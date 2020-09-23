@@ -49,7 +49,7 @@ public class ServerManager : MonoBehaviour
     public IEnumerator postData() 
     {
         string response; //response van de server
-        string site = "https://www.slatecanvas.com/context3/getdata.php?buffer=0"; // site waarmee gecomuniceert wordt
+        string site = "https://www.slatecanvas.com/context3/postdata.php?buffer=0"; // site waarmee gecomuniceert wordt
 
 
         //voegt de waardes toe aan de totale post, loopt door de array door.
