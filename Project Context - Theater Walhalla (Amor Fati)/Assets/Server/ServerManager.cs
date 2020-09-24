@@ -53,10 +53,10 @@ public class ServerManager : MonoBehaviour
 
 
         //voegt de waardes toe aan de totale post, loopt door de array door.
-        string post = "";
-        for (int i = 0 ; i<values.Length; i++){ 
-            post += "&" + labels[i] + "=" + values[i];     
-        }
+        string post = "&MediaRonde1=01100101010110";
+        //for (int i = 0 ; i<values.Length; i++){ 
+        //    post += "&" + labels[i] + "=" + values[i];     
+        //}
         
         //maakt de volledige link aan met post data
         string uri= site + post;

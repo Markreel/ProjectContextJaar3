@@ -8,9 +8,9 @@ public class MediaProjectile : MonoBehaviour
     [SerializeField] private Renderer renderer;
     [SerializeField] private TextMeshPro text;
 
-    private void Update()
+    private void FixedUpdate()
     {
-        transform.Translate(-transform.forward / 20f);
+        //transform.Translate(-transform.forward / 10f * MP_Spawner.Instance.SpeedMultiplier);
 
         if(transform.position.z < -10) { Destroy(gameObject); }
     }
