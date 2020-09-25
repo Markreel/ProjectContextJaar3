@@ -11,8 +11,6 @@ public class TelevisionControl : MonoBehaviour
     public System.Random r = new System.Random();
 
     // Private variables
-    private Material newsItem;
-    private TelevisionItem TV;
     private List<GameObject> televisionList = new List<GameObject>();
     private List<GameObject> randomizedTVList = new List<GameObject>();
     private int mediaCounter = 0;
@@ -34,10 +32,15 @@ public class TelevisionControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // TODO: Calculate the number of media items 
+        // int itemsCount = DataManager.Instance.MediaData.MediaItems.Count; // gives Unity error
+        
+        int itemsCount = 0; // For debugging purposes
+
         // Generate the televisions
         for (int i = 0; i < televisionCount; i++)
         {
-            // Generate dummy offSets. TODO: Generate on correct locations
+            // Generate dummy positions
             float xPos, yPos;
             if (i < televisionCount / 2)
             {
@@ -56,7 +59,10 @@ public class TelevisionControl : MonoBehaviour
             // Create the televisions
             GameObject _television = Instantiate(television, position, transform.rotation);
             _television.GetComponent<TelevisionItem>().TurnedOn = true;
-            _television.GetComponent<TelevisionItem>().SetScreen(mediaCounter);
+            // If there are media items present, assign them to the TV screens
+            if (itemsCount > 0) _television.GetComponent<TelevisionItem>().SetScreen(mediaCounter % itemsCount);
+            // Give the tv a name for debugging purposes
+            _television.GetComponent<TelevisionItem>().tvName = "Television" + mediaCounter;
             televisionList.Add(_television);
             mediaCounter++;
         }
@@ -64,6 +70,9 @@ public class TelevisionControl : MonoBehaviour
         // Turn the necessary tvs off
         foreach (GameObject t in televisionList)
         {
+            // Continue if there was no media item assigned to this object
+            if (t.GetComponent<TelevisionItem>().mediaItem == null) continue;
+            // Turn off if the assigned item was not liked
             if (!t.GetComponent<TelevisionItem>().mediaItem.Liked) TurnOnOff(t, turnOffDuration);
         }
     }
@@ -72,6 +81,9 @@ public class TelevisionControl : MonoBehaviour
     private IEnumerator TurnOnOff(GameObject t, float duration)
     {
         float tick = 0f;
+
+        // Do nothing if there was no media item assigned to this object
+        if (t.GetComponent<TelevisionItem>().mediaItem == null) yield return null;
 
         // If tv was on, turn it off
         if (t.GetComponent<TelevisionItem>().TurnedOn)
@@ -103,19 +115,27 @@ public class TelevisionControl : MonoBehaviour
     // Called every frame
     private void Update()
     {
-        // Change the on/off status of the clicked TV
+        // Change the on/off status if the TV's screen is clicked
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                TurnOnOff(hit.collider.gameObject, changeChannelDuration);
+                GameObject clickedItem = hit.collider.gameObject;
+
+                // Check if user clicked on a screen
+                if (clickedItem.transform.parent != null && clickedItem.transform.parent.parent != null && (clickedItem.transform.parent.parent).GetComponent<TelevisionItem>())
+                {
+                    GameObject tv = clickedItem.transform.parent.parent.gameObject;
+                    Debug.Log("You clicked this item: " + tv.GetComponent<TelevisionItem>().tvName);
+                    TurnOnOff(tv, changeChannelDuration);
+                }
             }
         }
     }
 
-    // Randomize TV list
+    // Randomize TV list 
     private List<GameObject> randomizeTVList()
     {
         // Randomize the tv
