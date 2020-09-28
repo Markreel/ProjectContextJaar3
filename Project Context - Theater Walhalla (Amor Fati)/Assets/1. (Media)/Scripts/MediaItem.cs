@@ -6,4 +6,10 @@ public class MediaItem
 {
     public Material Material;
     public bool Liked;
+
+    public MediaItem(Material _mat, bool _liked)
+    {
+        Material = _mat;
+        Liked = _liked;
+    }
 }

@@ -28,16 +28,10 @@ public class ServerManager : MonoBehaviour
             /*  Dit zijn 3 voorbeeld waardes en bijbehorende naam/label.
                 Eerst moeten de labels en bijbehorende waardes ingevult worden, daarna pas kan de Enumerator "postData" aangeroepen worden. */
 
-            labels[0] = "playerName";
-            values[0] = "Willem-Jan Renger";
 
-            labels[1] = "SelectedThings";
-            values[1] = "10";
+            //StartCoroutine(postData()); //start post en gaat de array af
 
-            labels[2] = "aantalFlips";
-            values[2] = "420";
-
-            StartCoroutine(postData()); //start post en gaat de array af
+            StartCoroutine(getdata());
 
             /* voor een vervolg iteratie. Array wordt automatisch langer voor elke waarde die wordt toegevoegd */
         }
@@ -111,8 +105,7 @@ public class ServerManager : MonoBehaviour
             {
                 requestedData = webRequest.downloadHandler.text;
                 
-                Debug.Log(requestedData);
-                Target = float.Parse(requestedData); //maakt target gelijk aan het resultaat;
+                Debug.Log(requestedData);              
             }
         }
     }
