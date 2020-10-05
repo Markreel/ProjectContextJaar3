@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class MP_Spawner : MonoBehaviour
 {
-    public static MP_Spawner Instance;
+    [SerializeField] public static MP_Spawner Instance;
 
-    public float SpeedMultiplier = 1;
+    [SerializeField] public float SpeedMultiplier = 1;
 
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float delayPerProjectile = 3;
     [SerializeField] private float travelDuration = 1f;
     [SerializeField] private float decisionDuration = 3f;
 
-    [SerializeField] private int projectileLimit = 50;
 
     [SerializeField] private AnimationCurve travelCurve;
 
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private Transform endPoint;
 
-    [SerializeField] private Transform wayPointLiked;
-    [SerializeField] private Transform wayPointNotLiked;
+    [SerializeField] private TelevisionControl televisionControl;
+    [Space]
+    [SerializeField] private Material[] materialsBlm;
+    [SerializeField] private Material[] materialsCorona;
+    [SerializeField] private Material[] materialsPrivacy;
+    [SerializeField] private Material[] materialsZwartePiet;
 
-    [SerializeField] private MP_Blueprint[] blueprints;
-
+    private List<MP_Blueprint> blueprints = new List<MP_Blueprint>();
+    private int projectileLimit;
     private int projectileCounter = 0;
+    private int projectilesDestroyed = 0;
 
     private List<MediaProjectile> activeMediaProjectiles = new List<MediaProjectile>();
 
@@ -35,19 +39,13 @@ public class MP_Spawner : MonoBehaviour
     {
         Instance = this;
 
-
-        //15 booleans
-        //5 levels
-
-        //booleanArray1[] 001110001100
-        //x = 3.5 y = 1.5
-
+        PopulateBlueprintList();
     }
 
     private void Update()
     {
         RaycastHit _hit;
-        Ray _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray _ray = CameraController.Instance.ActiveCamera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(_ray, out _hit))
         {
@@ -92,19 +90,53 @@ public class MP_Spawner : MonoBehaviour
         //Debug.Log(SpeedMultiplier);
     }
 
+    private void PopulateBlueprintList()
+    {
+        //Add BLM blueprints
+        foreach (var _mat in materialsBlm)
+        {
+            blueprints.Add(new MP_Blueprint(_mat, MediaTopic.BLM));
+        }
+
+        //Add corona blueprints
+        foreach (var _mat in materialsCorona)
+        {
+            blueprints.Add(new MP_Blueprint(_mat, MediaTopic.Corona));
+        }
+
+        //Add privacy blueprints
+        foreach (var _mat in materialsPrivacy)
+        {
+            blueprints.Add(new MP_Blueprint(_mat, MediaTopic.Privacy));
+        }
+
+        //Add zwarte piet blueprints
+        foreach (var _mat in materialsZwartePiet)
+        {
+            blueprints.Add(new MP_Blueprint(_mat, MediaTopic.ZwartePiet));
+        }
+
+        projectileLimit = blueprints.Count;
+    }
+
     private IEnumerator Start()
     {
+        if(blueprints.Count == 0) { yield break; }
+
         yield return new WaitForSeconds(delayPerProjectile / SpeedMultiplier);
 
-
         Transform _p1 = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        MP_Blueprint _bp = blueprints[Random.Range(0, blueprints.Length)];
+
+        //Take a random blueprint from the list and remove it from the list afterwards
+        int _randomBPIndex = Random.Range(0, blueprints.Count);
+        MP_Blueprint _bp = blueprints[_randomBPIndex];
+        blueprints.RemoveAt(_randomBPIndex);
 
         Vector3 _endPoint = endPoint.position + new Vector3(Random.Range(-3.5f, 3.5f), Random.Range(-1.5f, 1.5f), activeMediaProjectiles.Count * 0.01f + Random.Range(0, 0.005f));
 
         GameObject _obj = Instantiate(projectilePrefab, _p1.position, _p1.rotation, transform);
         activeMediaProjectiles.Add(_obj.GetComponent<MediaProjectile>());
-        _obj.GetComponent<MediaProjectile>().SetData(_bp.Material, _bp.Text);
+        _obj.GetComponent<MediaProjectile>().SetData(_bp.Material, _bp.MediaTopic);
 
         projectileCounter++;
         if(projectileCounter < projectileLimit) { StartCoroutine(Start()); }
@@ -149,15 +181,24 @@ public class MP_Spawner : MonoBehaviour
         if (activeMediaProjectiles.Contains(_mp))
         {
             activeMediaProjectiles.Remove(_mp);
+            projectilesDestroyed++;
 
-            MediaItem _mi = new MediaItem(_mp.Material, _liked);
+            MediaItem _mi = new MediaItem(_mp.Material, _liked, _mp.MediaTopic);
             DataManager.Instance.MediaData.AddMediaItem(_mi);
+            Debug.Log("liked = " + _liked);
 
             IFocusable _focus = _mp.GetComponent<IFocusable>();
             if(previousFocusable == _focus) { previousFocusable = null; }
         }
 
         Destroy(_mp.gameObject);
+
+        //End "game"
+        if (projectilesDestroyed >= projectileLimit)
+        {
+            CameraController.Instance.ChangeCamera();
+            televisionControl.SpawnTelevisions();
+        }
     }
 
     public void RestartSpawnCycle()
@@ -170,7 +211,13 @@ public class MP_Spawner : MonoBehaviour
 [System.Serializable]
 public class MP_Blueprint
 {
+    public MP_Blueprint(Material _material, MediaTopic _mediaTopic)
+    {
+        Material = _material;
+        MediaTopic = _mediaTopic;
+    }
+
     public Material Material;
-    public string Text;
+    public MediaTopic MediaTopic;
 }
 

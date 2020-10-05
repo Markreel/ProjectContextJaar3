@@ -43,7 +43,7 @@ public class ServerManager : MonoBehaviour
     public IEnumerator postData() 
     {
         string response; //response van de server
-        string site = "https://www.slatecanvas.com/context3/postdata.php?buffer=0"; // site waarmee gecomuniceert wordt
+        string site = "https://www.marcianosordam.com/projects/context3/postdata.php?buffer=0"; // site waarmee gecomuniceert wordt
 
 
         //voegt de waardes toe aan de totale post, loopt door de array door.
@@ -87,7 +87,7 @@ public class ServerManager : MonoBehaviour
     public IEnumerator getdata()
     {
         string requestedData;
-        string uri = "https://www.slatecanvas.com/context3/getdata.php"; //site waarmee gecomuniceert wordt
+        string uri = "https://www.marcianosordam.com/projects/context3/getdata.php"; //site waarmee gecomuniceert wordt
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {

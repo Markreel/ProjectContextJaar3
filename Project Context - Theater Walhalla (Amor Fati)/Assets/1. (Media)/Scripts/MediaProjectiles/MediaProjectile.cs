@@ -8,8 +8,8 @@ public class MediaProjectile : MonoBehaviour, IFocusable
     [SerializeField] protected GameObject likeHighlight;
     [SerializeField] private GameObject dislikeHighlight;
     [SerializeField] private Renderer renderer;
-    [SerializeField] private TextMeshPro text;
 
+    [HideInInspector] public MediaTopic MediaTopic;
     [HideInInspector] public Material Material;
 
     private void FixedUpdate()
@@ -19,10 +19,10 @@ public class MediaProjectile : MonoBehaviour, IFocusable
         if(transform.position.z < -10) { Destroy(gameObject); }
     }
 
-    public void SetData(Material _mat, string _text)
+    public void SetData(Material _mat, MediaTopic _mediaTopic)
     {
         renderer.material = Material = _mat;
-        text.text = _text;
+        MediaTopic = _mediaTopic;
     }
 
     public virtual void Focus(Vector2 _mousePos)

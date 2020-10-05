@@ -14,6 +14,13 @@ public class Debugger : MonoBehaviour
         Instance = this;
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow)) { Time.timeScale -= Time.timeScale > 1 ? 1 : 0.1f; }
+        if (Input.GetKeyDown(KeyCode.UpArrow)) { Time.timeScale += Time.timeScale > 1 ? 1 : 0.1f; }
+        if (Input.GetKeyDown(KeyCode.Space)) { Time.timeScale = 1; }
+    }
+
     public void DisplayText(string _text)
     {
         DebugText.text = _text;

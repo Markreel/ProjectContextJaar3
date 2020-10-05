@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -8,17 +7,21 @@ using UnityEngine;
 public class TelevisionControl : MonoBehaviour
 {
     public static TelevisionControl Instance;
-    public System.Random r = new System.Random();
 
     // Private variables
     private List<GameObject> televisionList = new List<GameObject>();
     private List<GameObject> randomizedTVList = new List<GameObject>();
     private int mediaCounter = 0;
+    private MediaData mediaData;
+
+    [SerializeField] private TelevisionGroup[] televisionGroups = new TelevisionGroup[4];
 
     // Adjustable fields
     [SerializeField] GameObject television;
     [SerializeField] float turnOffDuration;
+    [SerializeField] AnimationCurve turnOffCurve;
     [SerializeField] float changeChannelDuration;
+    [SerializeField] AnimationCurve changeChannelCurve;
     [SerializeField] int televisionCount = 20;
     [SerializeField] float horizontalDistance = 1.5f;
     [SerializeField] float verticalDistance = 1.5f;
@@ -29,86 +32,80 @@ public class TelevisionControl : MonoBehaviour
         Instance = this;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        // TODO: Calculate the number of media items 
-        // int itemsCount = DataManager.Instance.MediaData.MediaItems.Count; // gives Unity error
-        
-        int itemsCount = 0; // For debugging purposes
+        mediaData = DataManager.Instance.MediaData;
+    }
 
-        // Generate the televisions
-        for (int i = 0; i < televisionCount; i++)
+    public void SpawnTelevisions()
+    {
+        for (int i = 0; i < televisionGroups.Length; i++)
         {
-            // Generate dummy positions
-            float xPos, yPos;
-            if (i < televisionCount / 2)
+            int _count = televisionGroups[i].unassignedTelevisions.Count;
+            for (int j = 0; j < _count; j++)
             {
-                xPos = startPosition.x + i * horizontalDistance;
-                yPos = startPosition.y;
+                televisionGroups[i].unassignedTelevisions[0].TurnedOn = true;
+                televisionGroups[i].unassignedTelevisions[0].tvName = "Television" + i + "|" + j;
+                televisionGroups[i].unassignedTelevisions[0].SetScreen(mediaData.MediaItems[i][j]);
+
+                televisionGroups[i].assignedTelevisions.Add(televisionGroups[i].unassignedTelevisions[0]);
+                televisionGroups[i].unassignedTelevisions.RemoveAt(0);
             }
-
-           else
-            {
-                xPos = startPosition.x + (i - 10) * horizontalDistance;
-                yPos = startPosition.y + verticalDistance;
-            }
-
-            Vector3 position = new Vector3(xPos, yPos, 0);
-
-            // Create the televisions
-            GameObject _television = Instantiate(television, position, transform.rotation);
-            _television.GetComponent<TelevisionItem>().TurnedOn = true;
-            // If there are media items present, assign them to the TV screens
-            if (itemsCount > 0) _television.GetComponent<TelevisionItem>().SetScreen(mediaCounter % itemsCount);
-            // Give the tv a name for debugging purposes
-            _television.GetComponent<TelevisionItem>().tvName = "Television" + mediaCounter;
-            televisionList.Add(_television);
-            mediaCounter++;
         }
 
-        // Turn the necessary tvs off
-        foreach (GameObject t in televisionList)
+        for (int i = 0; i < televisionGroups.Length; i++)
         {
-            // Continue if there was no media item assigned to this object
-            if (t.GetComponent<TelevisionItem>().mediaItem == null) continue;
-            // Turn off if the assigned item was not liked
-            if (!t.GetComponent<TelevisionItem>().mediaItem.Liked) TurnOnOff(t, turnOffDuration);
+            foreach (var _tvItem in televisionGroups[i].assignedTelevisions)
+            {
+                // Continue if there was no media item assigned to this object
+                if (_tvItem.GetComponent<TelevisionItem>().mediaItem == null) continue;
+
+                // Turn off if the assigned item was not liked
+                if (!_tvItem.GetComponent<TelevisionItem>().mediaItem.Liked) { StartCoroutine(TurnOnOff(_tvItem, turnOffDuration, turnOffCurve)); }
+            }
         }
     }
 
     // Turn tvs on or off
-    private IEnumerator TurnOnOff(GameObject t, float duration)
+    private IEnumerator TurnOnOff(TelevisionItem _tvItem, float duration, AnimationCurve _curve)
     {
+        //Give random delay to televisions that are turning off for the first time
+        if(_curve == turnOffCurve) { yield return new WaitForSeconds(Random.Range(0f, 0.5f)); }
+
         float tick = 0f;
 
         // Do nothing if there was no media item assigned to this object
-        if (t.GetComponent<TelevisionItem>().mediaItem == null) yield return null;
+        if (_tvItem.mediaItem == null) yield return null;
 
         // If tv was on, turn it off
-        if (t.GetComponent<TelevisionItem>().TurnedOn)
+        if (_tvItem.TurnedOn)
         {
-            while (t.GetComponent<MeshRenderer>().material.color != Color.black)
+            while (tick < 1)
             {
-                tick += Time.deltaTime * duration;
-                t.GetComponent<MeshRenderer>().material.color = Color.Lerp(t.GetComponent<TelevisionItem>().mediaItem.Material.color, Color.black, tick);
+                tick += Time.deltaTime / (duration > 0 ? duration : 1);
+                float _evaluatedTick = _curve.Evaluate(tick);
+
+                _tvItem.Renderer.material.SetColor("_BaseColor", Color.Lerp(_tvItem.mediaItem.Material.color, Color.black, _evaluatedTick));
                 yield return null;
             }
 
-            t.GetComponent<TelevisionItem>().TurnedOn = false;
+            _tvItem.TurnedOn = false;
         }
 
         // If tv was off, turn it on
-        if (!t.GetComponent<TelevisionItem>().TurnedOn)
+        else
         {
-            while (t.GetComponent<MeshRenderer>().material.color != t.GetComponent<TelevisionItem>().mediaItem.Material.color)
+
+            while (tick < 1)
             {
-                tick += Time.deltaTime * duration;
-                t.GetComponent<MeshRenderer>().material.color = Color.Lerp(Color.black, t.GetComponent<TelevisionItem>().mediaItem.Material.color, tick);
+                tick += Time.deltaTime / (duration > 0 ? duration : 1);
+                float _evaluatedTick = _curve.Evaluate(tick);
+
+                _tvItem.Renderer.material.SetColor("_BaseColor", Color.Lerp(Color.black, _tvItem.mediaItem.Material.GetColor("_BaseColor"), _evaluatedTick));                
                 yield return null;
             }
 
-            t.GetComponent<TelevisionItem>().TurnedOn = true;
+            _tvItem.TurnedOn = true;
         }
     }
 
@@ -118,7 +115,7 @@ public class TelevisionControl : MonoBehaviour
         // Change the on/off status if the TV's screen is clicked
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = CameraController.Instance.ActiveCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -129,28 +126,17 @@ public class TelevisionControl : MonoBehaviour
                 {
                     GameObject tv = clickedItem.transform.parent.parent.gameObject;
                     Debug.Log("You clicked this item: " + tv.GetComponent<TelevisionItem>().tvName);
-                    TurnOnOff(tv, changeChannelDuration);
+                    StartCoroutine(TurnOnOff(tv.GetComponent<TelevisionItem>(), changeChannelDuration, changeChannelCurve));
                 }
             }
         }
     }
+}
 
-    // Randomize TV list 
-    private List<GameObject> randomizeTVList()
-    {
-        // Randomize the tv
-        List<GameObject> randomizedTelevisionList = new List<GameObject>();
-        List<GameObject> copyTelevisionList = televisionList;
-
-        int likedCount = DataManager.Instance.MediaData.MediaItems.Count;
-
-        while (randomizedTelevisionList.Count < likedCount)
-        {
-            int index = r.Next(0, copyTelevisionList.Count);
-            randomizedTelevisionList.Add(copyTelevisionList[index]);
-            copyTelevisionList.RemoveAt(index);
-        }
-
-        return randomizedTelevisionList;
-    }
+[System.Serializable]
+public class TelevisionGroup
+{
+    public MediaTopic MediaTopic;
+    public List<TelevisionItem> unassignedTelevisions = new List<TelevisionItem>();
+    public List<TelevisionItem> assignedTelevisions = new List<TelevisionItem>();
 }

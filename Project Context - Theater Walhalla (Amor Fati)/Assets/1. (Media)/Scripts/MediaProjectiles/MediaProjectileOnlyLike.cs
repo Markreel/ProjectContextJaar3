@@ -5,7 +5,6 @@ using TMPro;
 
 public class MediaProjectileOnlyLike : MediaProjectile
 {
-
     public override void Focus(Vector2 _mousePos)
     {
         likeHighlight.SetActive(true);
