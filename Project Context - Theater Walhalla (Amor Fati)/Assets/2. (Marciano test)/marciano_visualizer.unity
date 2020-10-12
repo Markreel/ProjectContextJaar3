@@ -325,6 +325,7 @@ MonoBehaviour:
   multiplyer: 2
   minimumSize: 1
   maxSize: 4
+  speed: 20
 --- !u!1 &205233660
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,6 +949,8 @@ MonoBehaviour:
   target: 3
   multiplyer: 1
   minimumSize: 0.5
+  maxSize: 5
+  speed: 20
 --- !u!4 &646780290
 Transform:
   m_ObjectHideFlags: 0
@@ -3250,6 +3253,7 @@ MonoBehaviour:
   target: 0
   multiplyer: 2000
   minimumSize: 100
+  speed: 20
   locallight: {fileID: 0}
   maxSize: 2000
 --- !u!33 &2660467316878319914
@@ -3623,5 +3627,6 @@ MonoBehaviour:
   target: 0
   multiplyer: 2000
   minimumSize: 100
+  speed: 20
   locallight: {fileID: 0}
   maxSize: 2000
