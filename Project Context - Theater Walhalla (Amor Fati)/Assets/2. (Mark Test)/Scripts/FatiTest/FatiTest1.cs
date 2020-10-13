@@ -29,15 +29,6 @@ public class FatiTest1 : MonoBehaviour
     private Coroutine animateCubeTransitionsRoutine;
     private List<CubeSegment> cubeSegments = new List<CubeSegment>();
 
-    //marciano toevoeging audio script
-    [SerializeField] private AudioVisualizerScript audioVisualizer;
-    [SerializeField] private float spectrum;
-
-    private void Start()
-    {
-        audioVisualizer = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
-    }
-
     private void PopulateCubeList()
     {
         for (int i = 0; i < cubeAmount; i++)
@@ -49,8 +40,6 @@ public class FatiTest1 : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space)) { UpdateCubeBody(); }
-
-        spectrum = audioVisualizer.target;
     }
 
     private void UpdateCubeBody()
@@ -96,9 +85,6 @@ public class FatiTest1 : MonoBehaviour
         {
             _tick += Time.deltaTime / animationDuration;
             float _evaluatedTick = animationCurve.Evaluate(_tick);
-
-            //marciano toevoeging
-                _evaluatedTick = _evaluatedTick+spectrum;
 
             Debug.Log(_tick);
 
