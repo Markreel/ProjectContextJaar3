@@ -8,6 +8,7 @@ public class VisualizeLight : MonoBehaviour
     [SerializeField] float target;
     [SerializeField] float multiplyer;
     [SerializeField] float minimumSize;
+    [SerializeField] float speed;
     [SerializeField] Light locallight;
 
     [SerializeField] float maxSize;
@@ -18,9 +19,11 @@ public class VisualizeLight : MonoBehaviour
 
     void Update()
     {
-        target = Mathf.Clamp((audiovisual.spectrum[0] * multiplyer + minimumSize),0,maxSize);
+
+        target = Mathf.Lerp(target, Mathf.Clamp((audiovisual.spectrum[0] * multiplyer + minimumSize),0,maxSize), speed*Time.deltaTime);
 
         locallight.intensity = target;
+
         
     }
 }
