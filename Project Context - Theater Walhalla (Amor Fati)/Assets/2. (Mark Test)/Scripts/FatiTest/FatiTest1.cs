@@ -96,8 +96,8 @@ public class FatiTest1 : MonoBehaviour
                 _cubeSegment.Cube.transform.localScale =
                     Vector3.Lerp(_cubeSegment.PrevScale, _cubeSegment.NextScale, _evaluatedTick);
 
-                _cubeSegment.Cube.transform.localEulerAngles =
-                    Vector3.Lerp(_cubeSegment.PrevEulerAngles, _cubeSegment.NextEulerAngles, _evaluatedTick);
+                _cubeSegment.Cube.transform.localRotation =
+                    Quaternion.Lerp(Quaternion.Euler(_cubeSegment.PrevEulerAngles), Quaternion.Euler(_cubeSegment.NextEulerAngles), _evaluatedTick);
             }
 
             yield return null;

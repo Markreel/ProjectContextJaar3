@@ -151,7 +151,7 @@ Transform:
   m_Children:
   - {fileID: 1590856526}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &153953854
 MonoBehaviour:
@@ -196,12 +196,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 227252217}
-  cubePrefab: {fileID: 6950164954945704279, guid: 50ea98e4a3a91bc408bebe75efd400ec,
-    type: 3}
+  cubePrefab: {fileID: 1572301175561318, guid: 3a6e1cb160a414c6cbe7d27b34d381a1, type: 3}
   cubeAmount: 15
   loop: 1
-  minSize: {x: 1, y: 0.2, z: 1}
-  maxSize: {x: 2, y: 0.2, z: 2}
+  minSize: {x: 1, y: 1, z: 1}
+  maxSize: {x: 2, y: 2, z: 2}
   minOffset: {x: -1, y: -1, z: -1}
   maxOffset: {x: 1, y: 1, z: 1}
   useRandomRotation: 0
@@ -334,7 +333,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: -27.276001, y: 131.04901, z: 58.877003}
 --- !u!1 &490916193
 GameObject:
@@ -360,21 +359,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 490916193}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d3194fc11623424889790cc8946f8a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 490916195}
-  cubePrefab: {fileID: 6950164954945704279, guid: 50ea98e4a3a91bc408bebe75efd400ec,
-    type: 3}
+  cubePrefab: {fileID: 1572301175561318, guid: 3a6e1cb160a414c6cbe7d27b34d381a1, type: 3}
   cubeAmount: 15
   loop: 1
-  minSize: {x: 1, y: 1, z: 0.2}
-  maxSize: {x: 2, y: 2, z: 0.2}
+  minSize: {x: 1, y: 1, z: 1}
+  maxSize: {x: 2, y: 2, z: 2}
   minOffset: {x: -1, y: -1, z: -1}
   maxOffset: {x: 1, y: 1, z: 1}
-  useRandomRotation: 0
+  useRandomRotation: 1
   animationDuration: 0.5
   animationCurve:
     serializedVersion: 2
@@ -412,7 +410,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &568766312
 GameObject:
@@ -438,21 +436,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 568766312}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d3194fc11623424889790cc8946f8a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 490916195}
-  cubePrefab: {fileID: 6950164954945704279, guid: 50ea98e4a3a91bc408bebe75efd400ec,
-    type: 3}
+  cubePrefab: {fileID: 1572301175561318, guid: 3a6e1cb160a414c6cbe7d27b34d381a1, type: 3}
   cubeAmount: 15
   loop: 1
-  minSize: {x: 0.2, y: 1, z: 1}
-  maxSize: {x: 0.2, y: 2, z: 2}
+  minSize: {x: 1, y: 1, z: 1}
+  maxSize: {x: 2, y: 2, z: 2}
   minOffset: {x: -1, y: -1, z: -1}
   maxOffset: {x: 1, y: 1, z: 1}
-  useRandomRotation: 0
+  useRandomRotation: 1
   animationDuration: 0.5
   animationCurve:
     serializedVersion: 2
@@ -490,7 +487,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &633643450
 GameObject:
