@@ -14,7 +14,7 @@ public class VisualizeScaleY : MonoBehaviour
 
     void Start(){
         audiovisual = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
-        offset = Random.Range(0,128);
+        offset = Random.Range(10,128);
     }
     void Update()
     {
