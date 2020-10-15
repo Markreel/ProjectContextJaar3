@@ -1,0 +1,95 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: GemsGold
+  m_Shader: {fileID: -6465566751694194690, guid: e7152b21427f31f4494b8d0ff2f0e862,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _FoamTexture:
+        m_Texture: {fileID: 2800000, guid: 3401310788dd34c4db7f15fd8620e2bd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FoamTexture2:
+        m_Texture: {fileID: 2800000, guid: c49a5fa8d5b69814fbed815ead735da1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainNormal:
+        m_Texture: {fileID: 2800000, guid: 8fbf96b998f80924a87dc9ed85d0d6b3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2DLOD_D14A08D8_Texture_1:
+        m_Texture: {fileID: 2800000, guid: c2855d4ddf3ea054da920462e7df428a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_581792C0_Texture_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_8B3C65A_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 239d3408bf6ef484ca9fe8b1bf5756bc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_A06184E8_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 7bdf96d9857848747ac360a1a9ae22d3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_A442BE0B_Texture_1:
+        m_Texture: {fileID: 2800000, guid: c4872abf0c41b7540add67ca52807cf3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_C72B9B3A_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 84a9dd5fb9102f745ae7bddd21abf9fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SecondNormal:
+        m_Texture: {fileID: 2800000, guid: 911424d0c61980e408cea921ae884029, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Waves:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Waves2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Depth: 1
+    - _Displacement: 0.001
+    - _Foam2Opacity: 0.8
+    - _FoamAmount: 0.3
+    - _FoamCutoff: 0.2
+    - _FoamDepth: 0
+    - _FoamSpeed: 5
+    - _FoamSpeed2: -5
+    - _FoamStrength: 0
+    - _NormalStrength: 1
+    - _RefractStrength: 0
+    - _SecondNormalSpeed: -40
+    - _Smoothness: 0.5
+    - _Strength: 1
+    - _WaveSize: 5
+    - _WaveSpeed: 100
+    - _https___textures_pixel_furnace_com_terms: 75
+    m_Colors:
+    - _DeepWaterColor: {r: 0.20185116, g: 0.44443518, b: 0.6792453, a: 0}
+    - _FoamTiling: {r: 5, g: 5, b: 0, a: 0}
+    - _FoamTiling2: {r: 5, g: 5, b: 0, a: 0}
+    - _ShallowWaterColor: {r: 0.4912781, g: 0.9056604, b: 0.9056604, a: 0}
+    - _Tiling: {r: 2, g: 2, b: 0, a: 0}
+    - _WavesTiling: {r: 1, g: 1, b: 0, a: 0}
