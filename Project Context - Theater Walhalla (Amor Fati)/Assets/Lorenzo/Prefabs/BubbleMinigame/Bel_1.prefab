@@ -207,8 +207,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e0a0269067ee6b4eb63072b66b2cd28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  velocityMulti: 0
   velocityDecay: 0.02
   canDrag: 1
+  BoundariesMesh: {fileID: 0}
+  popParticle: {fileID: 638192410359976809, guid: 1086546d891430c4e9176dffa612c24f,
+    type: 3}
 --- !u!54 &2318067150161109782
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -221,10 +225,10 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
+  m_Constraints: 120
+  m_CollisionDetection: 2
 --- !u!1 &3350743140961757078
 GameObject:
   m_ObjectHideFlags: 0

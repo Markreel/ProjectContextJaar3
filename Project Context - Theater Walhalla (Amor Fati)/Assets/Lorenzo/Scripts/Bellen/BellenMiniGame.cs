@@ -23,7 +23,9 @@ public class BellenMiniGame : MonoBehaviour
 
     public bool canSpawnBubble;
 
-    private FatiFirstMinigame fatiManager; 
+    private FatiFirstMinigame fatiManager;
+
+    public MeshFilter BoundariesMesh;
 
 
 
@@ -34,7 +36,7 @@ public class BellenMiniGame : MonoBehaviour
     {
         //We get all the requiredbubbles by checking how many sleep je bel hier fields we have.
         GetComponentsInChildren(false, requiredBubbles);
-       fatiManager = GetComponentInChildren<FatiFirstMinigame>();
+        fatiManager = GetComponentInChildren<FatiFirstMinigame>();
 
         canSpawnBubble = true;
 
@@ -90,7 +92,17 @@ public class BellenMiniGame : MonoBehaviour
         //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
         if (canSpawnBubble && filledInBubbles < requiredBubbles.Count)
         {
-            bubbles.Add(Instantiate(bubblePrefab, bubbleSpawnLocation));
+            //bubbles.Add(Instantiate(bubblePrefab, bubbleSpawnLocation));
+            //DragObject dragObject =
+
+            GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
+            bubbles.Add(bubble);
+
+            DragObject dragObject = bubble.GetComponent<DragObject>();
+            if (dragObject != null) { dragObject.BoundariesMesh = BoundariesMesh; }
+
+
+
             //Before we can spawn a new one this value needs to be set to true again by the SnapBubble Script.
             canSpawnBubble = false;
 
