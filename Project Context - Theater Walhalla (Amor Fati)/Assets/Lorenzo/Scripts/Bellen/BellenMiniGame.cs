@@ -6,21 +6,22 @@ using TMPro;
 using UnityEngine.EventSystems;
 public class BellenMiniGame : MonoBehaviour
 {
-    public List<TMP_InputField> inputFields;
+    public List<SnapBubble> requiredBubbles;
+    public List<GameObject> bubbles;
 
     public GameObject canvas;
 
-    private int filledInBubbles;
+    [HideInInspector] public int filledInBubbles;
 
-    public Button startGameButton;
-    public Image startGameButtonImage;
+    public Button newBubbleButton;
+    public Image neBubbleButtonImage;
 
     public TextMeshProUGUI titleText;
 
-
-
     public Transform bubbleSpawnLocation;
     public GameObject bubblePrefab;
+
+    public bool canSpawnBubble;
 
 
 
@@ -28,8 +29,9 @@ public class BellenMiniGame : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponentsInChildren(false, inputFields);
-        startGameButton.interactable = false;
+        //We get all the requiredbubbles by checking how many sleep je bel hier fields we have.
+        GetComponentsInChildren(false, requiredBubbles);
+        canSpawnBubble = true;
 
 
     }
@@ -37,65 +39,55 @@ public class BellenMiniGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //0 is required so users need to have all fields active at the same time, if that is not the case it resets to 0.
-        filledInBubbles = 0;
-
-        //Here we check if all the text fields have been filled in.
-        foreach (var inputField in inputFields)
+        //To keep the amount of fill in fields possibly dynamic instead of harcoded.
+        if (filledInBubbles == requiredBubbles.Count)
         {
-            if (!string.IsNullOrEmpty(inputField.text))
-            {
-                filledInBubbles++;
-            }
+            //Do something to change the nieuwe bel into the start game button.
+            newBubbleButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
+
         }
-
-        //When the amount of filled in text fields equals the total textfields the start game button appears.
-        if (filledInBubbles == inputFields.Count)
-        {
-            startGameButton.interactable = true;
-        }
-        else
-        {
-            startGameButton.interactable = false;
-        }
-
-
-
-
-        
 
     }
 
     //Why not all the update code in this function? Well because otherwise we need to click on the start button before the graphic changes.
     public void StartGame()
     {
-        //DO SOME SORT OF FADE OUT ANIMATION FOR THE BUTTON HERE.
-        startGameButton.transform.LeanMoveY(startGameButton.transform.position.y - 200, 2f).setEaseOutCubic();
-
-        //Fade out the title
-        LeanTween.scale(titleText.gameObject, new Vector3(0, 0, 0), 0.75f);
-
-        //Stops you from writing text after the game starts.
-        foreach (var inputField in inputFields)
+        if (filledInBubbles == requiredBubbles.Count)
         {
-            inputField.enabled = false;
-            LeanTween.scale(inputField.transform.root.gameObject, new Vector3(0.75f, 0.75f, 0.75f), 1f);
+            //DO SOME SORT OF FADE OUT ANIMATION FOR THE BUTTON HERE.
+            newBubbleButton.transform.LeanMoveY(newBubbleButton.transform.position.y - 200, 2f).setEaseOutCubic();
 
+            //Fade out the title
+            LeanTween.scale(titleText.gameObject, new Vector3(0, 0, 0), 0.75f);
+
+
+            foreach (var bubble in bubbles)
+            {
+                //Makes it so we can no longer type in the Bubble.
+                bubble.GetComponentInChildren<TMP_InputField>().interactable = false;
+                //Makes it possible to drag our Bubble again.
+                bubble.GetComponent<SphereCollider>().enabled = true;
+                bubble.GetComponent<DragObject>().canDrag = true;
+                //Makes it so our bubbles dont float away with the velocity they retained.
+                bubble.GetComponent<DragObject>().velocityMulti = 0;
+                //Scales down our bubble to make it easier to dodge Fati.
+                LeanTween.scale(bubble, new Vector3(0.65f, 0.65f, 0.65f), 0.75f);
+            }
         }
 
 
-        inputFields[0].GetComponentInParent<DragObject>().canDrag = true;
-
     }
-
 
     public void SpawnBubble()
     {
-        Instantiate(bubblePrefab, bubbleSpawnLocation);
+        //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
+        if (canSpawnBubble && filledInBubbles < requiredBubbles.Count)
+        {
+            bubbles.Add(Instantiate(bubblePrefab, bubbleSpawnLocation));
+            //Before we can spawn a new one this value needs to be set to true again by the SnapBubble Script.
+            canSpawnBubble = false;
 
-
-
-
+        }
     }
 
 

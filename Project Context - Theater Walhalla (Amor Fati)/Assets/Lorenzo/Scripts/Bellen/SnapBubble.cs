@@ -11,9 +11,13 @@ public class SnapBubble : MonoBehaviour
 
     private MeshRenderer meshRenderer;
 
+    private BellenMiniGame bellenMinigame;
+
+
     private void Start()
     {
         sleepHierJeBubbelText = GetComponentInChildren<TextMeshPro>();
+        bellenMinigame = transform.root.GetComponent<BellenMiniGame>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
@@ -33,7 +37,12 @@ public class SnapBubble : MonoBehaviour
             //We do not want the sleep hier je bubble text to also be displayed through your own input.
             sleepHierJeBubbelText.enabled = false;
             //To avoid Z fighting of the material.
-            meshRenderer.enabled = false; 
+            meshRenderer.enabled = false;
+            //Allows our bubble button to spawn another bubble.
+            bellenMinigame.canSpawnBubble = true;
+            //Counts up the amount of filled in bubbles; 
+            bellenMinigame.filledInBubbles++;
+
         }
         
     }

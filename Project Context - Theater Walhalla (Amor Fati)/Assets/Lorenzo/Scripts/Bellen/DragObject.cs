@@ -7,7 +7,7 @@ public class DragObject : MonoBehaviour
     private Vector3 offset;
     private Vector3 previousPos;
     private Vector3 velocity;
-    private float velocityMulti;
+    [HideInInspector]public float velocityMulti;
     [Range (0,1)]
     public float velocityDecay; 
 
