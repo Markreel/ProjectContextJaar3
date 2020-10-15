@@ -23,6 +23,9 @@ public class BellenMiniGame : MonoBehaviour
 
     public bool canSpawnBubble;
 
+    private FatiFirstMinigame fatiManager; 
+
+
 
 
 
@@ -31,6 +34,8 @@ public class BellenMiniGame : MonoBehaviour
     {
         //We get all the requiredbubbles by checking how many sleep je bel hier fields we have.
         GetComponentsInChildren(false, requiredBubbles);
+       fatiManager = GetComponentInChildren<FatiFirstMinigame>();
+
         canSpawnBubble = true;
 
 
@@ -72,6 +77,8 @@ public class BellenMiniGame : MonoBehaviour
                 bubble.GetComponent<DragObject>().velocityMulti = 0;
                 //Scales down our bubble to make it easier to dodge Fati.
                 LeanTween.scale(bubble, new Vector3(0.65f, 0.65f, 0.65f), 0.75f);
+                //Start the Fati attack.
+                fatiManager.StartFirstAttack();
             }
         }
 
