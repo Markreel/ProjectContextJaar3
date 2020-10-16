@@ -1,10 +1,12 @@
 ﻿using System.CodeDom;
 using System.Collections;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
+using System;
 
 public class MicrophoneControle : MonoBehaviour
 {
@@ -15,6 +17,7 @@ public class MicrophoneControle : MonoBehaviour
     int microphoneFrequency = 44100;
     bool microphonePresent;
     string device;
+    string savePath;
     AudioSource audio;
     AudioClip[] clips;
     #endregion
@@ -23,6 +26,8 @@ public class MicrophoneControle : MonoBehaviour
 
     [SerializeField] int nameDuration = 2; // in seconds
     [SerializeField] int jobDuration = 2; // in seconds
+    [SerializeField] string songName = "generated song";
+    [SerializeField] string saveFolder = "\\Downloads";
     [SerializeField] AudioClip name;
     [SerializeField] AudioClip job;
     [SerializeField] AudioClip intro1;
@@ -36,6 +41,7 @@ public class MicrophoneControle : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        savePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + saveFolder;
     }
 
     private IEnumerator Start()
@@ -55,24 +61,23 @@ public class MicrophoneControle : MonoBehaviour
             Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
             if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
         }
-        else yield return null;
+        else yield break;
         
         // Initialize audio
         audio = GetComponent<AudioSource>();
-        yield return null;
+        yield break;
 
         // Ask for permission to use microphone
         // yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
     }
 
-    // Record name
     IEnumerator RecordName()
     {
         // Return if no microphone is present
         if (!microphonePresent)
         {
             Debug.Log("No microphone detected!");
-            yield return null;
+            yield break;
         }
 
         // Record the name clip
@@ -84,14 +89,13 @@ public class MicrophoneControle : MonoBehaviour
         yield break;
     }
 
-    // Record job
     IEnumerator RecordJob()
     {
         // Return if no microphone is present
         if (!microphonePresent)
         {
             Debug.Log("No microphone detected!");
-            yield return null;
+            yield break;
         }
 
         // Record the job clip
@@ -122,28 +126,57 @@ public class MicrophoneControle : MonoBehaviour
         Debug.Log("Generating song...");
         clips = new AudioClip[] {intro1, name, job,
             intro2, name, job,
-            intro3, name, job,
+            intro3, name, job, 
             endSong};
 
         AudioClip generatedSong = Combine(clips);
 
-        // Play song
-        audio.clip = generatedSong;
-        audio.Play();
-
-        // Play song
-        //foreach (AudioClip snippet in clips)
+        // Debugging
+        //for (int i = 0; i < clips.Length; i++)
         //{
-        //    Debug.Log("Current snippet:" + snippet);
-        //    audio.clip = snippet;
+        //    audio.clip = clips[i];
         //    audio.Play();
-        //    yield return new WaitForSeconds(audio.clip.length);
+        //    Debug.Log("Playing clip " + i);
+        //    yield return new WaitForSeconds(clips[i].length);
+        //    Debug.Log("Turning to the next one");
         //}
 
+        // Play song
+        Debug.Log("Playing song...");
+        audio.clip = generatedSong;
+        audio.Play();
+        yield break;
+    }
+
+    IEnumerator DownloadSong()
+    {
+        // Check if clip is present
+        if (audio.clip == null)
+        {
+            Debug.Log("Je hebt nog geen nummer gemaakt!");
+            yield return null;
+        }
+
+        // Download the clip
+        try
+        {
+            Debug.Log("Downloading...");
+            savePath = Path.Combine(savePath, songName + ".wav");
+            SavWav.Save(savePath, audio.clip);
+            yield break;
+        }
+
+        catch (Exception e)
+        {
+            Debug.Log("Error! " + e.Message);
+            yield break;
+        }
     }
 
     AudioClip Combine(AudioClip[] clips)
     {
+        /* TODO: Clean up microphone recordings (popping sound at start) */
+
         // Check if there are clips
         if (clips == null || clips.Length == 0) return null;
 
@@ -151,6 +184,7 @@ public class MicrophoneControle : MonoBehaviour
         for (int i = 0; i < clips.Length; i++)
         {
             if (clips[i] == null) continue;
+            if (clips[i].channels != 1) Debug.Log("Please make sure all clips have same nr of channels to avoid weird pitch changes");
             length += clips[i].samples * clips[i].channels;
         }
 
@@ -169,89 +203,12 @@ public class MicrophoneControle : MonoBehaviour
 
         // Combine clips
         if (length == 0) return null;
-        AudioClip result = AudioClip.Create("Personal Song", length / 2, 2, microphoneFrequency, false);
+        AudioClip result = AudioClip.Create("Personal Song", length, 1, microphoneFrequency, false);
+       // AudioClip result = AudioClip.Create("Personal Song", length / 2, 2, microphoneFrequency, false);
         result.SetData(data, 0);
 
         return result;
     }
-
-    //IEnumerator RecordTwoClips()
-    //{
-    //    // Return if no microphone is present
-    //    if (!microphonePresent)
-    //    {
-    //        Debug.Log("No microphone detected!");
-    //        yield return null;
-    //    }
-
-    //    // Record two separate audioclips
-    //    // The first one should be the name
-    //    // The second one should be the job
-    //    for (int i = 0; i < 2; i++)
-    //    {
-    //        clips[i] = Microphone.Start(device, false, recordingDuration, microphoneFrequency);
-    //        Debug.Log("Recording clip " + i);
-    //        yield return new WaitForSeconds(recordingDuration);
-    //        Debug.Log("This clip is done!");
-    //        Debug.Log("Starting new record");
-    //    }
-
-    //    Microphone.End(device);
-    //    Debug.Log("Done recording all clips!");
-
-    //    // Identify clips
-    //    name = clips[0];
-    //    job = clips[1];
-
-    //    yield break;
-    //}
-
-    //IEnumerator PlayAudio()
-    //{
-    //    // Play all recorded pieces
-    //    for (int i = 0; i < clips.Length; i++)
-    //    {
-    //        audio.clip = clips[i];
-    //        audio.Play();
-    //        Debug.Log("Playing clip " + i);
-    //        yield return new WaitForSeconds(recordingDuration);
-    //        Debug.Log("Turning to the next one");
-    //    }
-
-    //    // TODO: Play back on correct place in song
-    //    MixSongs();
-
-    //    yield return new WaitForSeconds(recordingDuration);
-    //    Debug.Log("Played back all clips!");
-
-    //    yield break;
-    //}
-
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    // If the microphone is clicked, either start or stop recording
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    //        RaycastHit hit;
-    //        if (Physics.Raycast(ray, out hit))
-    //        {
-    //            GameObject clickedItem = hit.collider.gameObject;
-    //            if (clickedItem.transform.parent != null && (clickedItem.transform.parent).GetComponent<MicrophoneItem>())
-    //            {
-    //               // StartCoroutine(RecordTwoClips());
-    //            }
-    //        }
-    //    }
-
-    //    // Option to listen to the song
-    // //   if (Input.GetKeyDown(KeyCode.P)) StartCoroutine(PlayAudio());
-        
-    //    // Option to redo recording
-
-    //    // Option to save recording
-    //}
 
     #endregion
 
@@ -259,5 +216,6 @@ public class MicrophoneControle : MonoBehaviour
     public void NameButton() => StartCoroutine(RecordName());
     public void BeroepButton() => StartCoroutine(RecordJob());
     public void PlayButton() => StartCoroutine(PlayCustomSong());
+    public void DownloadButton() => StartCoroutine(DownloadSong());
     #endregion 
 }
