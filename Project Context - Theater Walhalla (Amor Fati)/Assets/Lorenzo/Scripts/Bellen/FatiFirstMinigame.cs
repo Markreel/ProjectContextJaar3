@@ -19,6 +19,8 @@ public class FatiFirstMinigame : MonoBehaviour
 
     private LineRenderer lineRenderer;
 
+    public float attackWaitTime = 2;
+
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +46,7 @@ public class FatiFirstMinigame : MonoBehaviour
                 attackTimer = 0;
 
                 canAttack = false;
-                Debug.Log("triggered");
+                //Debug.Log("triggered");
                 CalculateFatiPath();
             }
         }
@@ -70,7 +72,7 @@ public class FatiFirstMinigame : MonoBehaviour
     {
         lineRenderer.SetPosition(0, currentFatiPath[1].transform.position);
         lineRenderer.SetPosition(1, currentFatiPath[2].transform.position);
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(attackWaitTime -= 0.1f);
         Attack();
     }
 

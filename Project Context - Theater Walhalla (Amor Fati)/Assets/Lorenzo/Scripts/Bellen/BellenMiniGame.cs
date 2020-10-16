@@ -18,14 +18,26 @@ public class BellenMiniGame : MonoBehaviour
 
     public TextMeshProUGUI titleText;
 
+    //Spawning Bubbles
     public Transform bubbleSpawnLocation;
     public GameObject bubblePrefab;
 
     public bool canSpawnBubble;
 
+    //Fati
     private FatiFirstMinigame fatiManager;
 
     public MeshFilter BoundariesMesh;
+
+    //Coin Generation.
+    public bool generatingCoins;
+
+    public TextMeshProUGUI coinText;
+    public float coinAmount;
+    public TextMeshProUGUI coinMultiplierText;
+    public int coinMuliplierInt; 
+    public Image coinImage;
+
 
 
 
@@ -40,6 +52,11 @@ public class BellenMiniGame : MonoBehaviour
 
         canSpawnBubble = true;
 
+        //Hides the UI elements by making them 0 scale so we can tween them.
+        coinImage.gameObject.transform.localScale = new Vector3(0,0,0);
+        coinText.gameObject.transform.localScale = new Vector3(0,0,0);
+        coinMultiplierText.gameObject.transform.localScale = new Vector3(0, 0, 0);
+
 
     }
 
@@ -51,6 +68,14 @@ public class BellenMiniGame : MonoBehaviour
         {
             //Do something to change the nieuwe bel into the start game button.
             newBubbleButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
+
+        }
+
+        if (generatingCoins)
+        {
+
+            coinText.text = Mathf.Round(coinAmount += Time.deltaTime * coinMuliplierInt).ToString();
+            coinMultiplierText.text = "X " + coinMuliplierInt.ToString();
 
         }
 
@@ -81,10 +106,16 @@ public class BellenMiniGame : MonoBehaviour
                 LeanTween.scale(bubble, new Vector3(0.65f, 0.65f, 0.65f), 0.75f);
                 //Start the Fati attack.
                 fatiManager.StartFirstAttack();
+                //Set our coin multiplier to the amount of bubbles.
+                coinMuliplierInt++;
             }
+
+            
+            StartCoinGeneration();
+
+
+
         }
-
-
     }
 
     public void SpawnBubble()
@@ -96,17 +127,26 @@ public class BellenMiniGame : MonoBehaviour
             //DragObject dragObject =
 
             GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
+            bubble.transform.localScale = new Vector3(0, 0, 0);
+            LeanTween.scale(bubble, new Vector3(1, 1, 1), 1f).setEaseInExpo();
             bubbles.Add(bubble);
 
             DragObject dragObject = bubble.GetComponent<DragObject>();
             if (dragObject != null) { dragObject.BoundariesMesh = BoundariesMesh; }
 
-
-
             //Before we can spawn a new one this value needs to be set to true again by the SnapBubble Script.
             canSpawnBubble = false;
 
         }
+    }
+
+    public void StartCoinGeneration()
+    {
+        generatingCoins = true;
+        LeanTween.scale(coinImage.gameObject, new Vector3(1, 1, 1), 1f);
+        LeanTween.scale(coinText.gameObject, new Vector3(1, 1, 1), 1f);
+        LeanTween.scale(coinMultiplierText.gameObject, new Vector3(1, 1, 1), 1f);
+
     }
 
 
