@@ -29,6 +29,7 @@ public class BellenMiniGame : MonoBehaviour
 
     public MeshFilter BoundariesMesh;
 
+    [Header ("Coin Generation")]
     //Coin Generation.
     public bool generatingCoins;
 
@@ -68,7 +69,6 @@ public class BellenMiniGame : MonoBehaviour
         {
             //Do something to change the nieuwe bel into the start game button.
             newBubbleButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start Game";
-
         }
 
         if (generatingCoins)
@@ -76,14 +76,24 @@ public class BellenMiniGame : MonoBehaviour
 
             coinText.text = Mathf.Round(coinAmount += Time.deltaTime * coinMuliplierInt).ToString();
             coinMultiplierText.text = "X " + coinMuliplierInt.ToString();
+        }
+
+
+        if (filledInBubbles == 0 && generatingCoins)
+        {
+            generatingCoins = false;
+            EndScreen();
 
         }
 
+
+
     }
 
-    //Why not all the update code in this function? Well because otherwise we need to click on the start button before the graphic changes.
+
     public void StartGame()
     {
+        //When we have the required amount of bubbles the button will instead trigger this function.
         if (filledInBubbles == requiredBubbles.Count)
         {
             //DO SOME SORT OF FADE OUT ANIMATION FOR THE BUTTON HERE.
@@ -110,10 +120,7 @@ public class BellenMiniGame : MonoBehaviour
                 coinMuliplierInt++;
             }
 
-            
             StartCoinGeneration();
-
-
 
         }
     }
@@ -149,6 +156,11 @@ public class BellenMiniGame : MonoBehaviour
 
     }
 
+    public void EndScreen()
+    {
+
+
+    }
 
 
 

@@ -102,8 +102,10 @@ public class DragObject : MonoBehaviour
         {
             Instantiate(popParticle, transform.position, transform.rotation);
             Destroy(gameObject);
-            gameObject.GetComponentInParent<BellenMiniGame>().coinMuliplierInt -= 1; 
-           
+            gameObject.GetComponentInParent<BellenMiniGame>().coinMuliplierInt -= 1;
+            gameObject.GetComponentInParent<BellenMiniGame>().filledInBubbles -= 1;
+
+
         }
 
 
