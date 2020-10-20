@@ -29,19 +29,24 @@ public class BellenMiniGame : MonoBehaviour
 
     public MeshFilter BoundariesMesh;
 
-    [Header ("Coin Generation")]
+    [Header("Coin Generation")]
     //Coin Generation.
     public bool generatingCoins;
 
     public TextMeshProUGUI coinText;
     public float coinAmount;
     public TextMeshProUGUI coinMultiplierText;
-    public int coinMuliplierInt; 
+    public int coinMuliplierInt;
     public Image coinImage;
+    public GameObject coinUIRoot;
 
+    [Header("EndScreen")]
+    public GameObject playerScore;
+    public GameObject scoreBoard;
+    public TextMeshProUGUI endScreenPlayerScore;
+    public float endScreenPlayerScoreFloat;
 
-
-
+    public int coinTweenID;
 
 
     // Start is called before the first frame update
@@ -54,10 +59,15 @@ public class BellenMiniGame : MonoBehaviour
         canSpawnBubble = true;
 
         //Hides the UI elements by making them 0 scale so we can tween them.
-        coinImage.gameObject.transform.localScale = new Vector3(0,0,0);
-        coinText.gameObject.transform.localScale = new Vector3(0,0,0);
+        coinImage.gameObject.transform.localScale = new Vector3(0, 0, 0);
+        coinText.gameObject.transform.localScale = new Vector3(0, 0, 0);
         coinMultiplierText.gameObject.transform.localScale = new Vector3(0, 0, 0);
 
+        //Turns of our EndScreen at the start of the game.
+        playerScore.SetActive(false);
+        playerScore.transform.localScale = new Vector3(0, 0, 0);
+        scoreBoard.SetActive(false);
+        scoreBoard.transform.localScale = new Vector3(0, 0, 0);
 
     }
 
@@ -78,15 +88,14 @@ public class BellenMiniGame : MonoBehaviour
             coinMultiplierText.text = "X " + coinMuliplierInt.ToString();
         }
 
-
+        //If all bubbles have been destroyed...
         if (filledInBubbles == 0 && generatingCoins)
         {
             generatingCoins = false;
-            EndScreen();
-
+            StartCoroutine(EndScreen());
+            //Stop fati from attacking.
+            fatiManager.enabled = false;
         }
-
-
 
     }
 
@@ -135,7 +144,7 @@ public class BellenMiniGame : MonoBehaviour
 
             GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
             bubble.transform.localScale = new Vector3(0, 0, 0);
-            LeanTween.scale(bubble, new Vector3(1, 1, 1), 1f).setEaseInExpo();
+            LeanTween.scale(bubble, new Vector3(1, 1, 1), 0.5f).setEaseInExpo();
             bubbles.Add(bubble);
 
             DragObject dragObject = bubble.GetComponent<DragObject>();
@@ -149,6 +158,7 @@ public class BellenMiniGame : MonoBehaviour
 
     public void StartCoinGeneration()
     {
+        //Starts coin generation and shows our coin UI.
         generatingCoins = true;
         LeanTween.scale(coinImage.gameObject, new Vector3(1, 1, 1), 1f);
         LeanTween.scale(coinText.gameObject, new Vector3(1, 1, 1), 1f);
@@ -156,10 +166,59 @@ public class BellenMiniGame : MonoBehaviour
 
     }
 
-    public void EndScreen()
+    IEnumerator EndScreen()
     {
+        //Shows our Player Scoreboard.
+        playerScore.SetActive(true);
+        LeanTween.scale(playerScore, new Vector3(1, 1, 1), 1f).setEaseInCubic();
+
+        //Move the Coin UI to the middle of the screen.
+        LeanTween.moveLocalY(coinUIRoot, -5, 2f).setEaseInExpo();
+
+        //Return time should be the same as it takes for the coin UI to move.
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(DrainCoins());
 
 
+
+
+
+
+    }
+
+    IEnumerator DrainCoins()
+    {
+        //Fills up our scoreboard coin UI.
+        LeanTween.value(gameObject, givePlayerCoins, endScreenPlayerScoreFloat, coinAmount, 6f).setEaseInExpo();
+
+        //Drains out the coins in the Coin UI. 
+        LeanTween.value(gameObject, drainCoinScore, coinAmount, 0f, 6f).setEaseInExpo();
+
+        //Return time should be the same as it takes for the coins to drain + a second or two to not make it instant.
+        yield return new WaitForSeconds(7.25f);
+        StartCoroutine(ShowScoreBoard());
+    }
+
+    //Function required to use the value sadly. 
+    void givePlayerCoins(float val)
+    {
+        endScreenPlayerScore.text = Mathf.Round(val).ToString();
+    }
+
+    void drainCoinScore(float val)
+    {
+        coinText.text = Mathf.Round(val).ToString();
+    }
+
+    IEnumerator ShowScoreBoard()
+    {
+        scoreBoard.SetActive(true);
+        LeanTween.scale(scoreBoard, new Vector3(1, 1, 1), 1f).setEaseInCubic();
+
+        //However long you want the scoreboard to exist. Could also replaced by a continue button.
+        //yield return new WaitForSeconds(2f);
+        yield break;
     }
 
 

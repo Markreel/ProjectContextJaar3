@@ -132,7 +132,6 @@ public class FatiFirstMinigame : MonoBehaviour
         {
             attackTimer = minAttackDelay;
         }
-        //fatiMoveSpeed = attackTimer -1.5f;
         attackSpeedUp += Random.Range(0.1f, 0.3f);
 
 
