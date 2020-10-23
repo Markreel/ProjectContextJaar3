@@ -1599,10 +1599,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538a584e9589ffc4b8dd515e7e15b65b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpeedMultiplier: 1
+  SpeedMultiplier: 2
   projectilePrefab: {fileID: 4169783710332533092, guid: cd7020473f08db94b990a8788a0319ce,
     type: 3}
-  delayPerProjectile: 5
+  delayPerProjectile: 0
   travelDuration: 4
   decisionDuration: 5
   travelCurve:
