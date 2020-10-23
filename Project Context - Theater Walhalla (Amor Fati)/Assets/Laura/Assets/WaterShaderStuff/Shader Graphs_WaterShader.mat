@@ -51,7 +51,7 @@ Material:
     m_Floats:
     - Vector1_8E883A6C: 1
     - _Depth: -0.76
-    - _Displacement: 0.00025
+    - _Displacement: 0.0003
     - _Foam2Opacity: 0.87
     - _FoamAmount: 1.36
     - _FoamCutoff: 1.71
