@@ -7,7 +7,7 @@ public class FatiTest1 : MonoBehaviour
     [Header("General Settings: ")]
     [SerializeField] private Transform parent;
     [SerializeField] private GameObject cubePrefab;
-    [SerializeField] private float cubeAmount;
+    [SerializeField] private int cubeAmount;
     [SerializeField] private bool loop;
 
     [Header("Size: ")]
@@ -25,9 +25,13 @@ public class FatiTest1 : MonoBehaviour
     [SerializeField] private float animationDuration = 0.5f;
     [SerializeField] private AnimationCurve animationCurve;
 
+    [Header("Extra's: ")]
+    [SerializeField] private LineRenderer lineRenderer;
+
 
     private Coroutine animateCubeTransitionsRoutine;
     private List<CubeSegment> cubeSegments = new List<CubeSegment>();
+
 
     private void PopulateCubeList()
     {
@@ -56,6 +60,9 @@ public class FatiTest1 : MonoBehaviour
             //Spawn new cubes
             PopulateCubeList();
         }
+
+        //Set LineRenderer
+        lineRenderer.positionCount = cubeAmount + 1;
 
         foreach (var _cubeSegment in cubeSegments)
         {
@@ -98,6 +105,12 @@ public class FatiTest1 : MonoBehaviour
 
                 _cubeSegment.Cube.transform.localRotation =
                     Quaternion.Lerp(Quaternion.Euler(_cubeSegment.PrevEulerAngles), Quaternion.Euler(_cubeSegment.NextEulerAngles), _evaluatedTick);
+
+                //Update LineRenderer
+                int _index = cubeSegments.IndexOf(_cubeSegment);
+
+                lineRenderer.SetPosition(_index, _cubeSegment.Cube.transform.position);
+                if(_index == cubeSegments.Count - 1) { lineRenderer.SetPosition(cubeSegments.Count, cubeSegments[0].Cube.transform.position);  }
             }
 
             yield return null;
