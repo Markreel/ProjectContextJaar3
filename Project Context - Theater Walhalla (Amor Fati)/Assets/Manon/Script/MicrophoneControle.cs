@@ -89,13 +89,13 @@ public class MicrophoneControle : MonoBehaviour
             if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
         }
         else yield break;
-        
+
+        // Ask for permission to use microphone
+        yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
+
         // Initialize audio
         audio = GetComponent<AudioSource>();
         yield break;
-
-        // Ask for permission to use microphone
-        // yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
     }
 
     IEnumerator RecordName()
