@@ -22,4 +22,5 @@ public class UpdateMeshCollider : MonoBehaviour
         meshCollider.sharedMesh = null;
         meshCollider.sharedMesh = meshFilter.mesh;
     }
+
 }
