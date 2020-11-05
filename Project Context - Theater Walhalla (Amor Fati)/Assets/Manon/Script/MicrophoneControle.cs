@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using System;
+using UnityEditorInternal;
 
 public class MicrophoneControle : MonoBehaviour
 {
@@ -20,19 +21,38 @@ public class MicrophoneControle : MonoBehaviour
     string savePath;
     AudioSource audio;
     AudioClip[] clips;
+    AudioClip name;
+    AudioClip job;
+    UnityEngine.UI.Button nameButton;
+    UnityEngine.UI.Button jobButton;
+    UnityEngine.UI.Button karaokeButton;
+    UnityEngine.UI.Button switchButton;
+    UnityEngine.UI.Button generateButton;
+    UnityEngine.UI.Button downloadButton;
+    bool karaokeMode;
+    bool buttonMode;
+    #endregion
+
+    #region Public variables
+    [HideInInspector] public AudioClip name_1;
+    [HideInInspector] public AudioClip job_1;
+    [HideInInspector] public AudioClip name_2;
+    [HideInInspector] public AudioClip job_2;
+    [HideInInspector] public AudioClip name_3;
+    [HideInInspector] public AudioClip job_3;
     #endregion
 
     #region Adjustable variables
-
     [SerializeField] int nameDuration = 2; // in seconds
     [SerializeField] int jobDuration = 2; // in seconds
     [SerializeField] string songName = "generated song";
     [SerializeField] string saveFolder = "\\Downloads";
-    [SerializeField] AudioClip name;
-    [SerializeField] AudioClip job;
-    [SerializeField] AudioClip intro1;
-    [SerializeField] AudioClip intro2;
-    [SerializeField] AudioClip intro3;
+    [SerializeField] AudioClip kenje1;
+    [SerializeField] AudioClip kenje2;
+    [SerializeField] AudioClip kenje3;
+    [SerializeField] AudioClip dieis1;
+    [SerializeField] AudioClip dieis2;
+    [SerializeField] AudioClip dieis3;
     [SerializeField] AudioClip endSong;
 
     #endregion
@@ -42,6 +62,13 @@ public class MicrophoneControle : MonoBehaviour
     {
         Instance = this;
         savePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + saveFolder;
+        nameButton = GameObject.Find("NaamButton").GetComponent<UnityEngine.UI.Button>();
+        jobButton = GameObject.Find("BeroepButton").GetComponent<UnityEngine.UI.Button>();
+        karaokeButton = GameObject.Find("StartButton").GetComponent<UnityEngine.UI.Button>();
+        switchButton = GameObject.Find("SwitchMode").GetComponent<UnityEngine.UI.Button>();
+        generateButton = GameObject.Find("RemixButton").GetComponent<UnityEngine.UI.Button>();
+        downloadButton = GameObject.Find("DownloadButton").GetComponent<UnityEngine.UI.Button>();
+        karaokeMode = true;
     }
 
     private IEnumerator Start()
@@ -86,8 +113,19 @@ public class MicrophoneControle : MonoBehaviour
         yield return new WaitForSeconds(nameDuration);
         Microphone.End(device);
         Debug.Log("Recording done");
+
+        // if job is also recorded, you can download
+        if (job != null)
+        {
+            generateButton.gameObject.SetActive(true);
+            downloadButton.gameObject.SetActive(true);
+        }
+
         yield break;
+
     }
+
+
 
     IEnumerator RecordJob()
     {
@@ -104,29 +142,96 @@ public class MicrophoneControle : MonoBehaviour
         yield return new WaitForSeconds(jobDuration);
         Microphone.End(device);
         Debug.Log("Recording done");
+
+        // if name is also recorded, you can download
+        if (name != null)
+        {
+            generateButton.gameObject.SetActive(true);
+            downloadButton.gameObject.SetActive(true);
+        }
+
         yield break;
     }
 
+    bool DoPresenceCheck()
+    {
+        bool success = true;
+
+        // If both name and name_1 is empty, then something went wrong with the recording
+        if (name == null && name_1 == null)
+        {
+            Debug.Log("Je moet nog een naam inspreken!");
+            success = false;
+        }
+
+        else if (job == null && job_1 == null)
+        {
+            Debug.Log("Je moet nog een beroep inspreken!");
+            success = false;
+        }
+
+        // If name_1 is null but name is not, then the button-method was used
+        // For now, you only record your name and job once
+        // So set the other variables to the one you recorded
+        else if (name != null && name_1 == null)
+        {
+            Debug.Log("Name and job variables are assigned to name_1 to name_3 and job_1 to job_3");
+            name_1 = name;
+            name_2 = name;
+            name_3 = name;
+            job_1 = job;
+            job_2 = job;
+            job_3 = job;
+        }
+
+        // If name_1 till name_3 and job_1 till job_3 is null, then karaoke-recording has gone wrong
+        else if (name_1 == null || job_1 == null || name_2 == null || job_2 == null || name_3 == null || job_3 == null)
+        {
+            Debug.Log("Name and job variables were not well assigned. Try again");
+            success = false;
+        }
+
+        return success;
+    }
+
+    // This functions works with the separate buttons for name and job
+    // Where name and job (for now) are only recorded once)
     IEnumerator PlayCustomSong()
     {
         // Check all info is present
-        if (name == null)
-        {
-            Debug.Log("Je moet nog een naam inspreken!");
-            yield break;
-        }
-            
-        if (job == null)
-        {
-            Debug.Log("Je moet nog een beroep inspreken!");
-            yield break;
-        }
+        bool succesfullRecording = DoPresenceCheck();
+        if (!succesfullRecording) yield break;
+
+        //if (name == null && name_1 == null)
+        //{
+        //    Debug.Log("Je moet nog een naam inspreken!");
+        //    yield break;
+        //}
+
+        //if (job == null && job_1 == null)
+        //{
+        //    Debug.Log("Je moet nog een beroep inspreken!");
+        //    yield break;
+        //}
+
+        // Indicator that the buttonmethod was used
+        // If you used the button-method, then for now you only record your name and job once
+        // So set the other variables to the ones you recorded
+        //if (name_1 == null)
+        //{
+        //    name_1 = name;
+        //    name_2 = name;
+        //    name_3 = name;
+        //    job_1 = job;
+        //    job_2 = job;
+        //    job_3 = job;
+        //}
 
         // Combine all song snippets
         Debug.Log("Generating song...");
-        clips = new AudioClip[] {intro1, name, job,
-            intro2, name, job,
-            intro3, name, job, 
+        clips = new AudioClip[] {kenje1, name_1, dieis1, job_1,
+            kenje2, name_2, dieis2, job_2,
+            kenje3, name_3, dieis3, job_3, 
             endSong};
 
         AudioClip generatedSong = Combine(clips);
@@ -204,10 +309,35 @@ public class MicrophoneControle : MonoBehaviour
         // Combine clips
         if (length == 0) return null;
         AudioClip result = AudioClip.Create("Personal Song", length, 1, microphoneFrequency, false);
-       // AudioClip result = AudioClip.Create("Personal Song", length / 2, 2, microphoneFrequency, false);
+       // AudioClip result = AudioClip.Create("Personal Song", length / 2, 2, microphoneFrequency, false); // for stereo instead of mono
         result.SetData(data, 0);
 
         return result;
+    }
+
+    void SwitchMode()
+    {
+        // Switch from karaokemode to buttonmode
+        if (karaokeMode)
+        {
+            nameButton.gameObject.SetActive(true);
+            jobButton.gameObject.SetActive(true);
+            karaokeButton.gameObject.SetActive(false);
+            karaokeMode = false;
+            buttonMode = true;
+            switchButton.GetComponentInChildren<Text>().text = "Switch to button mode";
+        }
+
+        // Switch from buttonmode to karaokemode
+        else if (buttonMode)
+        {
+            nameButton.gameObject.SetActive(false);
+            jobButton.gameObject.SetActive(false);
+            karaokeButton.gameObject.SetActive(true);
+            buttonMode = false;
+            karaokeMode = true;
+            switchButton.GetComponentInChildren<Text>().text = "Switch to karaoke mode";
+        }  
     }
 
     #endregion
@@ -217,5 +347,6 @@ public class MicrophoneControle : MonoBehaviour
     public void BeroepButton() => StartCoroutine(RecordJob());
     public void PlayButton() => StartCoroutine(PlayCustomSong());
     public void DownloadButton() => StartCoroutine(DownloadSong());
+    public void ModeButton() => SwitchMode();
     #endregion 
 }
