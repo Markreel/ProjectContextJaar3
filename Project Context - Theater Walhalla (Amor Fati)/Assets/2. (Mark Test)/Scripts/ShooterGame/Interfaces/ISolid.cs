@@ -6,6 +6,6 @@ namespace ShooterGame
 {
     public interface ISolid
     {
-        
+        void OnShot();
     }
 }

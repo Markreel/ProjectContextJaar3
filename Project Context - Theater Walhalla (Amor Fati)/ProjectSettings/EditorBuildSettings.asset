@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/2. (Mark Test)/Scenes/ShooterGame.unity
+    guid: 6b7394686acbb754ca563394453b2f51
   m_configObjects: {}
