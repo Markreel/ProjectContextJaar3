@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using System;
-//using UnityEditorInternal;
 
 public class MicrophoneControle : MonoBehaviour
 {
@@ -58,10 +57,25 @@ public class MicrophoneControle : MonoBehaviour
     #endregion
 
     #region Private methods
+
+
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        void Update()
+        {
+            Microphone.Update();
+        }
+#endif
+
     private void Awake()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Microphone.Init();
+            Microphone.QueryAudioInput();
+#endif
+
         Instance = this;
-        savePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + saveFolder;
+        savePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + saveFolder;
         nameButton = GameObject.Find("NaamButton").GetComponent<UnityEngine.UI.Button>();
         jobButton = GameObject.Find("BeroepButton").GetComponent<UnityEngine.UI.Button>();
         karaokeButton = GameObject.Find("StartButton").GetComponent<UnityEngine.UI.Button>();
@@ -271,7 +285,7 @@ public class MicrophoneControle : MonoBehaviour
             yield break;
         }
 
-        catch (Exception e)
+        catch (System.Exception e)
         {
             Debug.Log("Error! " + e.Message);
             yield break;
@@ -348,5 +362,7 @@ public class MicrophoneControle : MonoBehaviour
     public void PlayButton() => StartCoroutine(PlayCustomSong());
     public void DownloadButton() => StartCoroutine(DownloadSong());
     public void ModeButton() => SwitchMode();
-    #endregion 
+    #endregion
+
+
 }
