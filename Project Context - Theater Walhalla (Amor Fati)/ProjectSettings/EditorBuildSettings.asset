@@ -8,4 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+<<<<<<< HEAD
+    path: Assets/Manon/Scenes/Song game.unity
+    guid: a1c212aa605d62e49a72f84513535f34
+=======
+    path: Assets/2. (Mark Test)/Scenes/ShooterGame.unity
+    guid: 6b7394686acbb754ca563394453b2f51
+>>>>>>> 1c7278179d24ee9dd1045702872da75635af930f
   m_configObjects: {}

@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using PoolingAndAudio;
 
 namespace ShooterGame
 {
     [RequireComponent(typeof(Rigidbody), typeof(SelfDestruct))]
     public class BaseDestructablePart : MonoBehaviour, IDestructablePart
     {
-        [SerializeField] private List<BaseDestructablePart> childParts = new List<BaseDestructablePart>();
+        [SerializeField] private List<BaseDestructablePart> linkedParts = new List<BaseDestructablePart>();
+        [SerializeField] private AudioClip audioOnHit;
         [SerializeField] private UnityEvent onDestruction;
 
         private Rigidbody rb;
@@ -20,10 +22,12 @@ namespace ShooterGame
 
         public void Destruct(IDestructable _parent)
         {
-            foreach (var _part in childParts)
+            foreach (var _part in linkedParts)
             {
                 _parent.DestroyPart(_part);
             }
+
+            GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit);
 
             rb.isKinematic = false;
             transform.parent = transform.parent.parent;

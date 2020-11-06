@@ -7,7 +7,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using System;
-using UnityEditorInternal;
 
 public class MicrophoneControle : MonoBehaviour
 {
@@ -19,9 +18,9 @@ public class MicrophoneControle : MonoBehaviour
     bool microphonePresent;
     string device;
     string savePath;
-    AudioSource audio;
+    AudioSource _audio;
     AudioClip[] clips;
-    AudioClip name;
+    AudioClip _name;
     AudioClip job;
     UnityEngine.UI.Button nameButton;
     UnityEngine.UI.Button jobButton;
@@ -58,10 +57,25 @@ public class MicrophoneControle : MonoBehaviour
     #endregion
 
     #region Private methods
+
+
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        void Update()
+        {
+            Microphone.Update();
+        }
+#endif
+
     private void Awake()
     {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Microphone.Init();
+            Microphone.QueryAudioInput();
+#endif
+
         Instance = this;
-        savePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + saveFolder;
+        savePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + saveFolder;
         nameButton = GameObject.Find("NaamButton").GetComponent<UnityEngine.UI.Button>();
         jobButton = GameObject.Find("BeroepButton").GetComponent<UnityEngine.UI.Button>();
         karaokeButton = GameObject.Find("StartButton").GetComponent<UnityEngine.UI.Button>();
@@ -94,7 +108,7 @@ public class MicrophoneControle : MonoBehaviour
         yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
 
         // Initialize audio
-        audio = GetComponent<AudioSource>();
+        _audio = GetComponent<AudioSource>();
         yield break;
     }
 
@@ -109,7 +123,7 @@ public class MicrophoneControle : MonoBehaviour
 
         // Record the name clip
         Debug.Log("Recording name...");
-        name = Microphone.Start(device, false, nameDuration, microphoneFrequency);
+        _name = Microphone.Start(device, false, nameDuration, microphoneFrequency);
         yield return new WaitForSeconds(nameDuration);
         Microphone.End(device);
         Debug.Log("Recording done");
@@ -144,7 +158,7 @@ public class MicrophoneControle : MonoBehaviour
         Debug.Log("Recording done");
 
         // if name is also recorded, you can download
-        if (name != null)
+        if (_name != null)
         {
             generateButton.gameObject.SetActive(true);
             downloadButton.gameObject.SetActive(true);
@@ -158,7 +172,7 @@ public class MicrophoneControle : MonoBehaviour
         bool success = true;
 
         // If both name and name_1 is empty, then something went wrong with the recording
-        if (name == null && name_1 == null)
+        if (_name == null && name_1 == null)
         {
             Debug.Log("Je moet nog een naam inspreken!");
             success = false;
@@ -176,9 +190,9 @@ public class MicrophoneControle : MonoBehaviour
         else if (name != null && name_1 == null)
         {
             Debug.Log("Name and job variables are assigned to name_1 to name_3 and job_1 to job_3");
-            name_1 = name;
-            name_2 = name;
-            name_3 = name;
+            name_1 = _name;
+            name_2 = _name;
+            name_3 = _name;
             job_1 = job;
             job_2 = job;
             job_3 = job;
@@ -248,15 +262,15 @@ public class MicrophoneControle : MonoBehaviour
 
         // Play song
         Debug.Log("Playing song...");
-        audio.clip = generatedSong;
-        audio.Play();
+        _audio.clip = generatedSong;
+        _audio.Play();
         yield break;
     }
 
     IEnumerator DownloadSong()
     {
         // Check if clip is present
-        if (audio.clip == null)
+        if (_audio.clip == null)
         {
             Debug.Log("Je hebt nog geen nummer gemaakt!");
             yield return null;
@@ -267,11 +281,11 @@ public class MicrophoneControle : MonoBehaviour
         {
             Debug.Log("Downloading...");
             savePath = Path.Combine(savePath, songName + ".wav");
-            SavWav.Save(savePath, audio.clip);
+            SavWav.Save(savePath, _audio.clip);
             yield break;
         }
 
-        catch (Exception e)
+        catch (System.Exception e)
         {
             Debug.Log("Error! " + e.Message);
             yield break;
@@ -348,5 +362,7 @@ public class MicrophoneControle : MonoBehaviour
     public void PlayButton() => StartCoroutine(PlayCustomSong());
     public void DownloadButton() => StartCoroutine(DownloadSong());
     public void ModeButton() => SwitchMode();
-    #endregion 
+    #endregion
+
+
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PoolingAndAudio;
 
 namespace ShooterGame
 {
@@ -9,6 +10,9 @@ namespace ShooterGame
         [SerializeField] private GameObject heightAdjuster;
         [SerializeField] private float minHeightAdjustment;
         [SerializeField] private float maxHeightAdjustment;
+
+        [SerializeField] private AudioClip audioOnHit1;
+        [SerializeField] private AudioClip audioOnHit2;
 
         private Animator animator;
         private TargetManager targetManager;
@@ -120,6 +124,8 @@ namespace ShooterGame
         public void OnShot(GameObject _shooter)
         {
             if (isShot) { return; }
+            GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit1);
+            GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit2);
             animator.SetTrigger("FallOver");
             isShot = true;
         }

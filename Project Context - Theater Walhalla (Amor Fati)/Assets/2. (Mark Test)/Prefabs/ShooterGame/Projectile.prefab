@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2385477488211295417}
   - component: {fileID: 2385477488211295416}
   - component: {fileID: 526695010923614895}
-  - component: {fileID: 9062702563618499178}
   m_Layer: 11
   m_Name: Projectile
   m_TagString: Untagged
@@ -63,23 +62,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedMulitplier: 20
---- !u!114 &9062702563618499178
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2385477488211295398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d7114ebed3392545a120a5f87559410, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startOnAwake: 1
-  selfDestructTime: 3
-  onDestruction:
-    m_PersistentCalls:
-      m_Calls: []
+  lifeTime: 3
 --- !u!1 &2385477489155031936
 GameObject:
   m_ObjectHideFlags: 0
