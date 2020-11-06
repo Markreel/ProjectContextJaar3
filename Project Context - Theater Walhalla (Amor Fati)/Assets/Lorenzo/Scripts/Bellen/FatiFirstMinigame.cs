@@ -18,7 +18,8 @@ public class FatiFirstMinigame : MonoBehaviour
 
     public GameObject fati;
 
-    private LineRenderer lineRenderer;
+    [HideInInspector]
+    public LineRenderer lineRenderer;
 
     public float attackWaitTime = 2;
     public float attackWaitSpeedup = 0.1f;

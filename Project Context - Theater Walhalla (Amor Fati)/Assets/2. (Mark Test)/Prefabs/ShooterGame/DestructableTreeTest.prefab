@@ -124,8 +124,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b51c8163faad614abd0c6099c199a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childParts:
+  linkedParts:
   - {fileID: 646742267139454090}
+  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
   onDestruction:
     m_PersistentCalls:
       m_Calls:
@@ -281,7 +282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b51c8163faad614abd0c6099c199a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childParts: []
+  linkedParts: []
+  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
   onDestruction:
     m_PersistentCalls:
       m_Calls:
@@ -437,8 +439,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b51c8163faad614abd0c6099c199a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  childParts:
+  linkedParts:
   - {fileID: 646742266077305473}
+  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
   onDestruction:
     m_PersistentCalls:
       m_Calls:

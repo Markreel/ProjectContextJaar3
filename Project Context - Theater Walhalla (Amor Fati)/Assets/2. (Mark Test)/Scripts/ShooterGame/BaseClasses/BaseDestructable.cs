@@ -8,7 +8,6 @@ namespace ShooterGame
     {
         [SerializeField] private List<BaseDestructablePart> parts = new List<BaseDestructablePart>();
 
-
         public void DestroyPart(BaseDestructablePart _targetedPart)
         {
             bool _isTargetPartInList = false;
