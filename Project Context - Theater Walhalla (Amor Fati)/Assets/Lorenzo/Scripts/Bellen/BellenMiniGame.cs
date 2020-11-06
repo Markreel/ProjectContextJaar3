@@ -95,6 +95,8 @@ public class BellenMiniGame : MonoBehaviour
             StartCoroutine(EndScreen());
             //Stop fati from attacking.
             fatiManager.enabled = false;
+            //Cleans up any left behind lines of Fati.
+            fatiManager.lineRenderer.positionCount = 0;
         }
 
     }
@@ -179,12 +181,6 @@ public class BellenMiniGame : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         StartCoroutine(DrainCoins());
-
-
-
-
-
-
     }
 
     IEnumerator DrainCoins()
@@ -205,7 +201,7 @@ public class BellenMiniGame : MonoBehaviour
     {
         endScreenPlayerScore.text = Mathf.Round(val).ToString();
     }
-
+    //Function required to use the value sadly. 
     void drainCoinScore(float val)
     {
         coinText.text = Mathf.Round(val).ToString();
