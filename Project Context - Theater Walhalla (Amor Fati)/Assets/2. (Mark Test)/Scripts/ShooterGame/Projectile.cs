@@ -1,21 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using PoolingAndAudio;
+using System;
 
 namespace ShooterGame
 {
-    public class Projectile : MonoBehaviour
+    public class Projectile : MonoBehaviour, IPooledObject
     {
+        public string Key { get; set; }
+        private Action<string, GameObject> onDestruction;
+
         [SerializeField] private float speedMulitplier = 10f;
+        [SerializeField] private float lifeTime = 5f;
 
         private bool isMoving = true;
-
         private Vector3 previousPosition = Vector3.zero;
-
-        private void Awake()
-        {
-            previousPosition = transform.position;
-        }
 
         private void FixedUpdate()
         {
@@ -38,7 +39,7 @@ namespace ShooterGame
                 if (_shootable != null)
                 {
                     //Debug.Log("I FOUND A SHOOTABLE");
-                    _shootable.OnShot(gameObject);
+                    _shootable.OnShot(gameObject);                  
                 }
 
                 //Check for Destructable
@@ -53,6 +54,7 @@ namespace ShooterGame
                 ISolid _solid = _hit.collider.GetComponent<ISolid>();
                 if (_solid != null)
                 {
+                    _solid.OnShot();
                     transform.position = _hit.point;
                     isMoving = false;
                 }
@@ -61,32 +63,27 @@ namespace ShooterGame
             previousPosition = transform.position;
         }
 
-        private void OnCollisionEnter(Collision _collision)
+        private void SelfDestruct()
         {
-            ////Check for Shootable
-            ////Debug.Log(_collision.collider.name);
-            //IShootable _shootable = _collision.collider.GetComponentInParent<IShootable>();
-            //if(_shootable != null)
-            //{
-            //    //Debug.Log("I FOUND A SHOOTABLE");
-            //    _shootable.OnShot(gameObject);
-            //}
-
-            ////Check for Destructable
-            //IDestructable _destructable = _collision.collider.GetComponentInParent<IDestructable>();
-            //BaseDestructablePart _destructionPart = _collision.collider.GetComponentInChildren<BaseDestructablePart>();
-            //if(_destructable != null && _destructionPart != null)
-            //{
-            //    _destructable.DestroyPart(_destructionPart);
-            //}
-
-            ////Check for Solid
-            //ISolid _solid = _collision.collider.GetComponent<ISolid>();
-            //if(_solid != null)
-            //{
-            //    transform.position = _collision.contacts[0].point;
-            //    isMoving = false;
-            //}
+            onDestruction.Invoke(Key,gameObject);
         }
+
+        public void OnObjectSpawn()
+        {
+            previousPosition = transform.position;
+            isMoving = true;
+            GameManager.Instance.TimerHandler.StartTimer($"ProjectileDestruction_{GetInstanceID()}", lifeTime, SelfDestruct);
+        }
+
+        public void OnObjectDespawn()
+        {
+            
+        }
+
+        public void SetUpOnDestruction(Action<string, GameObject> _action)
+        {
+            onDestruction += _action;
+        }
+
     }
 }
