@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PoolingAndAudio;
 
 namespace ShooterGame
 {
@@ -16,6 +17,13 @@ namespace ShooterGame
         private float currentWindUp;
         private float currentFiringRate;
         private float currentHeat;
+
+        private ObjectPool objectPool;
+
+        public void OnStart(ObjectPool _op)
+        {
+            objectPool = _op;
+        }
 
         private void Update()
         {
@@ -36,8 +44,11 @@ namespace ShooterGame
 
             if (Physics.Raycast(_ray, out _hit, Mathf.Infinity, layerMask.value))
             {
-                GameObject _obj = Instantiate(projectilePrefab, transform.position, Quaternion.identity, transform);
-                _obj.transform.LookAt(_hit.point);
+                PooledObject _po = objectPool.SpawnFromPool("Projectile", transform.position, Vector3.zero);
+                _po?.GameObject.transform.LookAt(_hit.point);
+
+                //GameObject _obj = Instantiate(projectilePrefab, transform.position, Quaternion.identity, transform);
+                //_obj.transform.LookAt(_hit.point);
             }
         }
     }
