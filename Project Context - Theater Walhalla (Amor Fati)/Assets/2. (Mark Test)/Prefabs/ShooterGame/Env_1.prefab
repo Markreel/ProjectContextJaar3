@@ -517,7 +517,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3637507923319307249}
-  - component: {fileID: 1949591349255849311}
+  - component: {fileID: 3561601581655636754}
   m_Layer: 0
   m_Name: Env_1
   m_TagString: Untagged
@@ -544,7 +544,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1949591349255849311
+--- !u!114 &3561601581655636754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -553,7 +553,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4121029519583600971}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b72052f778b04314c9ccebcdf3546e06, type: 3}
+  m_Script: {fileID: 11500000, guid: 431ab7a26162ac346a3a1ce80fa804b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activeParts:
@@ -562,11 +562,33 @@ MonoBehaviour:
   - {fileID: 893575278822819644}
   - {fileID: 6481606558741872951}
   - {fileID: 332031302133434984}
-  unactiveParts: []
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
+  refreshDelay: 2.5
+  refreshLocationOffset: {x: 0, y: -1, z: 0}
+  refreshCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  refreshDuration: 0.5
 --- !u!1 &5432494105317849637
 GameObject:
   m_ObjectHideFlags: 0

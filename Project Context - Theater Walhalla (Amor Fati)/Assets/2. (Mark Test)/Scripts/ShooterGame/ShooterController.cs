@@ -13,6 +13,7 @@ namespace ShooterGame
         [SerializeField] private float windUpDuration;
         [SerializeField] private float firingRate = 0.5f;
         [SerializeField] private float overheatThreshhold;
+        [SerializeField] private Texture2D cursorTexture;
 
         private float currentWindUp;
         private float currentFiringRate;
@@ -23,6 +24,7 @@ namespace ShooterGame
         public void OnStart(ObjectPool _op)
         {
             objectPool = _op;
+            Cursor.SetCursor(cursorTexture, Vector2.one * cursorTexture.width / 2, CursorMode.ForceSoftware);
         }
 
         private void Update()
@@ -44,7 +46,7 @@ namespace ShooterGame
 
             if (Physics.Raycast(_ray, out _hit, Mathf.Infinity, layerMask.value))
             {
-                PooledObject _po = objectPool.SpawnFromPool("Projectile", transform.position, Vector3.zero);
+                PooledObject _po = objectPool.SpawnFromPool("Projectile", _ray.origin, Vector3.zero);
                 _po?.GameObject.transform.LookAt(_hit.point);
 
                 //GameObject _obj = Instantiate(projectilePrefab, transform.position, Quaternion.identity, transform);

@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -172,6 +172,7 @@ MonoBehaviour:
   windUpDuration: 0
   firingRate: 0.05
   overheatThreshhold: 0
+  cursorTexture: {fileID: 2800000, guid: a387c68e9e3fb974d84297bd90c0daa9, type: 3}
 --- !u!1 &25489783
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,10 +603,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &251518769
 GameObject:
@@ -793,10 +790,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &392876468
 GameObject:
@@ -934,10 +927,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &466292885
 GameObject:
@@ -1165,10 +1154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &683843032
 GameObject:
@@ -1306,10 +1291,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &801030621
 GameObject:
@@ -2608,10 +2589,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &1298371924
 GameObject:
@@ -2719,10 +2696,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1001 &1301337150
 PrefabInstance:
@@ -2973,10 +2946,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &1475467043
 GameObject:
@@ -3118,10 +3087,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &1563558279 stripped
 GameObject:
@@ -3343,10 +3308,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &1628810975
 GameObject:
@@ -3592,10 +3553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
 --- !u!1 &1957227881
 GameObject:

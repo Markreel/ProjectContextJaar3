@@ -106,7 +106,8 @@ namespace ShooterGame
         {
             round = _round;
             track = _track;
-
+            isShot = false;
+            
             StartCoroutine(IEMove());
             StartCoroutine(IEAdjustHeight());
         }

@@ -89,13 +89,13 @@ namespace ShooterGame
         private void SpawnEnvironmentPart(Round _round, Track _track, string _key)
         {
             PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
-            _po.GameObject.GetComponent<BaseDestructable>().Init(_round, _track);
+            _po.GameObject.GetComponent<MovingDestructable>().Init(_round, _track);
         }
 
         private void SpawnBackgroundPart(Round _round, Track _track, string _key)
         {
             PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
-            _po.GameObject.GetComponent<BaseSolid>().Init(_round, _track);
+            _po.GameObject.GetComponent<MovingSolid>().Init(_round, _track);
         }
     }
 
