@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using PoolingAndAudio;
+using System;
 
 namespace ShooterGame
 {
-    public class ShootingTarget : MonoBehaviour, IShootable
+    public class ShootingTarget : MonoBehaviour, IShootable, IPooledObject
     {
+        public string Key { get; set; }
         [SerializeField] private GameObject heightAdjuster;
         [SerializeField] private float minHeightAdjustment;
         [SerializeField] private float maxHeightAdjustment;
@@ -18,53 +20,32 @@ namespace ShooterGame
         private TargetManager targetManager;
         private bool isShot = false;
 
-        private int index;
-        private AnimationCurve horizontalMovementCurve;
-        private AnimationCurve verticalMovementCurve;
+        private Round round;
+        private Track track;
 
-        private Vector3 startPos;
-        private Vector3 endPos;
+        private Action<string, GameObject> onDestruction;
 
         private void Awake()
         {
             animator = GetComponent<Animator>();
         }
-
-        public void Init(TargetManager _targetManager, int _index, Vector3 _startPos, Vector3 _endPos, AnimationCurve _horMoveCurve, AnimationCurve _verMoveCurve)
-        {
-            targetManager = _targetManager;
-            index = _index;
-
-            startPos = _startPos;
-            endPos = _endPos;
-
-            horizontalMovementCurve = _horMoveCurve;
-            verticalMovementCurve = _verMoveCurve;
-
-            StartCoroutine(IEMove());
-            StartCoroutine(IEAdjustHeight());
-            //StartCoroutine(IEAdjustRotation());
-        }
-
+       
         private IEnumerator IEMove()
         {
             float _tick = 0f;
-
             while (_tick < 1f)
             {
-                _tick += Time.deltaTime / targetManager.GetHorizontalMovementSpeed(index);
-                float _evaluatedTick = horizontalMovementCurve.Evaluate(_tick);
+                _tick += Time.deltaTime / track.HorizontalMovementDuration;
+                float _evaluatedTick = track.HorizontalMovementCurve.Evaluate(_tick);
 
-                Vector3 _pos = Vector3.Lerp(startPos, endPos, _evaluatedTick);
-                _pos.y += (targetManager.GetHeightCurve(index, _evaluatedTick) / 2f) - 0.5f;
+                Vector3 _pos = Vector3.Lerp(track.SpawnPoint.position, track.EndPoint.position, _evaluatedTick);
+                _pos.y += track.HorizontalHeightCurve.Evaluate(_evaluatedTick) / 2f - 0.5f;
                 transform.position = _pos;
-
-
 
                 yield return null;
             }
 
-            Destroy(gameObject);
+            SelfDestruct();
             yield return null;
         }
 
@@ -74,8 +55,8 @@ namespace ShooterGame
 
             while (_tick < 1f)
             {
-                _tick += Time.deltaTime / targetManager.GetVerticalMovementSpeed(index);
-                float _evaluatedTick = verticalMovementCurve.Evaluate(_tick);
+                _tick += Time.deltaTime / track.VerticalMovementSpeed;
+                float _evaluatedTick = track.VerticalMovementCurve.Evaluate(_tick);
 
                 Vector3 _newPos = heightAdjuster.transform.localPosition;
                 _newPos.y = Mathf.Lerp(minHeightAdjustment, maxHeightAdjustment, _evaluatedTick);
@@ -121,6 +102,20 @@ namespace ShooterGame
             yield return null;
         }
 
+        public void Init(Round _round, Track _track)
+        {
+            round = _round;
+            track = _track;
+
+            StartCoroutine(IEMove());
+            StartCoroutine(IEAdjustHeight());
+        }
+
+        public void SelfDestruct()
+        {
+            onDestruction.Invoke(Key, gameObject);
+        }
+
         public void OnShot(GameObject _shooter)
         {
             if (isShot) { return; }
@@ -128,6 +123,21 @@ namespace ShooterGame
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit2);
             animator.SetTrigger("FallOver");
             isShot = true;
+        }
+
+        public void OnObjectSpawn()
+        {
+            
+        }
+
+        public void OnObjectDespawn()
+        {
+            StopAllCoroutines();
+        }
+
+        public void SetUpOnDestruction(Action<string, GameObject> _action)
+        {
+            onDestruction += _action;
         }
     }
 }

@@ -127,20 +127,7 @@ MonoBehaviour:
   linkedParts:
   - {fileID: 646742267139454090}
   audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
-  onDestruction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5277259208794179075}
-        m_MethodName: StartSelfDestruction
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  lifeTime: 3
 --- !u!114 &5277259208794179075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,20 +271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedParts: []
   audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
-  onDestruction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3747000501911674749}
-        m_MethodName: StartSelfDestruction
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  lifeTime: 3
 --- !u!114 &3747000501911674749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,20 +416,7 @@ MonoBehaviour:
   linkedParts:
   - {fileID: 646742266077305473}
   audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
-  onDestruction:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7139058373244663449}
-        m_MethodName: StartSelfDestruction
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  lifeTime: 3
 --- !u!114 &7139058373244663449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -519,7 +480,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b72052f778b04314c9ccebcdf3546e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parts:
+  activeParts:
   - {fileID: 646742267441330782}
   - {fileID: 646742266077305473}
   - {fileID: 646742267139454090}
+  unactiveParts: []
+  useHeightAdjustment: 0
+  heightAdjuster: {fileID: 0}
+  minHeightAdjustment: 0
+  maxHeightAdjustment: 0

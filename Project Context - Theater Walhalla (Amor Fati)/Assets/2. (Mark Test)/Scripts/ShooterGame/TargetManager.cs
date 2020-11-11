@@ -1,127 +1,131 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using PoolingAndAudio;
 
 namespace ShooterGame
 {
 
     public class TargetManager : MonoBehaviour
     {
-        [Header("Settings: ")]
-        [SerializeField] private Transform spawnPoint1;
-        [SerializeField] private Transform endPoint1;
-        [SerializeField] private Transform spawnPoint2;
-        [SerializeField] private Transform endPoint2;
+        [Header("Settings per Round: ")]
+        [SerializeField] public List<Round> Rounds = new List<Round>();
         [Space]
-        [SerializeField] private AnimationCurve normalHorizontalMovementCurve;
-        [SerializeField] private AnimationCurve horizontalHeightCurve1;
-        [SerializeField] private float horizontalMovementSpeed1;
-        [SerializeField] private AnimationCurve horizontalHeightCurve2;
-        [SerializeField] private float horizontalMovementSpeed2;
-
-        [Header("Verticles Movement: ")]
-        [SerializeField] private float verticalMovementSpeed1;
-        [SerializeField] private float verticalMovementSpeed2;
-        [SerializeField] private AnimationCurve normalVerticalMovementCurve;
-        [SerializeField] private AnimationCurve upDownVerticalMovementCurve;
-        [SerializeField] private AnimationCurve crazyVerticalMovementCurve;
-        [Space]
-        [SerializeField] private float spawnDelay1;
-        [SerializeField] private float spawnDelay2;
 
         [Header("References: ")]
         [SerializeField] private ShootingTarget shootingTargetPrefab;
+        [SerializeField] private BaseDestructable destructablePrefab;
 
-        private void Start()
+        private ObjectPool objectPool;
+
+        public void OnStart(ObjectPool _objectPool)
         {
-            StartCoroutine(IESpawnTargets(1));
-            StartCoroutine(IESpawnTargets(2));
+            objectPool = _objectPool;
+            StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
         }
 
-        public float GetHorizontalMovementSpeed(int _index)
+        private IEnumerator IEExecuteRoundBehaviour(Round _round)
         {
-            switch (_index)
+            float _roundTime = _round.Duration;
+            while (_roundTime > 0f)
             {
-                default:
-                case 1:
-                    return horizontalMovementSpeed1;
-                case 2:
-                    return horizontalMovementSpeed2;
-            }
-        }
+                _roundTime -= Time.deltaTime;
+                //zet UI timer gelijk aan de _roundTimer waarde
 
-        public float GetVerticalMovementSpeed(int _index)
-        {
-            switch (_index)
-            {
-                default:
-                case 1:
-                    return verticalMovementSpeed1;
-                case 2:
-                    return verticalMovementSpeed2;
-            }
-        }
+                foreach (var _track in _round.TargetTracks)
+                {
+                    if(_track.SpawnTimer > 0f)
+                    {
+                        _track.SpawnTimer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        _track.SpawnTimer = _track.SpawnDelay;
+                        SpawnTarget(_round, _track);
+                    }
+                }
 
-        public float GetHeightCurve(int _index, float _t)
-        {
-            switch (_index)
-            {
-                default:
-                case 1:
-                    return horizontalHeightCurve1.Evaluate(_t);
-                case 2:
-                    return horizontalHeightCurve2.Evaluate(_t);
-            }
-        }
+                foreach (var _track in _round.EnvironmentTracks)
+                {
+                    if (_track.SpawnTimer > 0f)
+                    {
+                        _track.SpawnTimer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        _track.SpawnTimer = _track.SpawnDelay;
+                        SpawnEnvironmentPart(_round,_track, _track.PooledObjectKey);
+                    }
+                }
 
-        private IEnumerator IESpawnTargets(int _index)
-        {
-            float _delay = 0f;
-            AnimationCurve _curve;
+                foreach (var _track in _round.BackgroundTracks)
+                {
+                    if (_track.SpawnTimer > 0f)
+                    {
+                        _track.SpawnTimer -= Time.deltaTime;
+                    }
+                    else
+                    {
+                        _track.SpawnTimer = _track.SpawnDelay;
+                        SpawnBackgroundPart(_round, _track, _track.PooledObjectKey);
+                    }
+                }
 
-            switch (_index)
-            {
-                default:
-                case 1:
-                    _delay = spawnDelay1;
-                    _curve = normalVerticalMovementCurve;
-                    break;
-                case 2:
-                    _delay = spawnDelay2;
-                    _curve = upDownVerticalMovementCurve;
-                    break;
+                yield return null;
             }
 
-            yield return new WaitForSeconds(_delay);
+            Debug.Log("Round is over!");
+            //Ronde is voorbij
 
-            SpawnTarget(_index, normalHorizontalMovementCurve, _curve);
-
-            StartCoroutine(IESpawnTargets(_index));
             yield return null;
         }
 
-        private void SpawnTarget(int _index, AnimationCurve _horMoveCurve, AnimationCurve _verMoveCurve)
+        private void SpawnTarget(Round _round, Track _track)
         {
-            Vector3 _startPos;
-            Vector3 _endPos;
-
-            switch (_index)
-            {
-                default:
-                case 1:
-                    _startPos = spawnPoint1.position;
-                    _endPos = endPoint1.position;
-                    break;
-                case 2:
-                    _startPos = spawnPoint2.position;
-                    _endPos = endPoint2.position;
-                    break;
-            }
-
-            ShootingTarget _target = Instantiate(shootingTargetPrefab, _startPos, shootingTargetPrefab.transform.rotation, transform);
-
-            _target.Init(this, _index, _startPos, _endPos, _horMoveCurve, _verMoveCurve);
+            PooledObject _po = objectPool.SpawnFromPool("Target", _track.SpawnPoint.position, Vector3.zero);
+            _po.GameObject.GetComponent<ShootingTarget>().Init(_round, _track);
         }
 
+        private void SpawnEnvironmentPart(Round _round, Track _track, string _key)
+        {
+            PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
+            _po.GameObject.GetComponent<BaseDestructable>().Init(_round, _track);
+        }
+
+        private void SpawnBackgroundPart(Round _round, Track _track, string _key)
+        {
+            PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
+            _po.GameObject.GetComponent<BaseSolid>().Init(_round, _track);
+        }
     }
+
+    [System.Serializable]
+    public class Round
+    {
+        public float Duration;
+        public float SpeedMultiplier;
+        public List<Track> TargetTracks;
+        public List<Track> EnvironmentTracks;
+        public List<Track> BackgroundTracks;
+    }
+
+    [System.Serializable]
+    public class Track
+    {
+        [Header("Main Settings: ")]
+        public string PooledObjectKey;
+        public float SpawnDelay;
+        [HideInInspector] public float SpawnTimer;
+        public Transform SpawnPoint;
+        public Transform EndPoint;
+        [Header("Horizontal Movement: ")]
+        public float HorizontalMovementDuration;
+        public AnimationCurve HorizontalMovementCurve;
+        public AnimationCurve HorizontalHeightCurve;
+        [Header("Vertical Movement: ")]
+        public float VerticalMovementSpeed;
+        public AnimationCurve VerticalMovementCurve;
+
+    }
+
 }

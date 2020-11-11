@@ -6,18 +6,40 @@ using PoolingAndAudio;
 
 namespace ShooterGame
 {
-    [RequireComponent(typeof(Rigidbody), typeof(SelfDestruct))]
+    [RequireComponent(typeof(Rigidbody))]
     public class BaseDestructablePart : MonoBehaviour, IDestructablePart
     {
         [SerializeField] private List<BaseDestructablePart> linkedParts = new List<BaseDestructablePart>();
         [SerializeField] private AudioClip audioOnHit;
-        [SerializeField] private UnityEvent onDestruction;
+        [SerializeField] private float lifeTime = 3;
 
+        private Transform parent;
+        private Vector3 localStartPos;
+        private Quaternion localStartRot;
         private Rigidbody rb;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            parent = transform.parent;
+            localStartPos = transform.localPosition;
+            localStartRot = transform.localRotation;
+        }
+
+        private void Deactivate()
+        {
+            gameObject.SetActive(false);
+            rb.isKinematic = true;
+        }
+
+        public void Init()
+        {
+            GameManager.Instance.TimerHandler.StopTimer($"BaseDestructionPart Destroy {GetInstanceID()}");
+            rb.isKinematic = true;
+            transform.parent = parent;
+            transform.localPosition = localStartPos;
+            transform.localRotation = localStartRot;
+            gameObject.SetActive(true);
         }
 
         public void Destruct(IDestructable _parent)
@@ -33,7 +55,8 @@ namespace ShooterGame
             transform.parent = transform.parent.parent;
             rb.AddForce((Random.insideUnitSphere + Vector3.up) * 200f);
             transform.LookAt(transform.position + Random.insideUnitSphere);
-            onDestruction.Invoke();
+
+            GameManager.Instance.TimerHandler.StartTimer($"BaseDestructionPart Destroy {GetInstanceID()}", lifeTime, Deactivate);
         }
     }
 }
