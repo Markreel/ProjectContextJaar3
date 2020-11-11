@@ -32,7 +32,7 @@ namespace ShooterGame
             float _tick = 0f;
             while (_tick < 1f)
             {
-                _tick += Time.deltaTime / track.HorizontalMovementDuration;
+                _tick += Time.fixedDeltaTime / track.HorizontalMovementDuration;
                 float _evaluatedTick = track.HorizontalMovementCurve.Evaluate(_tick);
 
                 Vector3 _pos = Vector3.Lerp(track.SpawnPoint.position, track.EndPoint.position, _evaluatedTick);

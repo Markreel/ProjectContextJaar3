@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 8677495920647252844}
   - component: {fileID: 5747564018057061577}
   - component: {fileID: 7505112766761095171}
+  - component: {fileID: 7820988676308324715}
   m_Layer: 0
-  m_Name: SGMountainsBG
+  m_Name: Bg_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 8297733037960262102}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.66, y: -0.060347848, z: 21.77}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -79,3 +80,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7820988676308324715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8297733037960262102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useHeightAdjustment: 0
+  heightAdjuster: {fileID: 0}
+  minHeightAdjustment: 0
+  maxHeightAdjustment: 0
+  audioOnHit: {fileID: 0}
