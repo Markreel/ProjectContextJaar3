@@ -47,15 +47,20 @@ public class ProgressBar : MonoBehaviour
     #region Private methods
 
     // TO DO:
-    // - Sort of presentable UI
-    // - Deze code en die van MicrophoneControl cleanen
+    // - Deze code en die van MicrophoneControl cleanen (o.a. andere versie eruit)
+    // - Met time samples ipv autodetection
     // - Make sure it records 6 clips (at the right time; recordings-size should then also be 6) (gaat mis aan begin)
-    // - Fix progressbar (stops too early or speed too slow)
-    // - Progressbar (user feedback when to record eg)
+    // - Clips bijknippen (alleen als er gepraat wordt; niet standaardtijd)
+    // - Quitbutton
+    // - Download naam incl. tijdstamp
+    // - Exporteren video 
+    // - Design incorporeren
     // - Make sure recording has approx. same volume as song
 
     private void Awake()
     {
+        Debug.Log("Progressbar: Awake wordt gebruikt");
+
         // Init objects
         slider = gameObject.GetComponent<Slider>();
         bullshitbanen = GameObject.Find("FullSong").GetComponent<AudioSource>();
@@ -78,114 +83,129 @@ public class ProgressBar : MonoBehaviour
         silentStart = true;
     }
 
-    IEnumerator Start()
+    //IEnumerator Start()
+    //{
+    //    Debug.Log("Progressbar: Start wordt gebruikt");
+
+    //    // Find microphone devices
+    //    string[] devices = Microphone.devices;
+    //    if (devices.Length > 0)
+    //    {
+    //        // Set device
+    //        microphonePresent = true;
+    //        device = devices[0];
+    //        Debug.Log("Current device:" + device);
+
+    //        // Get max frequency of device
+    //        int minFreq;
+    //        int maxFreq;
+    //        Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
+    //        if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
+    //    }
+    //    else yield break;
+
+    //    yield break;
+    //}
+
+    //IEnumerator RecordClip(int counter)
+    //{
+    //    Debug.Log("Progressbar: RecordClip wordt gebruikt");
+
+    //    // Return if no microphone is present
+    //    if (!microphonePresent)
+    //    {
+    //        Debug.Log("No microphone detected!");
+    //        yield break;
+    //    }
+
+    //    // Record the job clip
+    //    Debug.Log("Recording clip " + counter);
+    //    recordings[counter] = Microphone.Start(device, false, duration, microphoneFrequency);
+    //    yield return new WaitForSeconds(duration);
+    //    Microphone.End(device);
+    //    Debug.Log("Recording of clip " + counter + " is done");
+    //    yield break;
+    //}
+
+    //IEnumerator StartGame()
+    //{
+    //    Debug.Log("Progressbar: StartGame wordt gebruikt");
+
+    //    // Play audio
+    //    clipCounter = 0;
+    //    IncrementProgress(1);
+    //    bullshitbanen.Play();
+
+    //    // Start karaoke session
+    //    while (bullshitbanen.isPlaying)
+    //    {
+    //        // Check volume of clip (every 100ms)
+    //        currentUpdateTime += Time.deltaTime;
+    //        if (currentUpdateTime >= updateStep)
+    //        {
+    //            currentUpdateTime = 0f;
+    //            bullshitbanen.clip.GetData(clipSampleData, bullshitbanen.timeSamples);
+    //            clipLoudness = 0f;
+    //            foreach (var sample in clipSampleData) clipLoudness += Mathf.Abs(sample);
+    //            clipLoudness /= sampleDataLength;
+    //            yield return null;
+    //        }
+
+    //        // In the silent moments in the audio, turn on microphone to record clips
+    //        if (clipLoudness < 0.01f && !silentStart)
+    //        {
+    //            if (!currentlyRecording)
+    //            {
+    //                currentlyRecording = true;
+    //                StartCoroutine(RecordClip(clipCounter));
+    //                clipCounter++;
+    //            }
+    //        }
+
+    //        // Toggle the start boolean if Flip starts singing for the first time
+    //        else if (clipLoudness > 0.01f && silentStart)
+    //        {
+    //            Debug.Log("Flip starts his chanson");
+    //            silentStart = false;
+    //        }
+
+    //        // If Flip is singing, stop recording
+    //        else if (clipLoudness > 0.01f && currentlyRecording) 
+    //        {
+    //            Debug.Log("Recording is off!");
+    //            currentlyRecording = false;
+    //        }
+
+    //       // Advance slider
+    //        if (slider.value < targetProgress)
+    //        {
+    //            slider.value = bullshitbanen.time / bullshitbanen.clip.length;
+    //            yield return null;
+    //        }
+    //    }
+
+    //    // Set the variables of the microphone control 
+    //    microphoneControl.name_1 = recordings[0];
+    //    microphoneControl.job_1 = recordings[1];
+    //    microphoneControl.name_2 = recordings[2];
+    //    microphoneControl.job_2 = recordings[3];
+    //    microphoneControl.name_3 = recordings[4];
+    //    microphoneControl.job_3 = recordings[5];
+
+    //    // Show buttons
+    //    generateButton.gameObject.SetActive(true);
+    //    downloadButton.gameObject.SetActive(true);
+
+    //    yield break;
+    //}
+
+    // Quit application
+    void Update()
     {
-        // Find microphone devices
-        string[] devices = Microphone.devices;
-        if (devices.Length > 0)
-        {
-            // Set device
-            microphonePresent = true;
-            device = devices[0];
-            Debug.Log("Current device:" + device);
+        Debug.Log("Progressbar: Update wordt gebruikt");
 
-            // Get max frequency of device
-            int minFreq;
-            int maxFreq;
-            Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
-            if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
-        }
-        else yield break;
-
-        yield break;
-    }
-
-    IEnumerator RecordClip(int counter)
-    {
-        // Return if no microphone is present
-        if (!microphonePresent)
-        {
-            Debug.Log("No microphone detected!");
-            yield break;
-        }
-
-        // Record the job clip
-        Debug.Log("Recording clip " + counter);
-        recordings[counter] = Microphone.Start(device, false, duration, microphoneFrequency);
-        yield return new WaitForSeconds(duration);
-        Microphone.End(device);
-        Debug.Log("Recording of clip " + counter + " is done");
-        yield break;
-    }
-
-    IEnumerator StartGame()
-    {
-        // Play audio
-        clipCounter = 0;
-        IncrementProgress(1);
-        bullshitbanen.Play();
-
-        // Start karaoke session
-        while (bullshitbanen.isPlaying)
-        {
-            // Check volume of clip (every 100ms)
-            currentUpdateTime += Time.deltaTime;
-            if (currentUpdateTime >= updateStep)
-            {
-                currentUpdateTime = 0f;
-                bullshitbanen.clip.GetData(clipSampleData, bullshitbanen.timeSamples);
-                clipLoudness = 0f;
-                foreach (var sample in clipSampleData) clipLoudness += Mathf.Abs(sample);
-                clipLoudness /= sampleDataLength;
-                yield return null;
-            }
-
-            // In the silent moments in the audio, turn on microphone to record clips
-            if (clipLoudness < 0.01f && !silentStart)
-            {
-                if (!currentlyRecording)
-                {
-                    currentlyRecording = true;
-                    StartCoroutine(RecordClip(clipCounter));
-                    clipCounter++;
-                }
-            }
-
-            // Toggle the start boolean if Flip starts singing for the first time
-            else if (clipLoudness > 0.01f && silentStart)
-            {
-                Debug.Log("Flip starts his chanson");
-                silentStart = false;
-            }
-
-            // If Flip is singing, stop recording
-            else if (clipLoudness > 0.01f && currentlyRecording) 
-            {
-                Debug.Log("Recording is off!");
-                currentlyRecording = false;
-            }
-
-            // Advance slider
-            if (slider.value < targetProgress)
-            {
-                slider.value += speed * Time.deltaTime;
-                yield return null;
-            }
-        }
-
-        // Set the variables of the microphone control 
-        microphoneControl.name_1 = recordings[0];
-        microphoneControl.job_1 = recordings[1];
-        microphoneControl.name_2 = recordings[2];
-        microphoneControl.job_2 = recordings[3];
-        microphoneControl.name_3 = recordings[4];
-        microphoneControl.job_3 = recordings[5];
-
-        // Show buttons
-        generateButton.gameObject.SetActive(true);
-        downloadButton.gameObject.SetActive(true);
-
-        yield break;
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
     }
 
     #endregion
@@ -193,6 +213,6 @@ public class ProgressBar : MonoBehaviour
     #region Public methods
     // Add progress to the bar
     public void IncrementProgress(float updateProgress) => targetProgress = slider.value + updateProgress;
-    public void StartKaraoke() => StartCoroutine(StartGame());
+  //  public void StartKaraoke() => StartCoroutine(StartGame());
     #endregion
 }
