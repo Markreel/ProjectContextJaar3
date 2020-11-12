@@ -38,8 +38,8 @@ namespace ShooterGame
                 IShootable _shootable = _hit.collider.GetComponentInParent<IShootable>();
                 if (_shootable != null)
                 {
-                    //Debug.Log("I FOUND A SHOOTABLE");
-                    _shootable.OnShot(gameObject);                  
+                    _shootable.OnShot(gameObject);
+                    DataCollectionManager.Instance.TargetsHit();
                 }
 
                 //Check for Destructable
@@ -48,6 +48,7 @@ namespace ShooterGame
                 if (_destructable != null && _destructionPart != null)
                 {
                     _destructable.DestroyPart(_destructionPart);
+                    DataCollectionManager.Instance.BreakablesHit();
                 }
 
                 //Check for Solid

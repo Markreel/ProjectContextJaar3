@@ -9,6 +9,8 @@ using System.Web;
 
 public class DataCollectionManager : MonoBehaviour
 {
+    public static DataCollectionManager Instance;
+
     [SerializeField] int score;
     [SerializeField] float timer;
     [SerializeField] int totalShots;
@@ -18,6 +20,11 @@ public class DataCollectionManager : MonoBehaviour
     [SerializeField] float frameRate, maxFrameRate, minFrameRate;
     [SerializeField] float averageFPSCalculation, averageFPS;
     string deviceDataText;
+
+    private void Awake()
+    {
+        Instance = Instance ?? this;
+    }
 
     void Start()
     {
@@ -59,9 +66,9 @@ public class DataCollectionManager : MonoBehaviour
         averageFPS = 1f / averageFPSCalculation;
     }
 
-    public void ScoreUp(int x)
+    public void SetScore(int x)
     {
-        score += x;
+        score = x;
     }
 
     public void TotalShots()
@@ -76,14 +83,17 @@ public class DataCollectionManager : MonoBehaviour
     public void BreakablesHit()
     {
         breakables++;
+        HitShots();
     }
     public void TargetsHit()
     {
         targetshit++;
+        HitShots();
     }
     public void FatiHit()
     {
         fatihit++;
+        HitShots();
     }
     public void StartMouseTimer()
     {

@@ -13,6 +13,9 @@ namespace ShooterGame
         [SerializeField] private float minHeightAdjustment;
         [SerializeField] private float maxHeightAdjustment;
 
+        [Space]
+
+        [SerializeField] private int scoreValue;
         [SerializeField] private AudioClip audioOnHit1;
         [SerializeField] private AudioClip audioOnHit2;
 
@@ -22,6 +25,7 @@ namespace ShooterGame
 
         private Round round;
         private Track track;
+        private ScoreManager scoreManager;
 
         private Action<string, GameObject> onDestruction;
 
@@ -102,10 +106,12 @@ namespace ShooterGame
             yield return null;
         }
 
-        public void Init(Round _round, Track _track)
+        public void Init(Round _round, Track _track, ScoreManager _scoreManager)
         {
             round = _round;
             track = _track;
+            scoreManager = _scoreManager;
+
             isShot = false;
             
             StartCoroutine(IEMove());
@@ -120,8 +126,13 @@ namespace ShooterGame
         public void OnShot(GameObject _shooter)
         {
             if (isShot) { return; }
+
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit1);
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit2);
+
+            scoreManager.AddScore(scoreValue);
+            scoreManager.AdvanceMultiplierProgression();
+
             animator.SetTrigger("FallOver");
             isShot = true;
         }

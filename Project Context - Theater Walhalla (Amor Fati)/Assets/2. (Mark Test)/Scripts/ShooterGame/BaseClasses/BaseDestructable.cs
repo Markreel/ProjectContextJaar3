@@ -16,7 +16,7 @@ namespace ShooterGame
             Destroy(gameObject);
         }
 
-        public void DestroyPart(BaseDestructablePart _targetedPart)
+        public virtual void DestroyPart(BaseDestructablePart _targetedPart)
         {
             bool _isTargetPartInList = false;
             foreach (var _part in activeParts)

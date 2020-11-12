@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6394540144726608168}
   - component: {fileID: 9176382380996787682}
   - component: {fileID: 2682142233041519191}
+  - component: {fileID: 8317075627936456713}
   m_Layer: 0
   m_Name: Bg_2
   m_TagString: Untagged
@@ -92,8 +93,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64d8b97bd2abd4bba2782c6aa7c099, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useHeightAdjustment: 0
-  heightAdjuster: {fileID: 0}
-  minHeightAdjustment: 0
-  maxHeightAdjustment: 0
   audioOnHit: {fileID: 0}
+--- !u!65 &8317075627936456713
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7231078236419578935}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.9366633, y: 0.66408724, z: 0.047813535}
+  m_Center: {x: 0, y: 0.33200803, z: 0}

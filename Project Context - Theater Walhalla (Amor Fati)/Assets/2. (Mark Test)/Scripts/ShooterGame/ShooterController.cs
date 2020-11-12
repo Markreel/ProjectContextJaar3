@@ -14,6 +14,7 @@ namespace ShooterGame
         [SerializeField] private float firingRate = 0.5f;
         [SerializeField] private float overheatThreshhold;
         [SerializeField] private Texture2D cursorTexture;
+        [SerializeField] private AudioClip audioOnShoot;
 
         private float currentWindUp;
         private float currentFiringRate;
@@ -31,6 +32,7 @@ namespace ShooterGame
         {
             if (Input.GetMouseButton(0))
             {
+                DataCollectionManager.Instance.StartMouseTimer();
                 if (currentFiringRate <= 0f) { Shoot(); }
             }
 
@@ -48,6 +50,9 @@ namespace ShooterGame
             {
                 PooledObject _po = objectPool.SpawnFromPool("Projectile", _ray.origin, Vector3.zero);
                 _po?.GameObject.transform.LookAt(_hit.point);
+
+                GameManager.Instance.AudioManager.SpawnAudioComponent(Camera.main.transform, audioOnShoot);
+                DataCollectionManager.Instance.TotalShots();
 
                 //GameObject _obj = Instantiate(projectilePrefab, transform.position, Quaternion.identity, transform);
                 //_obj.transform.LookAt(_hit.point);

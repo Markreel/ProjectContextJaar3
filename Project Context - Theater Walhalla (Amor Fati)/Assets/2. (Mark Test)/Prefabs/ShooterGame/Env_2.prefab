@@ -112,7 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linkedParts:
   - {fileID: 3112534060386362279}
-  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
+  audioOnHit: {fileID: 8300000, guid: c3f9a0d786e191f4aaa251c3e7ab1556, type: 3}
   lifeTime: 3
 --- !u!64 &1716669731220434715
 MeshCollider:
@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedParts: []
-  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
+  audioOnHit: {fileID: 8300000, guid: c3f9a0d786e191f4aaa251c3e7ab1556, type: 3}
   lifeTime: 3
 --- !u!64 &1821039084771574773
 MeshCollider:
@@ -366,7 +366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedParts: []
-  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
+  audioOnHit: {fileID: 8300000, guid: c3f9a0d786e191f4aaa251c3e7ab1556, type: 3}
   lifeTime: 3
 --- !u!64 &329476274010593121
 MeshCollider:
@@ -493,7 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   linkedParts: []
-  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
+  audioOnHit: {fileID: 8300000, guid: c3f9a0d786e191f4aaa251c3e7ab1556, type: 3}
   lifeTime: 3
 --- !u!64 &1088916841111493910
 MeshCollider:
@@ -623,7 +623,7 @@ MonoBehaviour:
   - {fileID: 6587067811744139415}
   - {fileID: 9101171314929830841}
   - {fileID: 7457457191143864664}
-  audioOnHit: {fileID: 8300000, guid: b0cc30ffe1a716148be079107912eeef, type: 3}
+  audioOnHit: {fileID: 8300000, guid: c3f9a0d786e191f4aaa251c3e7ab1556, type: 3}
   lifeTime: 3
 --- !u!64 &6271947552271042854
 MeshCollider:
@@ -693,7 +693,7 @@ MonoBehaviour:
   - {fileID: 6587067811744139415}
   - {fileID: 9101171314929830841}
   - {fileID: 7457457191143864664}
-  refreshDelay: 2.5
+  refreshDelay: 4
   refreshLocationOffset: {x: 0, y: -1, z: 0}
   refreshCurve:
     serializedVersion: 2

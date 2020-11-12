@@ -11,6 +11,7 @@ namespace ShooterGame
         [SerializeField] private AnimationCurve refreshCurve;
         [SerializeField] private float refreshDuration;
 
+        private bool isRefreshing = false;
         private Vector3 startPos;
         private Coroutine refreshRoutine;
 
@@ -19,15 +20,12 @@ namespace ShooterGame
             startPos = transform.position;
         }
 
-        protected override void SelfDestruct()
-        {
-            gameObject.SetActive(false);
-            Refresh();
-        }
-
         private void Refresh()
         {
-            if(refreshRoutine != null) { StopCoroutine(refreshRoutine); }
+            if (isRefreshing) { return; }
+            isRefreshing = true;
+
+            if (refreshRoutine != null) { StopCoroutine(refreshRoutine); }
             refreshRoutine = StartCoroutine(IERefresh());
         }
 
@@ -41,12 +39,25 @@ namespace ShooterGame
             unactiveParts.Clear();
         }
 
+        private void SetActiveColliderOnParts(bool _value)
+        {
+            foreach (var _part in activeParts)
+            {
+                _part.SetActiveCollider(_value);
+            }
+        }
+
+        protected override void SelfDestruct()
+        {
+            
+        }
+
         private IEnumerator IERefresh()
         {
             yield return new WaitForSeconds(refreshDelay);
 
             ResetParts();
-            gameObject.SetActive(true);
+            SetActiveColliderOnParts(false);
 
             float _key = 0;
             while (_key < 1f)
@@ -55,9 +66,19 @@ namespace ShooterGame
                 float _evaluatedKey = refreshCurve.Evaluate(_key);
 
                 transform.position = Vector3.Lerp(startPos + refreshLocationOffset, startPos, _evaluatedKey);
+                yield return null;
             }
 
+            SetActiveColliderOnParts(true);
+            isRefreshing = false;
             yield return null;
+        }
+
+        public override void DestroyPart(BaseDestructablePart _targetedPart)
+        {
+            base.DestroyPart(_targetedPart);
+
+            Refresh();
         }
     }
 
