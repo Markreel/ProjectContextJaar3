@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using PoolingAndAudio;
-using System;
 
 namespace ShooterGame
 {
     public class Projectile : MonoBehaviour, IPooledObject
     {
         public string Key { get; set; }
-        private Action<string, GameObject> onDestruction;
+        private System.Action<string, GameObject> onDestruction;
 
         [SerializeField] private float speedMulitplier = 10f;
         [SerializeField] private float lifeTime = 5f;
@@ -57,6 +56,7 @@ namespace ShooterGame
                 {
                     _solid.OnShot();
                     transform.position = _hit.point;
+                    transform.forward = -_hit.normal + new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), 0);
                     isMoving = false;
                 }
             }
@@ -81,7 +81,7 @@ namespace ShooterGame
             
         }
 
-        public void SetUpOnDestruction(Action<string, GameObject> _action)
+        public void SetUpOnDestruction(System.Action<string, GameObject> _action)
         {
             onDestruction += _action;
         }

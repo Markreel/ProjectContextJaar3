@@ -41,7 +41,7 @@ namespace ShooterGame
         public void QuitGame()
         {
             Application.OpenURL("https://forms.gle/YRoE2q7dxnu4Xoek9");
-            Application.Quit();
+            //Application.Quit();
         }
     }
 }
