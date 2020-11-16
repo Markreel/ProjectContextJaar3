@@ -23,7 +23,7 @@ namespace PoolingAndAudio
             List<AudioClip> _clips = new List<AudioClip>();
             _clips.Add(_clip);
 
-            _ac.Reset();
+            _ac.ResetValues();
             _ac.DisableAfterPlaying = true;
             _ac.AddAudioClipCollection("", _clips);
             _ac.Play();
@@ -34,10 +34,11 @@ namespace PoolingAndAudio
             PooledObject _po = objectPool.SpawnFromPool("AC_RandomClip", _t.position, _t.eulerAngles);
             AudioComponent _ac = _po.GameObject.GetComponent<AudioComponent>();
 
-            _ac.Reset();
+            _ac.ResetValues();
             _ac.DisableAfterPlaying = true;
             _ac.AddAudioClipCollection("", _clips);
             _ac.Play();
         }
+
     }
 }

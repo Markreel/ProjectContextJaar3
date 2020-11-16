@@ -101,7 +101,7 @@ namespace PoolingAndAudio
             clipCollections.Add(_acc);
         }
 
-        public virtual void Reset()
+        public virtual void ResetValues()
         {
             DisableAfterPlaying = false;
             playOnEnable = false;
@@ -109,11 +109,11 @@ namespace PoolingAndAudio
             loop = false;
             delayPerLoop = 0;
 
-            randomPitch = false;
-            randomPitchMin = 0;
-            randomPitchMax = 0;
-            randomPitchValue = 1;
-            Pitch = 1;
+            //randomPitch = false;
+            //randomPitchMin = 0;
+            //randomPitchMax = 0;
+            //randomPitchValue = 1;
+            //Pitch = 1;
 
             clipCollections.Clear();
         }

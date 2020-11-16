@@ -13,16 +13,21 @@ namespace ShooterGame
         [SerializeField] private AudioClip audioOnHit;
         [SerializeField] private float lifeTime = 3;
 
+        private Collider col;
         private Transform parent;
         private Vector3 localStartPos;
+        private Vector3 localStartScale;
         private Quaternion localStartRot;
         private Rigidbody rb;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            col = GetComponent<Collider>();
+
             parent = transform.parent;
             localStartPos = transform.localPosition;
+            localStartScale = transform.localScale;
             localStartRot = transform.localRotation;
         }
 
@@ -38,6 +43,7 @@ namespace ShooterGame
             rb.isKinematic = true;
             transform.parent = parent;
             transform.localPosition = localStartPos;
+            transform.localScale = localStartScale;
             transform.localRotation = localStartRot;
             gameObject.SetActive(true);
         }
@@ -53,10 +59,16 @@ namespace ShooterGame
 
             rb.isKinematic = false;
             transform.parent = transform.parent.parent;
+            transform.localScale /= 2;
             rb.AddForce((Random.insideUnitSphere + Vector3.up) * 200f);
             transform.LookAt(transform.position + Random.insideUnitSphere);
 
             GameManager.Instance.TimerHandler.StartTimer($"BaseDestructionPart Destroy {GetInstanceID()}", lifeTime, Deactivate);
+        }
+
+        public void SetActiveCollider(bool _value)
+        {
+            col.enabled = _value;
         }
     }
 }

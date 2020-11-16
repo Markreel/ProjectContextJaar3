@@ -17,10 +17,14 @@ namespace ShooterGame
         [SerializeField] private BaseDestructable destructablePrefab;
 
         private ObjectPool objectPool;
+        private ScoreManager scoreManager;
+        private UIManager uiManager;
 
-        public void OnStart(ObjectPool _objectPool)
+        public void OnStart(ObjectPool _objectPool, ScoreManager _scoreManager, UIManager _uiManager)
         {
             objectPool = _objectPool;
+            scoreManager = _scoreManager;
+            uiManager = _uiManager;
             StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
         }
 
@@ -30,7 +34,7 @@ namespace ShooterGame
             while (_roundTime > 0f)
             {
                 _roundTime -= Time.deltaTime;
-                //zet UI timer gelijk aan de _roundTimer waarde
+                uiManager.UpdateTimerVisual((int)_roundTime);
 
                 foreach (var _track in _round.TargetTracks)
                 {
@@ -74,8 +78,9 @@ namespace ShooterGame
                 yield return null;
             }
 
-            Debug.Log("Round is over!");
-            //Ronde is voorbij
+            Time.timeScale = 0;
+            DataCollectionManager.Instance.PostData();
+            uiManager.OpenRoundEndedWindow();
 
             yield return null;
         }
@@ -83,19 +88,19 @@ namespace ShooterGame
         private void SpawnTarget(Round _round, Track _track)
         {
             PooledObject _po = objectPool.SpawnFromPool("Target", _track.SpawnPoint.position, Vector3.zero);
-            _po.GameObject.GetComponent<ShootingTarget>().Init(_round, _track);
+            _po.GameObject.GetComponent<ShootingTarget>().Init(_round, _track, scoreManager);
         }
 
         private void SpawnEnvironmentPart(Round _round, Track _track, string _key)
         {
             PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
-            _po.GameObject.GetComponent<BaseDestructable>().Init(_round, _track);
+            _po.GameObject.GetComponent<MovingDestructable>().Init(_round, _track);
         }
 
         private void SpawnBackgroundPart(Round _round, Track _track, string _key)
         {
             PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
-            _po.GameObject.GetComponent<BaseSolid>().Init(_round, _track);
+            _po.GameObject.GetComponent<MovingSolid>().Init(_round, _track);
         }
     }
 

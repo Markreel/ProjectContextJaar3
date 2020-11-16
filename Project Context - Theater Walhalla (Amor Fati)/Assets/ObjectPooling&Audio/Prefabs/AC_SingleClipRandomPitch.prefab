@@ -145,6 +145,6 @@ MonoBehaviour:
   loop: 0
   delayPerLoop: 0
   randomPitch: 1
-  randomPitchMin: -0.5
-  randomPitchMax: 0.5
+  randomPitchMin: 1
+  randomPitchMax: 1.1
   clipCollections: []
