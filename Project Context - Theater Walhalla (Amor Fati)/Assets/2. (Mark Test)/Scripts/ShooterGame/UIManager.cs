@@ -32,7 +32,7 @@ namespace ShooterGame
 
         public void UpdateMultiplierVisuals(int _multiplier, float _progress)
         {
-            multiplierText.text = _multiplier.ToString();
+            multiplierText.text = "x" + _multiplier.ToString();
             multiplierProgressBar.fillAmount = _progress;
         }
 

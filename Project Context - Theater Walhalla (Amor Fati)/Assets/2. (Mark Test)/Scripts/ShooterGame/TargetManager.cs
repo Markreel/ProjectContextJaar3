@@ -79,7 +79,7 @@ namespace ShooterGame
             }
 
             Time.timeScale = 0;
-            DataCollectionManager.Instance.PostData();
+            //DataCollectionManager.Instance.PostData();
             uiManager.OpenRoundEndedWindow();
 
             yield return null;
