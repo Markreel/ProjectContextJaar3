@@ -17,9 +17,9 @@ public class MicrophoneControle : MonoBehaviour
     #region Private variables
    
     // UI
-    UnityEngine.UI.Button generateButton;
-    UnityEngine.UI.Button downloadButton;
-    public UnityEngine.UI.Slider slider;
+    //UnityEngine.UI.Button generateButton;
+    //UnityEngine.UI.Button downloadButton;
+  //  public UnityEngine.UI.Slider slider;
 
     // Karaoke track
     public AudioSource bullshitbanen;
@@ -50,11 +50,17 @@ public class MicrophoneControle : MonoBehaviour
     #endregion
 
     #region Adjustable variables
+    [SerializeField] GameObject microphoneObject;
+    [SerializeField] GameObject exportScherm;
+    [SerializeField] GameObject startButton;
+    [SerializeField] GameObject downloadButton;
+    [SerializeField] UnityEngine.UI.Slider slider;
+    [SerializeField] UnityEngine.UI.Slider sliderPlaySong;
     [SerializeField] VideoPlayer video;
     [SerializeField] VideoClip _videoClip;
     [SerializeField] ProgressBar progressBar;
-    [SerializeField] string backgroundVideo = "RutteZegtGwnJeBekHouden.mp4";
-    [SerializeField] string downloadVideoName = "Video";
+   // [SerializeField] string backgroundVideo = "RutteZegtGwnJeBekHouden.mp4";
+   // [SerializeField] string downloadVideoName = "Video";
     [SerializeField] string songName = "Bullshit-Baan";
     [SerializeField] string saveFolder = "\\Downloads";
     [SerializeField] AudioClip kenje1;
@@ -75,17 +81,17 @@ public class MicrophoneControle : MonoBehaviour
         Instance = this;
         bullshitbanen = GameObject.Find("FullSong").GetComponent<AudioSource>();
         savePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + saveFolder;
-        generateButton = GameObject.Find("RemixButton").GetComponent<UnityEngine.UI.Button>();
-        downloadButton = GameObject.Find("DownloadButton").GetComponent<UnityEngine.UI.Button>();
-        slider = GameObject.Find("ProgressBar").GetComponent<UnityEngine.UI.Slider>(); 
+        downloadButton.gameObject.SetActive(false);
+        microphoneObject.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        microphoneObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.black);
 
         // Set variables
         clipSampleData = new float[sampleDataLength];
         recordings = new AudioClip[8];
         currentlyRecording = false;
         silentStart = true;
-        string videoPath = Application.streamingAssetsPath + "/" + backgroundVideo;
-        video.url = videoPath;
+      //  string videoPath = Application.streamingAssetsPath + "/" + backgroundVideo;
+      //  video.url = videoPath;
     }
 
     private IEnumerator Start()
@@ -95,6 +101,7 @@ public class MicrophoneControle : MonoBehaviour
         if (devices.Length > 0)
         {
             // Set device
+            microphoneObject.GetComponent<Renderer>().material.color = Color.green;
             microphonePresent = true;
             device = devices[0];
             Debug.Log("Current device:" + device);
@@ -105,7 +112,11 @@ public class MicrophoneControle : MonoBehaviour
             Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
             if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
         }
-        else yield break;
+        else
+        {
+            microphoneObject.GetComponent<Renderer>().material.color = Color.red;
+            yield break;
+        }
 
         // Initialize audio
         _audio = GetComponent<AudioSource>();
@@ -121,6 +132,9 @@ public class MicrophoneControle : MonoBehaviour
             yield break;
         }
 
+        // Show feedback
+        microphoneObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.green);
+
         // Record the job clip
         Debug.Log("Recording clip " + counter);
         recordings[counter] = Microphone.Start(device, false, duration, microphoneFrequency);
@@ -131,9 +145,13 @@ public class MicrophoneControle : MonoBehaviour
 
     IEnumerator StartGame()
     {
+        // Reset slider value
+        slider.value = 0;
+        microphoneObject.SetActive(true);
+        downloadButton.SetActive(false);
+
         // Play audio
         clipCounter = 0;
-      //  StartCoroutine(progressBar.IncrementProgress(1));
         bullshitbanen.Play();
 
         // Start karaoke session
@@ -163,7 +181,7 @@ public class MicrophoneControle : MonoBehaviour
             }
 
             // Toggle the start boolean if Flip starts singing for the first time
-            else if (clipLoudness > 0.01f && silentStart)
+            else if (clipLoudness > 0.01f && silentStart && bullshitbanen.time > 2)
             {
                 Debug.Log("Flip starts his chanson");
                 silentStart = false;
@@ -172,7 +190,8 @@ public class MicrophoneControle : MonoBehaviour
             // If Flip is singing, stop recording
             else if (clipLoudness > 0.01f && currentlyRecording)
             {
-                Debug.Log("Recording is off!");
+                // Show feedback
+                microphoneObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.black);
                 currentlyRecording = false;
             }
 
@@ -189,9 +208,9 @@ public class MicrophoneControle : MonoBehaviour
         name_3 = recordings[4];
         job_3 = recordings[5];
 
-        // Show generate and download buttons
-        generateButton.gameObject.SetActive(true);
+        // Update UI
         downloadButton.gameObject.SetActive(true);
+        microphoneObject.SetActive(false);
 
         yield break;
     }
@@ -202,6 +221,13 @@ public class MicrophoneControle : MonoBehaviour
         Debug.Log("Playing song...");
         if (_audio.clip == null) GenerateSong();
         _audio.Play();
+
+        // Update slider
+        while (_audio.isPlaying)
+        {
+            sliderPlaySong.value = _audio.time / _audio.clip.length;
+            yield return null;
+        }
         yield break;
     }
 
@@ -224,37 +250,38 @@ public class MicrophoneControle : MonoBehaviour
         _audio.clip = generatedSong;
     }
 
-    IEnumerator WaitForRequest(WWW www)
-    {
-        yield return www;
-        if (www.error == null) Debug.Log("WWW ok!: " + www.text);
-        else Debug.Log("WWW Error: " + www.error);
-    }
+    //IEnumerator WaitForRequest(WWW www)
+    //{
+    //    yield return www;
+    //    if (www.error == null) Debug.Log("WWW ok!: " + www.text);
+    //    else Debug.Log("WWW Error: " + www.error);
+    //}
 
     IEnumerator DownloadSong()
     {
         // Check if clip is present
         if (_audio.clip == null) GenerateSong();
 
+        /* 
         // Set generated song to videoclip
         video.audioOutputMode = VideoAudioOutputMode.AudioSource;
         video.SetTargetAudioSource(0, _audio);
 
         // Prepare video download
         WWW www = new WWW(video.url);
-        StartCoroutine(WaitForRequest(www));
+        StartCoroutine(WaitForRequest(www)); */
 
         // Download the clip
         try
         {
             Debug.Log("Downloading...");
-            // Video
+          /*  // Video
             string downloadPath = Path.Combine(savePath, downloadVideoName + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".mp4");
-            File.WriteAllBytes(downloadPath, www.bytes);
+            File.WriteAllBytes(downloadPath, www.bytes); */
 
             // Audio
-            savePath = Path.Combine(savePath, songName + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".wav");
-            SavWav.Save(savePath, _audio.clip);
+            string saveAt = Path.Combine(savePath, songName + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".wav");
+            SavWav.Save(saveAt, _audio.clip);
             yield break;
         }
 
@@ -301,6 +328,13 @@ public class MicrophoneControle : MonoBehaviour
         return result;
     }
 
+    void ReturnToGame()
+    {
+        if (_audio.isPlaying) _audio.Stop();
+        exportScherm.SetActive(false);
+        startButton.SetActive(true);
+    }
+
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -313,6 +347,8 @@ public class MicrophoneControle : MonoBehaviour
     public void PlayButton() => StartCoroutine(PlayCustomSong());
     public void DownloadButton() => StartCoroutine(DownloadSong());
     public void StartKaraoke() => StartCoroutine(StartGame());
+
+    public void ReturnButton() => ReturnToGame();
     #endregion
 
 
