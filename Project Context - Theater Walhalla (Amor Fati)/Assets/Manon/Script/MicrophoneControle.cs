@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using System;
+using UnityEngine.Video;
 
 public class MicrophoneControle : MonoBehaviour
 {
@@ -14,37 +15,53 @@ public class MicrophoneControle : MonoBehaviour
     public static MicrophoneControle Instance;
 
     #region Private variables
-    int microphoneFrequency = 44100;
-    bool microphonePresent;
-    string device;
+   
+    // UI
+    //UnityEngine.UI.Button generateButton;
+    //UnityEngine.UI.Button downloadButton;
+  //  public UnityEngine.UI.Slider slider;
+
+    // Karaoke track
+    public AudioSource bullshitbanen;
+    private bool silentStart;
+    private float updateStep = 0.1f;
+    private int sampleDataLength = 1024;
+    private float currentUpdateTime = 0f;
+    private float clipLoudness;
+    private float[] clipSampleData;
     string savePath;
     AudioSource _audio;
     AudioClip[] clips;
-    AudioClip _name;
-    AudioClip job;
-    UnityEngine.UI.Button nameButton;
-    UnityEngine.UI.Button jobButton;
-    UnityEngine.UI.Button karaokeButton;
-    UnityEngine.UI.Button switchButton;
-    UnityEngine.UI.Button generateButton;
-    UnityEngine.UI.Button downloadButton;
-    bool karaokeMode;
-    bool buttonMode;
-    #endregion
+    AudioClip name_1;
+    AudioClip job_1;
+    AudioClip name_2;
+    AudioClip job_2;
+    AudioClip name_3;
+    AudioClip job_3;
 
-    #region Public variables
-    [HideInInspector] public AudioClip name_1;
-    [HideInInspector] public AudioClip job_1;
-    [HideInInspector] public AudioClip name_2;
-    [HideInInspector] public AudioClip job_2;
-    [HideInInspector] public AudioClip name_3;
-    [HideInInspector] public AudioClip job_3;
+    // Recordings
+    int microphoneFrequency = 44100;
+    bool microphonePresent;
+    string device;
+    private bool currentlyRecording;
+    private AudioClip[] recordings;
+    private int clipCounter;
+    private int duration = 2; // in seconds
     #endregion
 
     #region Adjustable variables
-    [SerializeField] int nameDuration = 2; // in seconds
-    [SerializeField] int jobDuration = 2; // in seconds
-    [SerializeField] string songName = "generated song";
+    [SerializeField] GameObject microphoneObject;
+    [SerializeField] GameObject exportScherm;
+    [SerializeField] GameObject startButton;
+    [SerializeField] GameObject downloadButton;
+    [SerializeField] UnityEngine.UI.Slider slider;
+    [SerializeField] UnityEngine.UI.Slider sliderPlaySong;
+    [SerializeField] VideoPlayer video;
+    [SerializeField] VideoClip _videoClip;
+    [SerializeField] ProgressBar progressBar;
+   // [SerializeField] string backgroundVideo = "RutteZegtGwnJeBekHouden.mp4";
+   // [SerializeField] string downloadVideoName = "Video";
+    [SerializeField] string songName = "Bullshit-Baan";
     [SerializeField] string saveFolder = "\\Downloads";
     [SerializeField] AudioClip kenje1;
     [SerializeField] AudioClip kenje2;
@@ -58,31 +75,23 @@ public class MicrophoneControle : MonoBehaviour
 
     #region Private methods
 
-
-
-#if UNITY_WEBGL && !UNITY_EDITOR
-        void Update()
-        {
-            Microphone.Update();
-        }
-#endif
-
     private void Awake()
     {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            Microphone.Init();
-            Microphone.QueryAudioInput();
-#endif
-
+        // Init objects
         Instance = this;
+        bullshitbanen = GameObject.Find("FullSong").GetComponent<AudioSource>();
         savePath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + saveFolder;
-        nameButton = GameObject.Find("NaamButton").GetComponent<UnityEngine.UI.Button>();
-        jobButton = GameObject.Find("BeroepButton").GetComponent<UnityEngine.UI.Button>();
-        karaokeButton = GameObject.Find("StartButton").GetComponent<UnityEngine.UI.Button>();
-        switchButton = GameObject.Find("SwitchMode").GetComponent<UnityEngine.UI.Button>();
-        generateButton = GameObject.Find("RemixButton").GetComponent<UnityEngine.UI.Button>();
-        downloadButton = GameObject.Find("DownloadButton").GetComponent<UnityEngine.UI.Button>();
-        karaokeMode = true;
+        downloadButton.gameObject.SetActive(false);
+        microphoneObject.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+        microphoneObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.black);
+
+        // Set variables
+        clipSampleData = new float[sampleDataLength];
+        recordings = new AudioClip[8];
+        currentlyRecording = false;
+        silentStart = true;
+      //  string videoPath = Application.streamingAssetsPath + "/" + backgroundVideo;
+      //  video.url = videoPath;
     }
 
     private IEnumerator Start()
@@ -92,6 +101,7 @@ public class MicrophoneControle : MonoBehaviour
         if (devices.Length > 0)
         {
             // Set device
+            microphoneObject.GetComponent<Renderer>().material.color = Color.green;
             microphonePresent = true;
             device = devices[0];
             Debug.Log("Current device:" + device);
@@ -102,17 +112,18 @@ public class MicrophoneControle : MonoBehaviour
             Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
             if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
         }
-        else yield break;
-
-        // Ask for permission to use microphone
-        yield return Application.RequestUserAuthorization(UserAuthorization.Microphone);
+        else
+        {
+            microphoneObject.GetComponent<Renderer>().material.color = Color.red;
+            yield break;
+        }
 
         // Initialize audio
         _audio = GetComponent<AudioSource>();
         yield break;
     }
 
-    IEnumerator RecordName()
+    IEnumerator RecordClip(int counter)
     {
         // Return if no microphone is present
         if (!microphonePresent)
@@ -121,167 +132,156 @@ public class MicrophoneControle : MonoBehaviour
             yield break;
         }
 
-        // Record the name clip
-        Debug.Log("Recording name...");
-        _name = Microphone.Start(device, false, nameDuration, microphoneFrequency);
-        yield return new WaitForSeconds(nameDuration);
-        Microphone.End(device);
-        Debug.Log("Recording done");
-
-        // if job is also recorded, you can download
-        if (job != null)
-        {
-            generateButton.gameObject.SetActive(true);
-            downloadButton.gameObject.SetActive(true);
-        }
-
-        yield break;
-
-    }
-
-
-
-    IEnumerator RecordJob()
-    {
-        // Return if no microphone is present
-        if (!microphonePresent)
-        {
-            Debug.Log("No microphone detected!");
-            yield break;
-        }
+        // Show feedback
+        microphoneObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.green);
 
         // Record the job clip
-        Debug.Log("Recording job...");
-        job = Microphone.Start(device, false, jobDuration, microphoneFrequency);
-        yield return new WaitForSeconds(jobDuration);
+        Debug.Log("Recording clip " + counter);
+        recordings[counter] = Microphone.Start(device, false, duration, microphoneFrequency);
+        yield return new WaitForSeconds(duration);
         Microphone.End(device);
-        Debug.Log("Recording done");
+        yield break;
+    }
 
-        // if name is also recorded, you can download
-        if (_name != null)
+    IEnumerator StartGame()
+    {
+        // Reset slider value
+        slider.value = 0;
+        microphoneObject.SetActive(true);
+        downloadButton.SetActive(false);
+
+        // Play audio
+        clipCounter = 0;
+        bullshitbanen.Play();
+
+        // Start karaoke session
+        while (bullshitbanen.isPlaying)
         {
-            generateButton.gameObject.SetActive(true);
-            downloadButton.gameObject.SetActive(true);
+            // Check volume of clip (every 100ms)
+            currentUpdateTime += Time.deltaTime;
+            if (currentUpdateTime >= updateStep)
+            {
+                currentUpdateTime = 0f;
+                bullshitbanen.clip.GetData(clipSampleData, bullshitbanen.timeSamples);
+                clipLoudness = 0f;
+                foreach (var sample in clipSampleData) clipLoudness += Mathf.Abs(sample);
+                clipLoudness /= sampleDataLength;
+                yield return null;
+            }
+
+            // In the silent moments in the audio, turn on microphone to record clips
+            if (clipLoudness < 0.01f && !silentStart)
+            {
+                if (!currentlyRecording)
+                {
+                    currentlyRecording = true;
+                    StartCoroutine(RecordClip(clipCounter));
+                    clipCounter++;
+                }
+            }
+
+            // Toggle the start boolean if Flip starts singing for the first time
+            else if (clipLoudness > 0.01f && silentStart && bullshitbanen.time > 2)
+            {
+                Debug.Log("Flip starts his chanson");
+                silentStart = false;
+            }
+
+            // If Flip is singing, stop recording
+            else if (clipLoudness > 0.01f && currentlyRecording)
+            {
+                // Show feedback
+                microphoneObject.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.black);
+                currentlyRecording = false;
+            }
+
+            // Advance slider
+            slider.value = bullshitbanen.time / bullshitbanen.clip.length;
+            yield return null;
         }
+
+        // Set the variables of the microphone control 
+        name_1 = recordings[0];
+        job_1 = recordings[1];
+        name_2 = recordings[2];
+        job_2 = recordings[3];
+        name_3 = recordings[4];
+        job_3 = recordings[5];
+
+        // Update UI
+        downloadButton.gameObject.SetActive(true);
+        microphoneObject.SetActive(false);
 
         yield break;
     }
 
-    bool DoPresenceCheck()
-    {
-        bool success = true;
-
-        // If both name and name_1 is empty, then something went wrong with the recording
-        if (_name == null && name_1 == null)
-        {
-            Debug.Log("Je moet nog een naam inspreken!");
-            success = false;
-        }
-
-        else if (job == null && job_1 == null)
-        {
-            Debug.Log("Je moet nog een beroep inspreken!");
-            success = false;
-        }
-
-        // If name_1 is null but name is not, then the button-method was used
-        // For now, you only record your name and job once
-        // So set the other variables to the one you recorded
-        else if (name != null && name_1 == null)
-        {
-            Debug.Log("Name and job variables are assigned to name_1 to name_3 and job_1 to job_3");
-            name_1 = _name;
-            name_2 = _name;
-            name_3 = _name;
-            job_1 = job;
-            job_2 = job;
-            job_3 = job;
-        }
-
-        // If name_1 till name_3 and job_1 till job_3 is null, then karaoke-recording has gone wrong
-        else if (name_1 == null || job_1 == null || name_2 == null || job_2 == null || name_3 == null || job_3 == null)
-        {
-            Debug.Log("Name and job variables were not well assigned. Try again");
-            success = false;
-        }
-
-        return success;
-    }
-
-    // This functions works with the separate buttons for name and job
-    // Where name and job (for now) are only recorded once)
     IEnumerator PlayCustomSong()
     {
-        // Check all info is present
-        bool succesfullRecording = DoPresenceCheck();
-        if (!succesfullRecording) yield break;
+        // Play song
+        Debug.Log("Playing song...");
+        if (_audio.clip == null) GenerateSong();
+        _audio.Play();
 
-        //if (name == null && name_1 == null)
-        //{
-        //    Debug.Log("Je moet nog een naam inspreken!");
-        //    yield break;
-        //}
+        // Update slider
+        while (_audio.isPlaying)
+        {
+            sliderPlaySong.value = _audio.time / _audio.clip.length;
+            yield return null;
+        }
+        yield break;
+    }
 
-        //if (job == null && job_1 == null)
-        //{
-        //    Debug.Log("Je moet nog een beroep inspreken!");
-        //    yield break;
-        //}
-
-        // Indicator that the buttonmethod was used
-        // If you used the button-method, then for now you only record your name and job once
-        // So set the other variables to the ones you recorded
-        //if (name_1 == null)
-        //{
-        //    name_1 = name;
-        //    name_2 = name;
-        //    name_3 = name;
-        //    job_1 = job;
-        //    job_2 = job;
-        //    job_3 = job;
-        //}
+    void GenerateSong()
+    {
+        // Check if audio clips have been recorded and assigned to correctly
+        if (name_1 == null || job_1 == null || name_2 == null || job_2 == null || name_3 == null || job_3 == null)
+        {
+            Debug.Log("Name and job variables were not well assigned. Could not generate song");
+            return;
+        }
 
         // Combine all song snippets
         Debug.Log("Generating song...");
         clips = new AudioClip[] {kenje1, name_1, dieis1, job_1,
             kenje2, name_2, dieis2, job_2,
-            kenje3, name_3, dieis3, job_3, 
+            kenje3, name_3, dieis3, job_3,
             endSong};
-
         AudioClip generatedSong = Combine(clips);
-
-        // Debugging
-        //for (int i = 0; i < clips.Length; i++)
-        //{
-        //    audio.clip = clips[i];
-        //    audio.Play();
-        //    Debug.Log("Playing clip " + i);
-        //    yield return new WaitForSeconds(clips[i].length);
-        //    Debug.Log("Turning to the next one");
-        //}
-
-        // Play song
-        Debug.Log("Playing song...");
         _audio.clip = generatedSong;
-        _audio.Play();
-        yield break;
     }
+
+    //IEnumerator WaitForRequest(WWW www)
+    //{
+    //    yield return www;
+    //    if (www.error == null) Debug.Log("WWW ok!: " + www.text);
+    //    else Debug.Log("WWW Error: " + www.error);
+    //}
 
     IEnumerator DownloadSong()
     {
         // Check if clip is present
-        if (_audio.clip == null)
-        {
-            Debug.Log("Je hebt nog geen nummer gemaakt!");
-            yield return null;
-        }
+        if (_audio.clip == null) GenerateSong();
+
+        /* 
+        // Set generated song to videoclip
+        video.audioOutputMode = VideoAudioOutputMode.AudioSource;
+        video.SetTargetAudioSource(0, _audio);
+
+        // Prepare video download
+        WWW www = new WWW(video.url);
+        StartCoroutine(WaitForRequest(www)); */
 
         // Download the clip
         try
         {
             Debug.Log("Downloading...");
-            savePath = Path.Combine(savePath, songName + ".wav");
-            SavWav.Save(savePath, _audio.clip);
+          /*  // Video
+            string downloadPath = Path.Combine(savePath, downloadVideoName + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".mp4");
+            File.WriteAllBytes(downloadPath, www.bytes); */
+
+            // Audio
+            string saveAt = Path.Combine(savePath, songName + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".wav");
+            SavWav.Save(saveAt, _audio.clip);
             yield break;
         }
 
@@ -294,8 +294,6 @@ public class MicrophoneControle : MonoBehaviour
 
     AudioClip Combine(AudioClip[] clips)
     {
-        /* TODO: Clean up microphone recordings (popping sound at start) */
-
         // Check if there are clips
         if (clips == null || clips.Length == 0) return null;
 
@@ -323,45 +321,34 @@ public class MicrophoneControle : MonoBehaviour
         // Combine clips
         if (length == 0) return null;
         AudioClip result = AudioClip.Create("Personal Song", length, 1, microphoneFrequency, false);
-       // AudioClip result = AudioClip.Create("Personal Song", length / 2, 2, microphoneFrequency, false); // for stereo instead of mono
+        /* For stereo instead of mono, use:
+         * AudioClip result = AudioClip.Create("Personal Song", length / 2, 2, microphoneFrequency, false); */
         result.SetData(data, 0);
 
         return result;
     }
 
-    void SwitchMode()
+    void ReturnToGame()
     {
-        // Switch from karaokemode to buttonmode
-        if (karaokeMode)
-        {
-            nameButton.gameObject.SetActive(true);
-            jobButton.gameObject.SetActive(true);
-            karaokeButton.gameObject.SetActive(false);
-            karaokeMode = false;
-            buttonMode = true;
-            switchButton.GetComponentInChildren<Text>().text = "Switch to button mode";
-        }
+        if (_audio.isPlaying) _audio.Stop();
+        exportScherm.SetActive(false);
+        startButton.SetActive(true);
+    }
 
-        // Switch from buttonmode to karaokemode
-        else if (buttonMode)
-        {
-            nameButton.gameObject.SetActive(false);
-            jobButton.gameObject.SetActive(false);
-            karaokeButton.gameObject.SetActive(true);
-            buttonMode = false;
-            karaokeMode = true;
-            switchButton.GetComponentInChildren<Text>().text = "Switch to karaoke mode";
-        }  
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Application.Quit();
     }
 
     #endregion
 
     #region Public methods
-    public void NameButton() => StartCoroutine(RecordName());
-    public void BeroepButton() => StartCoroutine(RecordJob());
     public void PlayButton() => StartCoroutine(PlayCustomSong());
     public void DownloadButton() => StartCoroutine(DownloadSong());
-    public void ModeButton() => SwitchMode();
+    public void StartKaraoke() => StartCoroutine(StartGame());
+
+    public void ReturnButton() => ReturnToGame();
     #endregion
 
 
