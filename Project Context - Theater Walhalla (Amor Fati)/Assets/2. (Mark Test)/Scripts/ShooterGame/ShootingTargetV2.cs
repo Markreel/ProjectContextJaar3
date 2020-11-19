@@ -62,9 +62,11 @@ namespace ShooterGame
 
         private void SetStartingHeight()
         {
+            float _evaluatedTick = heightAdjustmentCurve.Evaluate(0);
             Vector3 _startHeight = heightAdjuster.transform.localPosition;
-            _startHeight.y = Mathf.Lerp(minHeightAdjustment, maxHeightAdjustment, 0);
+            _startHeight.y = Mathf.Lerp(minHeightAdjustment, maxHeightAdjustment, _evaluatedTick);
             heightAdjuster.transform.localPosition = _startHeight;
+            Debug.Log(_startHeight.y);
         }
 
         private void StartHeightAdjustment()
