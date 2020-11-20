@@ -522,7 +522,7 @@ GameObject:
   - component: {fileID: 1453914594112383600}
   - component: {fileID: 173300219660499555}
   m_Layer: 0
-  m_Name: Env_3
+  m_Name: Mountain_Shootable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -579,7 +579,7 @@ MonoBehaviour:
   - {fileID: 555997051504923256}
   - {fileID: 9188772859642173409}
   - {fileID: 473901541978171933}
-  refreshDelay: 5
+  refreshDelay: Infinity
   refreshLocationOffset: {x: 0, y: -1, z: 0}
   refreshCurve:
     serializedVersion: 2
