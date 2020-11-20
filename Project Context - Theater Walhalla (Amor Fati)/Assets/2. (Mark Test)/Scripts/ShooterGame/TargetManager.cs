@@ -12,10 +12,14 @@ namespace ShooterGame
         [SerializeField] public List<Round> Rounds = new List<Round>();
         [Space]
 
+        [SerializeField] private Vector3 cameraStartPos;
+        [SerializeField] private Vector3 cameraEndPos;
+
         [Header("References: ")]
         [SerializeField] private ShootingTarget shootingTargetPrefab;
         [SerializeField] private BaseDestructable destructablePrefab;
 
+        private Camera cam;
         private ObjectPool objectPool;
         private ScoreManager scoreManager;
         private UIManager uiManager;
@@ -25,7 +29,14 @@ namespace ShooterGame
             objectPool = _objectPool;
             scoreManager = _scoreManager;
             uiManager = _uiManager;
+            cam = Camera.main;
+
             StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
+        }
+
+        private void LerpCamera(float _t)
+        {
+            cam.gameObject.transform.position = Vector3.Lerp(cameraStartPos, cameraEndPos, _t);
         }
 
         private IEnumerator IEExecuteRoundBehaviour(Round _round)
@@ -35,6 +46,8 @@ namespace ShooterGame
             {
                 _roundTime -= Time.deltaTime;
                 uiManager.UpdateTimerVisual((int)_roundTime);
+
+                LerpCamera(1f / _round.Duration * (-_roundTime + _round.Duration));
 
                 foreach (var _track in _round.TargetTracks)
                 {
@@ -79,7 +92,7 @@ namespace ShooterGame
             }
 
             Time.timeScale = 0;
-            DataCollectionManager.Instance.PostData();
+            //DataCollectionManager.Instance.PostData();
             uiManager.OpenRoundEndedWindow();
 
             yield return null;

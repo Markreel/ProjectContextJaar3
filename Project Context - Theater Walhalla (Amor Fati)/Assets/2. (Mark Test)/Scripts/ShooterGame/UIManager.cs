@@ -20,7 +20,7 @@ namespace ShooterGame
             int _minutes = Mathf.Clamp((_timeInSeconds - _timeInSeconds % 60) / 60, 0, 60);
             int _seconds = Mathf.Clamp(_timeInSeconds - 60 * _minutes, 0, 60);
 
-            Debug.Log($"TimeInSeconds: {_timeInSeconds} | Minutes: {_minutes} | Seconds{ _seconds}");
+            //Debug.Log($"TimeInSeconds: {_timeInSeconds} | Minutes: {_minutes} | Seconds{ _seconds}");
 
             timerText.text = string.Format("{0:00}:{1:00}", _minutes, _seconds);
         }
@@ -32,7 +32,7 @@ namespace ShooterGame
 
         public void UpdateMultiplierVisuals(int _multiplier, float _progress)
         {
-            multiplierText.text = _multiplier.ToString();
+            multiplierText.text = "x" + _multiplier.ToString();
             multiplierProgressBar.fillAmount = _progress;
         }
 
