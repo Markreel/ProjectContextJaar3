@@ -648,7 +648,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6471520223253270306}
-  - component: {fileID: 682449148825806371}
+  - component: {fileID: 480426905658269420}
   m_Layer: 0
   m_Name: Env_2
   m_TagString: Untagged
@@ -675,7 +675,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &682449148825806371
+--- !u!114 &480426905658269420
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -684,7 +684,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5946059885718590872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 431ab7a26162ac346a3a1ce80fa804b2, type: 3}
+  m_Script: {fileID: 11500000, guid: b72052f778b04314c9ccebcdf3546e06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activeParts:
@@ -693,30 +693,3 @@ MonoBehaviour:
   - {fileID: 6587067811744139415}
   - {fileID: 9101171314929830841}
   - {fileID: 7457457191143864664}
-  refreshDelay: 4
-  refreshLocationOffset: {x: 0, y: -1, z: 0}
-  refreshCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  refreshDuration: 0.5
