@@ -16,6 +16,6 @@ public class AudioVisualizerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
+        _audioSource.GetSpectrumData(spectrum, 0, FFTWindow.Rectangular);
     }
 }
