@@ -5,7 +5,6 @@ using PoolingAndAudio;
 
 namespace ShooterGame
 {
-
     public class TargetManager : MonoBehaviour
     {
         [Header("Settings per Round: ")]
@@ -14,6 +13,10 @@ namespace ShooterGame
 
         [SerializeField] private Vector3 cameraStartPos;
         [SerializeField] private Vector3 cameraEndPos;
+
+        [Header("Boss Fight")]
+        [SerializeField] private FatiBoss fati;
+        [SerializeField] private float bossFightDuration;
 
         [Header("References: ")]
         [SerializeField] private ShootingTarget shootingTargetPrefab;
@@ -51,7 +54,7 @@ namespace ShooterGame
 
                 foreach (var _track in _round.TargetTracks)
                 {
-                    if(_track.SpawnTimer > 0f)
+                    if (_track.SpawnTimer > 0f)
                     {
                         _track.SpawnTimer -= Time.deltaTime;
                     }
@@ -71,7 +74,7 @@ namespace ShooterGame
                     else
                     {
                         _track.SpawnTimer = _track.SpawnDelay;
-                        SpawnEnvironmentPart(_round,_track, _track.PooledObjectKey);
+                        SpawnEnvironmentPart(_round, _track, _track.PooledObjectKey);
                     }
                 }
 
@@ -88,6 +91,15 @@ namespace ShooterGame
                     }
                 }
 
+                yield return null;
+            }
+
+            fati.DoIntro();
+
+            _roundTime = bossFightDuration;
+            while (_roundTime > 0f)
+            {
+                _roundTime -= Time.deltaTime;
                 yield return null;
             }
 
@@ -145,5 +157,4 @@ namespace ShooterGame
         public AnimationCurve VerticalMovementCurve;
 
     }
-
 }
