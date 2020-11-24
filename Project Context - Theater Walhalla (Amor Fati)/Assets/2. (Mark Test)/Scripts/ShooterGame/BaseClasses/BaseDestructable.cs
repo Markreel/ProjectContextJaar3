@@ -16,6 +16,11 @@ namespace ShooterGame
             Destroy(gameObject);
         }
 
+        private void OnDestroy()
+        {
+            StopAllCoroutines();
+        }
+
         public virtual void DestroyPart(BaseDestructablePart _targetedPart)
         {
             bool _isTargetPartInList = false;
@@ -30,5 +35,6 @@ namespace ShooterGame
 
             if (activeParts.Count == 0) { SelfDestruct(); }
         }
+
     }
 }

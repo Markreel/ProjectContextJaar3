@@ -16,6 +16,7 @@ namespace ShooterGame
 
         [Header("Boss Fight")]
         [SerializeField] private FatiBoss fati;
+        [SerializeField] private Weight weight;
         [SerializeField] private float bossFightDuration;
 
         [Header("References: ")]
@@ -94,18 +95,21 @@ namespace ShooterGame
                 yield return null;
             }
 
-            fati.DoIntro();
+            //fati.DoIntro(weight.DoIntro);
 
             _roundTime = bossFightDuration;
             while (_roundTime > 0f)
             {
                 _roundTime -= Time.deltaTime;
+                uiManager.UpdateTimerVisual((int)_roundTime);
                 yield return null;
             }
 
-            Time.timeScale = 0;
+            fati.DoAttack(uiManager.OpenRoundEndedWindow);
+
+            //Time.timeScale = 0;
             //DataCollectionManager.Instance.PostData();
-            uiManager.OpenRoundEndedWindow();
+            //uiManager.OpenRoundEndedWindow();
 
             yield return null;
         }
@@ -118,8 +122,8 @@ namespace ShooterGame
 
         private void SpawnEnvironmentPart(Round _round, Track _track, string _key)
         {
-            PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
-            _po.GameObject.GetComponent<MovingDestructable>().Init(_round, _track);
+            //PooledObject _po = objectPool.SpawnFromPool(_key, _track.SpawnPoint.position, Vector3.zero);
+            //_po.GameObject.GetComponent<MovingDestructable>().Init(_round, _track);
         }
 
         private void SpawnBackgroundPart(Round _round, Track _track, string _key)
