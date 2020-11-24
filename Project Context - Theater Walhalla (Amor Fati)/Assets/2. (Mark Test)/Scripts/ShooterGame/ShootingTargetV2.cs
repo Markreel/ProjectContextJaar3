@@ -52,9 +52,7 @@ namespace ShooterGame
         {
             if (Camera.main.transform.position.x > transform.position.x - activationRange &&
                 Camera.main.transform.position.x < transform.position.x + activationRange)
-            {
-                Debug.Log($"Activation range: {transform.position.x - activationRange} | Camera pos: {Camera.main.transform.position}");
-
+            {               
                 isActivated = true;
                 Invoke("StartHeightAdjustment", Random.Range(minActivationDelay, maxActivationDelay));
             }

@@ -87,7 +87,7 @@ namespace ShooterGame
                 yield return null;
             }
 
-            OnIntroDone?.Invoke();
+            OnAttackDone?.Invoke();
             yield return null;
         }
 
