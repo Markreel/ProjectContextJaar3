@@ -34,6 +34,7 @@ namespace ShooterGame
 
             foreach (var _hit in _hits)
             {
+                //Check for Shootable
                 IShootable _shootable = _hit.collider.GetComponentInParent<IShootable>();
                 if (_shootable != null)
                 {
