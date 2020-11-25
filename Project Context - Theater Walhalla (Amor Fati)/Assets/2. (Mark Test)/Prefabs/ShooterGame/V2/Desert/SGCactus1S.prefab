@@ -138,7 +138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2088402274943765519}
-  - component: {fileID: -606962372121358976}
+  - component: {fileID: 3367705666551570797}
   m_Layer: 0
   m_Name: SGCactus1S
   m_TagString: Untagged
@@ -163,7 +163,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-606962372121358976
+--- !u!114 &3367705666551570797
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,13 +172,60 @@ MonoBehaviour:
   m_GameObject: {fileID: 1707055992431466165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b72052f778b04314c9ccebcdf3546e06, type: 3}
+  m_Script: {fileID: 11500000, guid: d092ec3b9df87174daae01d294f2ac0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activeParts:
   - {fileID: 7159018023000328446}
   - {fileID: 2413846170093896356}
   - {fileID: 79921378065151476}
+  activationRange: 1
+  minActivationDelay: 0.75
+  maxActivationDelay: 1
+  moveHorizontally: 0
+  loopHorizontalMovement: 0
+  destroyAfterHorizontal: 0
+  horizontalStartPos: 0
+  useObjectPosAsHorizontalStart: 0
+  horizontalEndPos: 0
+  horizontalMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  horizontalMovementDuration: 0
+  moveVertically: 1
+  loopVerticalMovement: 0
+  destroyAfterVertical: 0
+  verticalStartPos: 0
+  useObjectPosAsVerticalStart: 1
+  verticalEndPos: 0
+  verticalMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  verticalMovementDuration: 0.45
 --- !u!1 &4396284361354995149
 GameObject:
   m_ObjectHideFlags: 0

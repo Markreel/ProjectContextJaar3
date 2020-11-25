@@ -137,7 +137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4523337740242171963}
-  - component: {fileID: -6909064055911342022}
+  - component: {fileID: 5274061369660454379}
   m_Layer: 0
   m_Name: SGPenguin2S
   m_TagString: Untagged
@@ -161,7 +161,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6909064055911342022
+--- !u!114 &5274061369660454379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,12 +170,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 2862125954294976852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b72052f778b04314c9ccebcdf3546e06, type: 3}
+  m_Script: {fileID: 11500000, guid: d092ec3b9df87174daae01d294f2ac0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   activeParts:
   - {fileID: 5980942287631176874}
   - {fileID: 8507942457158642170}
+  activationRange: 5
+  minActivationDelay: 0
+  maxActivationDelay: 0
+  moveHorizontally: 0
+  loopHorizontalMovement: 0
+  destroyAfterHorizontal: 0
+  horizontalStartPos: 0
+  useObjectPosAsHorizontalStart: 0
+  horizontalEndPos: 0
+  horizontalMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  horizontalMovementDuration: 0
+  moveVertically: 0
+  loopVerticalMovement: 0
+  destroyAfterVertical: 0
+  verticalStartPos: 0
+  useObjectPosAsVerticalStart: 0
+  verticalEndPos: 0
+  verticalMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  verticalMovementDuration: 0
 --- !u!1 &6514957921809964798
 GameObject:
   m_ObjectHideFlags: 0
