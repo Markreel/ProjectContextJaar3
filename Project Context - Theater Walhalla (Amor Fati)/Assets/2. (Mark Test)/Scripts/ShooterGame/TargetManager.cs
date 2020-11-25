@@ -37,7 +37,7 @@ namespace ShooterGame
             uiManager = _uiManager;
             cam = Camera.main;
 
-            fati.Init(uiManager, this);
+            fati?.Init(uiManager, this);
 
             roundRoutine = StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
         }
