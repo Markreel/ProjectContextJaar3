@@ -29,6 +29,14 @@ namespace ShooterGame
 
         private bool isIntroducing = false;
         private Coroutine currentRoutine;
+        private UIManager uiManager;
+        private TargetManager targetManager;
+
+        public void Init(UIManager _uiManager, TargetManager _targetManager)
+        {
+            uiManager = _uiManager;
+            targetManager = _targetManager;
+        }
 
         public void ResetValues()
         {
@@ -40,9 +48,13 @@ namespace ShooterGame
 
         public void GetHit()
         {
+            targetManager.StopRound();
+
             stunEffect.SetActive(true);
             bonk.SetActive(true);
             GameManager.Instance.AudioManager.Play2DAudio(chirpClip);
+
+            uiManager.OpenGameOverWindow(2);
         }
 
         public void DoIntro(UnityAction _onIntroDone = null)
