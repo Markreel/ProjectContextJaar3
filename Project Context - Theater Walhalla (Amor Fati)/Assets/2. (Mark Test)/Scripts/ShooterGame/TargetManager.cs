@@ -95,7 +95,7 @@ namespace ShooterGame
                 yield return null;
             }
 
-            //fati.DoIntro(weight.DoIntro);
+            fati.DoIntro(weight.DoIntro);
 
             _roundTime = bossFightDuration;
             while (_roundTime > 0f)

@@ -36,6 +36,10 @@ namespace ShooterGame
             base.Update();
 
             ScoreManager.OnUpdate();
+
+            if (Input.GetKeyDown(KeyCode.UpArrow)) { Time.timeScale++; }
+            if (Input.GetKeyDown(KeyCode.DownArrow)) { Time.timeScale--; }
+            if (Input.GetKeyDown(KeyCode.Space)) { Time.timeScale = 1; }
         }
 
         public void QuitGame()

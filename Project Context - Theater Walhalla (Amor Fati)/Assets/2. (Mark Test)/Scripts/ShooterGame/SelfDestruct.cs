@@ -24,6 +24,7 @@ public class SelfDestruct : MonoBehaviour
         yield return new WaitForSeconds(selfDestructTime);
 
         onDestruction.Invoke();
+        Destroy(gameObject);
         
         yield return null;
     }

@@ -7,10 +7,21 @@ namespace PoolingAndAudio
     public class AudioManager : MonoBehaviour
     {
         private ObjectPool objectPool;
+        private AudioSource audioSource;
+
+        private void Awake()
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
 
         public void OnStart(ObjectPool _op)
         {
             objectPool = _op;
+        }
+
+        public void Play2DAudio(AudioClip _clip)
+        {
+            audioSource.PlayOneShot(_clip);
         }
 
         public void SpawnAudioComponent(Transform _t, AudioClip _clip)
