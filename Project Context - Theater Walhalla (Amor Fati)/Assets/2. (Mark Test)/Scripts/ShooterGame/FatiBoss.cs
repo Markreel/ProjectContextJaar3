@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using PoolingAndAudio;
 
 namespace ShooterGame
 {
@@ -12,6 +13,8 @@ namespace ShooterGame
 
         [Header("Stun Effect: ")]
         [SerializeField] private GameObject stunEffect;
+        [SerializeField] private GameObject bonk;
+        [SerializeField] private AudioClip chirpClip;
 
         [Header("Intro: ")]
         [SerializeField] private Vector3 startPos;
@@ -26,6 +29,14 @@ namespace ShooterGame
 
         private bool isIntroducing = false;
         private Coroutine currentRoutine;
+        private UIManager uiManager;
+        private TargetManager targetManager;
+
+        public void Init(UIManager _uiManager, TargetManager _targetManager)
+        {
+            uiManager = _uiManager;
+            targetManager = _targetManager;
+        }
 
         public void ResetValues()
         {
@@ -37,7 +48,13 @@ namespace ShooterGame
 
         public void GetHit()
         {
+            targetManager.StopRound();
+
             stunEffect.SetActive(true);
+            bonk.SetActive(true);
+            GameManager.Instance.AudioManager.Play2DAudio(chirpClip);
+
+            uiManager.OpenGameOverWindow(2);
         }
 
         public void DoIntro(UnityAction _onIntroDone = null)

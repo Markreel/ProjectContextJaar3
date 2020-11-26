@@ -10,7 +10,6 @@ namespace ShooterGame
         [Header("Settings per Round: ")]
         [SerializeField] public List<Round> Rounds = new List<Round>();
         [Space]
-
         [SerializeField] private Vector3 cameraStartPos;
         [SerializeField] private Vector3 cameraEndPos;
 
@@ -22,6 +21,9 @@ namespace ShooterGame
         [Header("References: ")]
         [SerializeField] private ShootingTarget shootingTargetPrefab;
         [SerializeField] private BaseDestructable destructablePrefab;
+
+        private int roundIndex;
+        private Coroutine roundRoutine;
 
         private Camera cam;
         private ObjectPool objectPool;
@@ -35,7 +37,9 @@ namespace ShooterGame
             uiManager = _uiManager;
             cam = Camera.main;
 
-            StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
+            fati?.Init(uiManager, this);
+
+            roundRoutine = StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
         }
 
         private void LerpCamera(float _t)
@@ -95,7 +99,7 @@ namespace ShooterGame
                 yield return null;
             }
 
-            //fati.DoIntro(weight.DoIntro);
+            fati.DoIntro(weight.DoIntro);
 
             _roundTime = bossFightDuration;
             while (_roundTime > 0f)
@@ -112,6 +116,11 @@ namespace ShooterGame
             //uiManager.OpenRoundEndedWindow();
 
             yield return null;
+        }
+
+        public void StopRound()
+        {
+            if(roundRoutine != null) { StopCoroutine(roundRoutine); }          
         }
 
         private void SpawnTarget(Round _round, Track _track)

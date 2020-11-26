@@ -14,6 +14,8 @@ namespace ShooterGame
         [SerializeField] private Image multiplierProgressBar;
         [SerializeField] private GameObject roundEndedWindow;
         [SerializeField] private TextMeshProUGUI roundEndedScoreText;
+        [Space]
+        [SerializeField] private GameObject gameOverWindow;
 
         public void UpdateTimerVisual(int _timeInSeconds)
         {
@@ -50,11 +52,25 @@ namespace ShooterGame
             yield return null;
         }
 
+        public void OpenRoundEndedWindow(float _delay)
+        {
+            Invoke("OpenRoundEndedWindow", _delay);
+        }
+
         public void OpenRoundEndedWindow()
         {
             roundEndedScoreText.text = scoreText.text;
             roundEndedWindow.SetActive(true);
         }
 
+        public void OpenGameOverWindow(float _delay)
+        {
+            Invoke("OpenGameOverWindow", _delay);
+        }
+
+        public void OpenGameOverWindow()
+        {
+            gameOverWindow.SetActive(true); 
+        }
     }
 }

@@ -36,12 +36,22 @@ namespace ShooterGame
             base.Update();
 
             ScoreManager.OnUpdate();
+
+            if (Input.GetKeyDown(KeyCode.UpArrow)) { Time.timeScale++; }
+            if (Input.GetKeyDown(KeyCode.DownArrow)) { Time.timeScale--; }
+            if (Input.GetKeyDown(KeyCode.Space)) { Time.timeScale = 1; }
         }
 
         public void QuitGame()
         {
             Application.OpenURL("https://forms.gle/YRoE2q7dxnu4Xoek9");
             //Application.Quit();
+        }
+
+        public void WatchAdd()
+        {
+            //HIER VIDEO INLADEN
+            Debug.Log("The player has watched an add");
         }
     }
 }
