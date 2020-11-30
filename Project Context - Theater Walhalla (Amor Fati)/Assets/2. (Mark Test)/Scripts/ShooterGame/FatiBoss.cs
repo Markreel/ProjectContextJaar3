@@ -30,9 +30,9 @@ namespace ShooterGame
         private bool isIntroducing = false;
         private Coroutine currentRoutine;
         private UIManager uiManager;
-        private TargetManager targetManager;
+        private RoundManager targetManager;
 
-        public void Init(UIManager _uiManager, TargetManager _targetManager)
+        public void Init(UIManager _uiManager, RoundManager _targetManager)
         {
             uiManager = _uiManager;
             targetManager = _targetManager;
@@ -54,7 +54,7 @@ namespace ShooterGame
             bonk.SetActive(true);
             GameManager.Instance.AudioManager.Play2DAudio(chirpClip);
 
-            uiManager.OpenGameOverWindow(2);
+            uiManager.OpenRoundEndedWindow(2);
         }
 
         public void DoIntro(UnityAction _onIntroDone = null)

@@ -20,7 +20,7 @@ namespace ShooterGame
         [SerializeField] private AudioClip audioOnHit2;
 
         private Animator animator;
-        private TargetManager targetManager;
+        private RoundManager targetManager;
         private bool isShot = false;
 
         private Round round;

@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 1535983334426966048}
   - component: {fileID: 7338215026393783961}
   m_Layer: 0
-  m_Name: Target_1_PeekABoo
+  m_Name: Target_2_PeekABoo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,8 +152,8 @@ MonoBehaviour:
   minActivationDelay: 0
   maxActivationDelay: 0
   scoreValue: 2
-  audioOnHit1: {fileID: 0}
-  audioOnHit2: {fileID: 0}
+  audioOnHit1: {fileID: 8300000, guid: 04d5b96bec896d7449e5bec8a7a5c28e, type: 3}
+  audioOnHit2: {fileID: 8300000, guid: 9ef3a0de32555684f8ac1060b97eff34, type: 3}
 --- !u!1001 &1582984044024235048
 PrefabInstance:
   m_ObjectHideFlags: 0

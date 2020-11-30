@@ -9,7 +9,7 @@ namespace ShooterGame
     {
         [HideInInspector] public ScoreManager ScoreManager;
         private ShooterController shooterController;
-        private TargetManager targetManager;
+        private RoundManager targetManager;
         private UIManager uiManager;
 
         protected override void Awake()
@@ -17,7 +17,7 @@ namespace ShooterGame
             base.Awake();
              
             shooterController = GetComponentInChildren<ShooterController>();
-            targetManager = GetComponentInChildren<TargetManager>();
+            targetManager = GetComponentInChildren<RoundManager>();
             ScoreManager = GetComponentInChildren<ScoreManager>();
             uiManager = GetComponentInChildren<UIManager>();
         }
