@@ -2594,7 +2594,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 90.00001, y: 0, z: 90.00001}
 --- !u!1 &551520507
 GameObject:
@@ -3685,7 +3685,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &738067486
 GameObject:
@@ -4835,7 +4835,7 @@ GameObject:
   - component: {fileID: 944712151}
   - component: {fileID: 944712150}
   m_Layer: 0
-  m_Name: AudioVisualizer
+  m_Name: AudioVisualizerNoSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5092,7 +5092,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &960449812
 GameObject:
@@ -6915,7 +6915,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1340998628
 MonoBehaviour:
@@ -9373,7 +9373,7 @@ Transform:
   - {fileID: 516254898}
   - {fileID: 1120894470}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!199 &1851686074
 ParticleSystemRenderer:
@@ -16640,7 +16640,7 @@ PrefabInstance:
     - target: {fileID: 1525761946290830442, guid: 48a59d3f8d004bb438cadefe3dfd03cb,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 1525761946290830442, guid: 48a59d3f8d004bb438cadefe3dfd03cb,
         type: 3}
@@ -16911,7 +16911,7 @@ PrefabInstance:
     - target: {fileID: 6577643277960255888, guid: e250f964c5304024393374a1b76a238b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6577643277960255888, guid: e250f964c5304024393374a1b76a238b,
         type: 3}
