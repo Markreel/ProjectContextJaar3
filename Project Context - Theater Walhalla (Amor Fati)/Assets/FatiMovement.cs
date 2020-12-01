@@ -23,7 +23,7 @@ public class FatiMovement : MonoBehaviour
 
     private void Start()
     {
-        audiovisual = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
+        //audiovisual = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
 
         _movementSpeed = new Vector3(Random.Range(.2f, 1), Random.Range(.2f, 1), Random.Range(.2f, 1));
         StartCoroutine(MoveCube());
