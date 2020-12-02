@@ -50,28 +50,28 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_8E883A6C: 1
-    - _Depth: -0.76
-    - _Displacement: 0.0003
-    - _Foam2Opacity: 0.87
+    - _Depth: -2.2
+    - _Displacement: 0.0001
+    - _Foam2Opacity: 0.94
     - _FoamAmount: 1.36
     - _FoamCutoff: 1.71
-    - _FoamDepth: 1.87
+    - _FoamDepth: -0
     - _FoamDistance: -0.24
     - _FoamSpeed: 11.4
     - _FoamSpeed2: -7.97
     - _FoamStrength: 2
     - _NormalStrength: 1
     - _RefractStrength: 0.05
-    - _SecondNormalSpeed: -21.1
+    - _SecondNormalSpeed: -16.28
     - _Smoothness: 0.94
-    - _Strength: 0.89
+    - _Strength: 0.27
     - _WaveSize: 2.85
     - _WaveSpeed: 9.39
-    - _https___textures_pixel_furnace_com_terms: 25.99
+    - _https___textures_pixel_furnace_com_terms: 19.1
     m_Colors:
-    - _DeepWaterColor: {r: 0.037379846, g: 0.50271016, b: 0.5283019, a: 0}
-    - _FoamTiling: {r: 8, g: 8, b: 8, a: 0}
+    - _DeepWaterColor: {r: 0.43787825, g: 0.7369741, b: 0.754717, a: 0}
+    - _FoamTiling: {r: 20, g: 20, b: 8, a: 0}
     - _FoamTiling2: {r: 11, g: 11, b: 11, a: 0}
     - _ShallowWaterColor: {r: 0.759434, g: 1, b: 0.85151374, a: 1}
-    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
-    - _WavesTiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Tiling: {r: 3, g: 3, b: 0, a: 0}
+    - _WavesTiling: {r: 3, g: 3, b: 0, a: 0}
