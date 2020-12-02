@@ -17,7 +17,7 @@ public class SnapBubble : MonoBehaviour
     private void Start()
     {
         sleepHierJeBubbelText = GetComponentInChildren<TextMeshPro>();
-        bellenMinigame = transform.root.GetComponent<BellenMiniGame>();
+        bellenMinigame = GameObject.Find("BellenMiniGame").GetComponent<BellenMiniGame>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
