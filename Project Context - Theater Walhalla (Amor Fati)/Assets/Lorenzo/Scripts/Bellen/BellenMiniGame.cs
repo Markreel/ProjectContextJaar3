@@ -50,11 +50,6 @@ public class BellenMiniGame : MonoBehaviour
 
     public int coinTweenID;
 
-    [Header("Positions")]
-    public Vector3 endPosCamera;
-    public Vector3 endRotCamera;
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -74,10 +69,6 @@ public class BellenMiniGame : MonoBehaviour
         playerScore.transform.localScale = new Vector3(0, 0, 0);
         scoreBoard.SetActive(false);
         scoreBoard.transform.localScale = new Vector3(0, 0, 0);
-
-        //Set desired final position and orientation of the game
-        endPosCamera = new Vector3(-1, 18.68f, -3.7f); // debugging
-        endRotCamera = new Vector3(90, 0, 0); // debugging
     }
 
     // Update is called once per frame
@@ -107,7 +98,6 @@ public class BellenMiniGame : MonoBehaviour
             //Cleans up any left behind lines of Fati.
             fatiManager.lineRenderer.positionCount = 0;
         }
-
     }
 
     public void StartGame()
@@ -115,12 +105,8 @@ public class BellenMiniGame : MonoBehaviour
         //When we have the required amount of bubbles the button will instead trigger this function.
         if (filledInBubbles == requiredBubbles.Count)
         {
-            // Move all game elements to next position
-            Camera.main.transform.position = endPosCamera;
-            Camera.main.transform.eulerAngles = endRotCamera;
-            gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x + 90, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z);
-            canvas.transform.eulerAngles = new Vector3(canvas.transform.eulerAngles.x + 90, canvas.transform.eulerAngles.y, canvas.transform.eulerAngles.z);
-            boundaries.transform.eulerAngles = new Vector3(boundaries.transform.eulerAngles.x + 90, boundaries.transform.eulerAngles.y, boundaries.transform.eulerAngles.z);
+            // Reposition the game elements when the game starts as desired
+            TransitionToGame();
 
             //DO SOME SORT OF FADE OUT ANIMATION FOR THE BUTTON HERE.
             newBubbleButton.transform.LeanMoveY(newBubbleButton.transform.position.y - 200, 2f).setEaseOutCubic();
@@ -155,16 +141,23 @@ public class BellenMiniGame : MonoBehaviour
         }
     }
 
+    public void TransitionToGame()
+    {
+        // All the relevant elements are contained in the parent Content
+        gameObject.transform.parent.gameObject.transform.eulerAngles = new Vector3(gameObject.transform.parent.gameObject.transform.eulerAngles.x + 90,
+                                                                        gameObject.transform.parent.gameObject.transform.eulerAngles.y,
+                                                                        gameObject.transform.parent.gameObject.transform.eulerAngles.z);
+    }
+
     public void SpawnBubble()
     {
         //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
         if (canSpawnBubble && filledInBubbles < requiredBubbles.Count)
         {
             GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
-            Debug.Log("Current position: " + this.transform.position);
-            Debug.Log("Spawn position: " + bubbleSpawnLocation.position);
-            Debug.Log("Bubble position: " + bubble.transform.position);
             bubble.transform.localScale = new Vector3(0, 0, 0);
+            // Set variables for drag component
+            bubble.GetComponent<DragObject>().fixedZ = this.transform.position.z;
             bubble.GetComponent<DragObject>().protectGame = false;
             LeanTween.scale(bubble, new Vector3(1, 1, 1), 0.5f).setEaseInExpo();
             bubbles.Add(bubble);
@@ -235,7 +228,4 @@ public class BellenMiniGame : MonoBehaviour
         //yield return new WaitForSeconds(2f);
         yield break;
     }
-
-
-
 }
