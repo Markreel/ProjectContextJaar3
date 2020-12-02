@@ -29,8 +29,7 @@ public class BellenMiniGame : MonoBehaviour
     //Fati
     private FatiFirstMinigame fatiManager;
 
-    public MeshFilter BoundariesMeshIntro;
-    public MeshFilter BoundariesMeshGame;
+    public MeshFilter BoundariesMesh;
 
     [Header("Coin Generation")]
     //Coin Generation.
@@ -117,7 +116,6 @@ public class BellenMiniGame : MonoBehaviour
         if (filledInBubbles == requiredBubbles.Count)
         {
             // Move all game elements to next position
-            //secondOrientation = true;
             Camera.main.transform.position = endPosCamera;
             Camera.main.transform.eulerAngles = endRotCamera;
             gameObject.transform.eulerAngles = new Vector3(gameObject.transform.eulerAngles.x + 90, gameObject.transform.eulerAngles.y, gameObject.transform.eulerAngles.z);
@@ -140,7 +138,7 @@ public class BellenMiniGame : MonoBehaviour
                 bubble.GetComponent<DragObject>().canDrag = true;
                 // Set the variables allowing the bubble to change to a new position
                 bubble.GetComponent<DragObject>().protectGame = true;
-                bubble.GetComponent<DragObject>().newHeight = gameObject.transform.position.y;
+                bubble.GetComponent<DragObject>().fixedY = gameObject.transform.position.y;
                 bubble.GetComponent<DragObject>().SetBounds();
                 //Makes it so our bubbles dont float away with the velocity they retained.
                 bubble.GetComponent<DragObject>().velocityMulti = 0;
@@ -163,17 +161,16 @@ public class BellenMiniGame : MonoBehaviour
         if (canSpawnBubble && filledInBubbles < requiredBubbles.Count)
         {
             GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
+            Debug.Log("Current position: " + this.transform.position);
+            Debug.Log("Spawn position: " + bubbleSpawnLocation.position);
+            Debug.Log("Bubble position: " + bubble.transform.position);
             bubble.transform.localScale = new Vector3(0, 0, 0);
             bubble.GetComponent<DragObject>().protectGame = false;
             LeanTween.scale(bubble, new Vector3(1, 1, 1), 0.5f).setEaseInExpo();
             bubbles.Add(bubble);
 
             DragObject dragObject = bubble.GetComponent<DragObject>();
-            if (dragObject != null)
-            {
-                dragObject.BoundariesMeshIntro = BoundariesMeshIntro;
-                dragObject.BoundariesMeshGame = BoundariesMeshGame;
-            }
+            if (dragObject != null) dragObject.BoundariesMesh = BoundariesMesh;
 
             //Before we can spawn a new one this value needs to be set to true again by the SnapBubble Script.
             canSpawnBubble = false;
