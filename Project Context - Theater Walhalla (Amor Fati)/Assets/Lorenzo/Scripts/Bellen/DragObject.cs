@@ -15,7 +15,7 @@ public class DragObject : MonoBehaviour
     public bool canDrag, protectGame;
     private float zCoord;
     public float fixedY; // for the protectgame
-    float fixedZ = -3.785588f; // for the intro
+    public float fixedZ; // for the intro
 
     // Mouse boundaries
     public MeshFilter BoundariesMesh;
@@ -58,7 +58,7 @@ public class DragObject : MonoBehaviour
                 transform.position = new Vector3(
                     Mathf.Clamp(mousePos.x, boundPos.x + min.x * scale.x, boundPos.x + max.x * scale.x),
                     fixedY,
-                    Mathf.Clamp(mousePos.z, boundPos.z + min.z * scale.z, boundPos.z + max.z * scale.z));
+                    Mathf.Clamp(mousePos.z, boundPos.z + min.z * scale.z * 0.7f, boundPos.z + max.z * scale.z));
             }
 
             // Use xy-plane for the intro
@@ -76,20 +76,10 @@ public class DragObject : MonoBehaviour
     {
         if (canDrag)
         {
-            if (!protectGame)
-            {
-                previousPos = transform.position;
-                transform.position = GetMouseWorldPos() + offset;
-                velocity = transform.position - previousPos;
-                velocityMulti = (velocity.magnitude / 10) + 0.05f;
-            }
-            if (protectGame)
-            {
-                previousPos = transform.position;
-                transform.position = GetMouseWorldPos() + offset;
-                velocity = transform.position - previousPos;
-                velocityMulti = (velocity.magnitude / 10) + 0.05f;
-            }
+            previousPos = transform.position;
+            transform.position = GetMouseWorldPos() + offset;
+            velocity = transform.position - previousPos;
+            velocityMulti = (velocity.magnitude / 10) + 0.05f;
         }
     }
 
