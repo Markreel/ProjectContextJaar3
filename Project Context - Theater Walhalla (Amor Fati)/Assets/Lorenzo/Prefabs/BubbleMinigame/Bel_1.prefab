@@ -210,9 +210,12 @@ MonoBehaviour:
   velocityMulti: 0
   velocityDecay: 0.02
   canDrag: 1
-  BoundariesMesh: {fileID: 0}
+  protectGame: 1
+  BoundariesMeshIntro: {fileID: 0}
+  BoundariesMeshGame: {fileID: 0}
   popParticle: {fileID: 638192410359976809, guid: 1086546d891430c4e9176dffa612c24f,
     type: 3}
+  newHeight: 0
 --- !u!54 &2318067150161109782
 Rigidbody:
   m_ObjectHideFlags: 0
