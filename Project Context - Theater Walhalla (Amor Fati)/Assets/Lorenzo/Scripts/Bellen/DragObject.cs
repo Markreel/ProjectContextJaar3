@@ -12,7 +12,7 @@ public class DragObject : MonoBehaviour
     [HideInInspector] public float velocityMulti;
     [Range(0, 1)]
     public float velocityDecay;
-    public bool canDrag, protectGame;
+    public bool canDrag, protectGame, falling;
     private float zCoord;
     public float fixedY; // for the protectgame
     public float fixedZ; // for the intro
@@ -85,6 +85,9 @@ public class DragObject : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Allow free fall
+        if (falling) fixedY = transform.position.y;
+
         // Update the boundaries
         SetBounds();
 

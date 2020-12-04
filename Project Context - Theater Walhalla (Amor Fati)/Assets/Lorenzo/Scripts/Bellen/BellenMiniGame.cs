@@ -4,43 +4,51 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using UnityEditorInternal;
+using System.Runtime.InteropServices;
+
 public class BellenMiniGame : MonoBehaviour
 {
-    public List<SnapBubble> requiredBubbles;
-    public List<GameObject> bubbles;
-
     public GameObject canvas;
     public GameObject boundaries;
-    [HideInInspector] public bool secondOrientation;
-
-    [HideInInspector] public int filledInBubbles;
-
-    public Button newBubbleButton;
-    public Image neBubbleButtonImage;
-
-    public TextMeshProUGUI titleText;
-
-    //Spawning Bubbles
-    public Transform bubbleSpawnLocation;
-    public GameObject bubblePrefab;
-
-    public bool canSpawnBubble;
+    public GameObject camera1;
+    public GameObject camera2;
+    public AnimationCurve dropCurve;
+    public AnimationCurve rotationCurve;
+    public AnimationCurve dropCameraCurve;
 
     //Fati
     private FatiFirstMinigame fatiManager;
 
     public MeshFilter BoundariesMesh;
 
-    [Header("Coin Generation")]
-    //Coin Generation.
-    public bool generatingCoins;
+    // Bubbles
+    [Header("Bubbles")]
+    // Bubble variables
+    public List<SnapBubble> requiredBubbles;
+    public List<GameObject> bubbles;
+    [HideInInspector] public int filledInBubbles;
+    //Spawning Bubbles
+    public Transform bubbleSpawnLocation;
+    public GameObject bubblePrefab;
+    public bool canSpawnBubble;
 
+    //Coin Generation
+    [Header("Coin Generation")]
+    public bool generatingCoins;
     public TextMeshProUGUI coinText;
     public float coinAmount;
     public TextMeshProUGUI coinMultiplierText;
     public int coinMuliplierInt;
     public Image coinImage;
     public GameObject coinUIRoot;
+
+    // UI
+    [Header("StartScreen")]
+    public Button newBubbleButton;
+    public GameObject bellenblaasstok;
+    public Image neBubbleButtonImage;
+    public TextMeshProUGUI titleText;
 
     [Header("EndScreen")]
     public GameObject playerScore;
@@ -74,6 +82,9 @@ public class BellenMiniGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Update counter
+        bellenblaasstok.GetComponentInChildren<TextMeshPro>().text = $"{filledInBubbles}/{requiredBubbles.Count}";
+
         //To keep the amount of fill in fields possibly dynamic instead of harcoded.
         if (filledInBubbles == requiredBubbles.Count)
         {
@@ -105,15 +116,14 @@ public class BellenMiniGame : MonoBehaviour
         //When we have the required amount of bubbles the button will instead trigger this function.
         if (filledInBubbles == requiredBubbles.Count)
         {
-            // Reposition the game elements when the game starts as desired
-            TransitionToGame();
+            // Turn off bellenblaasstok image
+            bellenblaasstok.SetActive(false);
 
             //DO SOME SORT OF FADE OUT ANIMATION FOR THE BUTTON HERE.
             newBubbleButton.transform.LeanMoveY(newBubbleButton.transform.position.y - 200, 2f).setEaseOutCubic();
 
             //Fade out the title
             LeanTween.scale(titleText.gameObject, new Vector3(0, 0, 0), 0.75f);
-
 
             foreach (var bubble in bubbles)
             {
@@ -122,31 +132,123 @@ public class BellenMiniGame : MonoBehaviour
                 //Makes it possible to drag our Bubble again.
                 bubble.GetComponent<SphereCollider>().enabled = true;
                 bubble.GetComponent<DragObject>().canDrag = true;
+                bubble.GetComponent<DragObject>().falling = true;
                 // Set the variables allowing the bubble to change to a new position
                 bubble.GetComponent<DragObject>().protectGame = true;
-                bubble.GetComponent<DragObject>().fixedY = gameObject.transform.position.y;
                 bubble.GetComponent<DragObject>().SetBounds();
                 //Makes it so our bubbles dont float away with the velocity they retained.
                 bubble.GetComponent<DragObject>().velocityMulti = 0;
-                //Scales down our bubble to make it easier to dodge Fati.
-                LeanTween.scale(bubble, new Vector3(0.65f, 0.65f, 0.65f), 0.75f);
-                //Start the Fati attack.
-                fatiManager.StartFirstAttack();
                 //Set our coin multiplier to the amount of bubbles.
                 coinMuliplierInt++;
             }
 
-            StartCoinGeneration();
-
+            // Move the game objects to second postion
+            Vector3 canvasOffset = canvas.transform.position - gameObject.transform.position;
+            Vector3 boundariesOffset = boundaries.transform.position - gameObject.transform.position;
+            StartCoroutine(TransitionToGame(gameObject.transform.position, gameObject.transform.position + new Vector3(0, -8, 0), 
+                canvasOffset, boundariesOffset, 3));
         }
     }
 
-    public void TransitionToGame()
+    public IEnumerator TransitionToGame(Vector3 startPos, Vector3 endPos, Vector3 canvasOffset, Vector3 boundariesOffset, float duration)
     {
-        // All the relevant elements are contained in the parent Content
-        gameObject.transform.parent.gameObject.transform.eulerAngles = new Vector3(gameObject.transform.parent.gameObject.transform.eulerAngles.x + 90,
-                                                                        gameObject.transform.parent.gameObject.transform.eulerAngles.y,
-                                                                        gameObject.transform.parent.gameObject.transform.eulerAngles.z);
+        // Turn off UI for now
+        canvas.SetActive(false);
+
+        float tick = 0f;
+
+        yield return new WaitForSeconds(1);
+
+        // Move camera
+        Invoke("MoveCamera", 2);
+
+        // Lower the elements
+        while (tick < 1)
+        {
+            tick += Time.deltaTime / (duration > 0 ? duration : 1);
+            float _evaluatedTick = dropCurve.Evaluate(tick);
+            canvas.transform.position = Vector3.Lerp(startPos + canvasOffset, endPos + canvasOffset, _evaluatedTick);
+            boundaries.transform.position = Vector3.Lerp(startPos + boundariesOffset, endPos + boundariesOffset, _evaluatedTick);
+            gameObject.transform.position = Vector3.Lerp(startPos, endPos, _evaluatedTick);            
+            yield return null;
+        }
+
+         // Rotate the elements
+        canvas.transform.eulerAngles += new Vector3(90, 0, 0);
+        gameObject.transform.eulerAngles += new Vector3(90, 0, 0);
+        boundaries.transform.eulerAngles += new Vector3(90, 0, 0);
+
+        // Give the bubbles a slight offset and shrink them
+        foreach (var bubble in bubbles)
+        {
+            //Scales down our bubble to make it easier to dodge Fati.
+            LeanTween.scale(bubble, new Vector3(0.65f, 0.65f, 0.65f), 0.75f);
+            // Offset
+            float zOffset = Random.Range(-1.0f, 1.0f);
+            bubble.transform.position += new Vector3(0, 0, zOffset);
+            // Set them on fixed height
+            bubble.GetComponent<DragObject>().falling = false;
+            bubble.GetComponent<DragObject>().fixedY = gameObject.transform.position.y;
+        }
+
+        yield break;
+    }
+
+    public void MoveCamera()
+    {
+        // Switch cameras
+        camera1.SetActive(false);
+        camera2.SetActive(true);
+        float rotateDuration = 2f;
+        float moveDuration = 2f;
+        StartCoroutine(MoveSecondCamera(rotateDuration, moveDuration));
+    }
+
+    public IEnumerator MoveSecondCamera(float rotateDuration, float moveDuration)
+    {
+        yield return new WaitForSeconds(1);
+
+        // Set positions
+        Vector3 startRot = camera2.transform.eulerAngles;
+        Vector3 endRot = camera2.transform.eulerAngles + new Vector3(90, 0, 0);
+        Vector3 startPos = camera2.transform.position;
+        Vector3 endPos = camera2.transform.position + new Vector3(0, -3, 0);
+
+        // Rotate the camera
+        float tick = 0f;
+        while (tick < 1)
+        {
+            float _evaluatedTick = rotationCurve.Evaluate(tick);
+            tick += Time.deltaTime / (rotateDuration > 0 ? rotateDuration : 1);
+            camera2.transform.eulerAngles = Vector3.Lerp(startRot, endRot, _evaluatedTick);
+            yield return null;
+        }
+
+        // Lower the camera
+        tick = 0f;
+        while (tick < 1)
+        {
+            float _evaluatedTick = dropCameraCurve.Evaluate(tick);
+            tick += Time.deltaTime / (moveDuration > 0 ? moveDuration : 1);
+            camera2.transform.position = Vector3.Lerp(startPos, endPos, _evaluatedTick);
+            yield return null;
+        }
+
+        canvas.SetActive(true);
+
+        // Start the game
+        StartProtectGame();
+
+        yield break;        
+    }
+
+    public void StartProtectGame()
+    {
+        //Start the Fati attack.
+        fatiManager.StartFirstAttack();
+
+        // Start coin generation
+        StartCoinGeneration();
     }
 
     public void SpawnBubble()
@@ -154,6 +256,9 @@ public class BellenMiniGame : MonoBehaviour
         //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
         if (canSpawnBubble && filledInBubbles < requiredBubbles.Count)
         {
+            // Disable new bell button
+            newBubbleButton.gameObject.SetActive(false);
+
             GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
             bubble.transform.localScale = new Vector3(0, 0, 0);
             // Set variables for drag component

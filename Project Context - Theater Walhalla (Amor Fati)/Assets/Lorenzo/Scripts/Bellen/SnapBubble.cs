@@ -40,9 +40,9 @@ public class SnapBubble : MonoBehaviour
             meshRenderer.enabled = false;
             //Allows our bubble button to spawn another bubble.
             bellenMinigame.canSpawnBubble = true;
+            bellenMinigame.newBubbleButton.gameObject.SetActive(true);
             //Counts up the amount of filled in bubbles; 
             bellenMinigame.filledInBubbles++;
-
         }
         
     }
