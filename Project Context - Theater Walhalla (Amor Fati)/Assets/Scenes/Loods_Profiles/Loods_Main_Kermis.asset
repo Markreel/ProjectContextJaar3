@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7867829842956486960
+--- !u!114 &-3920042714960198640
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,26 +9,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 556797029e73b2347956b6579e77e05b, type: 3}
-  m_Name: DepthOfField
+  m_Script: {fileID: 11500000, guid: b3f6f3f7c722b4544b97e3c75840aa33, type: 3}
+  m_Name: AutoExposure
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
-  focusDistance:
+  filtering:
+    overrideState: 0
+    value: {x: 50, y: 95}
+  minLuminance:
+    overrideState: 0
+    value: 0
+  maxLuminance:
+    overrideState: 0
+    value: 0
+  keyValue:
     overrideState: 1
-    value: 4.55
-  aperture:
-    overrideState: 1
-    value: 4.3
-  focalLength:
-    overrideState: 1
-    value: 44
-  kernelSize:
+    value: 1.27
+  eyeAdaptation:
+    overrideState: 0
+    value: 0
+  speedUp:
+    overrideState: 0
+    value: 2
+  speedDown:
     overrideState: 0
     value: 1
---- !u!114 &-1540805087507492244
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
+  m_Name: Loods_Main_Kermis
+  m_EditorClassIdentifier: 
+  settings:
+  - {fileID: 4523522282797421377}
+  - {fileID: 3460153715661107638}
+  - {fileID: -3920042714960198640}
+  - {fileID: 9016908685586000526}
+--- !u!114 &3460153715661107638
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -52,8 +78,8 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   tonemapper:
-    overrideState: 1
-    value: 2
+    overrideState: 0
+    value: 0
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -81,36 +107,36 @@ MonoBehaviour:
     value: 1
   temperature:
     overrideState: 1
-    value: -22
+    value: -7
   tint:
     overrideState: 0
-    value: -100
+    value: 0
   colorFilter:
     overrideState: 1
-    value: {r: 0.9811321, g: 0.97496146, b: 0.96724814, a: 1}
+    value: {r: 0.9245283, g: 0.8591136, b: 0.9079389, a: 1}
   hueShift:
-    overrideState: 0
+    overrideState: 1
     value: 0
   saturation:
-    overrideState: 1
-    value: 18
+    overrideState: 0
+    value: -4
   brightness:
     overrideState: 0
     value: 0
   postExposure:
     overrideState: 1
-    value: 0.7
+    value: 0.35
   contrast:
     overrideState: 1
-    value: -4
+    value: 14
   mixerRedOutRedIn:
-    overrideState: 1
-    value: 125
+    overrideState: 0
+    value: 100
   mixerRedOutGreenIn:
-    overrideState: 1
-    value: 3
+    overrideState: 0
+    value: 0
   mixerRedOutBlueIn:
-    overrideState: 1
+    overrideState: 0
     value: 0
   mixerGreenOutRedIn:
     overrideState: 0
@@ -131,14 +157,14 @@ MonoBehaviour:
     overrideState: 0
     value: 100
   lift:
-    overrideState: 1
-    value: {x: 1, y: 0.9836946, z: 0.92679185, w: 0}
+    overrideState: 0
+    value: {x: 0.9765567, y: 0.9824173, z: 1, w: 0}
   gamma:
     overrideState: 1
-    value: {x: 0.79709244, y: 0.8538095, z: 1, w: -0.119840205}
+    value: {x: 1, y: 0.9780223, z: 0.91208804, w: 0}
   gain:
-    overrideState: 1
-    value: {x: 1, y: 0.8904592, z: 0.4979319, w: 0.13315602}
+    overrideState: 0
+    value: {x: 1, y: 0.98064184, z: 0.96843886, w: 0}
   masterCurve:
     overrideState: 0
     value:
@@ -1339,61 +1365,6 @@ MonoBehaviour:
       - 0.5
       - 0.5
       - 0.5
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: Loods_Main_Kermis
-  m_EditorClassIdentifier: 
-  settings:
-  - {fileID: 4523522282797421377}
-  - {fileID: -1540805087507492244}
-  - {fileID: 4302156695944245778}
-  - {fileID: -7867829842956486960}
-  - {fileID: 9016908685586000526}
---- !u!114 &4302156695944245778
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3f6f3f7c722b4544b97e3c75840aa33, type: 3}
-  m_Name: AutoExposure
-  m_EditorClassIdentifier: 
-  active: 1
-  enabled:
-    overrideState: 1
-    value: 1
-  filtering:
-    overrideState: 1
-    value: {x: 50.41212, y: 99}
-  minLuminance:
-    overrideState: 1
-    value: 0.6
-  maxLuminance:
-    overrideState: 0
-    value: 9
-  keyValue:
-    overrideState: 1
-    value: 1.75
-  eyeAdaptation:
-    overrideState: 1
-    value: 0
-  speedUp:
-    overrideState: 1
-    value: 2
-  speedDown:
-    overrideState: 1
-    value: 1
 --- !u!114 &4523522282797421377
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1412,7 +1383,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 19.4
+    value: 6.21
   threshold:
     overrideState: 1
     value: 0.91
@@ -1463,7 +1434,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.32
+    value: 0.048
   fastMode:
     overrideState: 0
     value: 0

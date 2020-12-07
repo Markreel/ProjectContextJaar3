@@ -8,19 +8,35 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KermisLampjeOranje
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e536e43fb2c55c941b1d237ccac00b4b,
+    type: 3}
   m_ShaderKeywords: _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3050
-  stringTagMap:
-    RenderType: Transparent
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_70017BF2:
+        m_Texture: {fileID: 2800000, guid: ea1cdddf63524054a99a3210f78e9e9e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_AFFDF5EF:
+        m_Texture: {fileID: 2800000, guid: 57cc0ffffe0375b4e978d81561b0c776, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_C9E6134E:
+        m_Texture: {fileID: 2800000, guid: 13678e6c759039a4d9be7a8798b77fa2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_FBD82114:
+        m_Texture: {fileID: 2800000, guid: 453c5bc1ef25e104b87eb070458e366a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -72,9 +88,10 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
+    - Color_8EADDAEC: {r: 127.999985, g: 24.125652, b: 0, a: 0}
     - _BaseColor: {r: 0.8679245, g: 0.5153707, b: 0.16785331, a: 0.7294118}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 1.5768995, g: 0.57383984, b: 0.15620232, a: 1}
+    - _EmissionColor: {r: 12.615195, g: 4.62337, b: 1.2549148, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
 --- !u!114 &951252263145417328
 MonoBehaviour:
