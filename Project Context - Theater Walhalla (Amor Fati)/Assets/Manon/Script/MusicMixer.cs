@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 using UnityEngine.Assertions;
-using UnityEditor;
 using UnityEngine.UI;
+using SimpleFileBrowser;
+using System.Linq;
 
 public class MusicMixer : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class MusicMixer : MonoBehaviour
     private void Start()
     {
         customAudio = GetComponent<AudioSource>();
-        defaultPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), saveFolder);
+        defaultPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + saveFolder;
     }
 
     IEnumerator PlayCustomSong()
@@ -131,15 +132,23 @@ public class MusicMixer : MonoBehaviour
         // Try downloading the clip
         try
         {
-            string savePath = EditorUtility.SaveFilePanel("Selecteer map", defaultPath, songName + DateTime.Now.ToString("-yyyy-dd-M--HH-mm-ss"), "wav");
-            SavWav.Save(savePath, customAudio.clip);
-            yield break;
+            StartCoroutine(ShowSaveDialog());
         }
         
         catch(System.Exception e)
         {
             yield break;
         }
+    }
+
+    IEnumerator ShowSaveDialog()
+    {
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, defaultPath, songName + DateTime.Now.ToString("-yyyy-dd-M--HH-mm-ss"), "Selecteer map");
+        if (FileBrowser.Success)
+        {
+            SavWav.Save(FileBrowser.Result.First(), customAudio.clip);
+        }
+        yield break;
     }
 
     #region Public methods
