@@ -89,7 +89,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_8EADDAEC: {r: 2.0862746, g: 0, b: 2.9960785, a: 0}
+    - Color_8EADDAEC: {r: 0.23921569, g: 0.2509804, b: 0.4745098, a: 0}
     - Color_EFE81246: {r: 0, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 0.876, g: 0, b: 0, a: 1}
     - _Color: {r: 0.876, g: 0, b: 0, a: 1}
