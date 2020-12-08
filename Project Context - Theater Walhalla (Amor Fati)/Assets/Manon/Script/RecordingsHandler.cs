@@ -17,9 +17,9 @@ public class RecordingsHandler : MonoBehaviour
 
     // Video
     [Header("Karaokebolletje-videos")]
-    //[SerializeField] VideoPlayer track1Video;
-    //[SerializeField] VideoPlayer track2Video;
-   // [SerializeField] VideoPlayer track3Video;
+    [SerializeField] VideoPlayer track1Video;
+    [SerializeField] VideoPlayer track2Video;
+    [SerializeField] VideoPlayer track3Video;
 
     // Microphone
     bool microphonePresent;
@@ -41,10 +41,6 @@ public class RecordingsHandler : MonoBehaviour
     [SerializeField] GameObject track1_recording;
     [SerializeField] GameObject track2_recording;
     [SerializeField] GameObject track3_recording;
-
-  //  [SerializeField] Button record_track1;
-    //[SerializeField] Button record_track2;
-    //[SerializeField] Button record_track3;
 
     #endregion
 
@@ -93,21 +89,21 @@ public class RecordingsHandler : MonoBehaviour
             // Update icon and play karaoke video
             if (trackNr == 0)
             {
-                track1_recording.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
-                track1_recording.GetComponentInChildren<VideoPlayer>().Play();
+                track1_recording.GetComponent<Image>().sprite = play;
+                track1Video.Play();
             }
 
             else if (trackNr == 1)
             {
-                track2_recording.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
-                track2_recording.GetComponentInChildren<VideoPlayer>().Play();
+                track2_recording.GetComponent<Image>().sprite = play;
+                track2Video.Play();
             }
                 
                 
             else if (trackNr == 2)
             {
-                track3_recording.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
-                track3_recording.GetComponentInChildren<VideoPlayer>().Play();
+                track3_recording.GetComponent<Image>().sprite = play;
+                track3Video.Play();
             }
 
             // Stop recording after set duration
@@ -115,14 +111,14 @@ public class RecordingsHandler : MonoBehaviour
             Microphone.End(device);
 
             // Change icon back
-            track1_recording.GetComponentInChildren<Button>().GetComponent<Image>().sprite = microphone;
-            track2_recording.GetComponentInChildren<Button>().GetComponent<Image>().sprite = microphone;
-            track3_recording.GetComponentInChildren<Button>().GetComponent<Image>().sprite = microphone;
+            track1_recording.GetComponent<Image>().sprite = microphone;
+            track2_recording.GetComponent<Image>().sprite = microphone;
+            track3_recording.GetComponent<Image>().sprite = microphone;
 
             // Stop video
-            track1_recording.GetComponentInChildren<VideoPlayer>().Stop();
-            track2_recording.GetComponentInChildren<VideoPlayer>().Stop();
-            track3_recording.GetComponentInChildren<VideoPlayer>().Stop();
+            track1Video.Stop();
+            track2Video.Stop();
+            track3Video.Stop();
 
             // Process recording if this went well
             if (recordedTracks[trackNr] != null)
@@ -131,6 +127,8 @@ public class RecordingsHandler : MonoBehaviour
                 if (history[trackNr] == null) counter++;
             }
         }
+
+        if (counter == 3) game.DownloadState();
 
         yield break;
     }

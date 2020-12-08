@@ -3,13 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class MuziekGame : MonoBehaviour
 {
     [Header("UI elements")]
     [SerializeField] Button voorbeeldButton;
     [SerializeField] Button startButton;
+    [SerializeField] Button downloadButton;
+    [SerializeField] Button playButton;
     [SerializeField] Sprite play;
+    [SerializeField] GameObject track1Video;
+    [SerializeField] GameObject track2Video;
+    [SerializeField] GameObject track3Video;
 
     [Header("Track elements")]
     [SerializeField] GameObject track1_recording;
@@ -18,7 +24,6 @@ public class MuziekGame : MonoBehaviour
     [SerializeField] GameObject track1Post;
     [SerializeField] GameObject track2Post;
     [SerializeField] GameObject track3Post;
-    [SerializeField] GameObject finishGame;
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
@@ -53,9 +58,13 @@ public class MuziekGame : MonoBehaviour
                 track1Post.gameObject.SetActive(false);
                 track2Post.gameObject.SetActive(false);
                 track3Post.gameObject.SetActive(false);
+                track1Video.gameObject.SetActive(false);
+                track2Video.gameObject.SetActive(false);
+                track3Video.gameObject.SetActive(false);
 
                 // Deactivate final menu
-                finishGame.gameObject.SetActive(false);
+                playButton.gameObject.SetActive(false);
+                downloadButton.gameObject.SetActive(false);
 
                 break;
 
@@ -68,23 +77,21 @@ public class MuziekGame : MonoBehaviour
                 track1_recording.gameObject.SetActive(true);
                 track2_recording.gameObject.SetActive(true);
                 track3_recording.gameObject.SetActive(true);
+                track1Video.gameObject.SetActive(true);
+                track2Video.gameObject.SetActive(true);
+                track3Video.gameObject.SetActive(true);
+
                 break;
 
             case (int)GameState.downloading:
-                finishGame.gameObject.SetActive(true);
+                playButton.gameObject.SetActive(true);
+                downloadButton.gameObject.SetActive(true);
                 break;
         }
     }
 
     private void Update()
     {
-        // Check if download button should be visible
-        if (currentState != (int)GameState.downloading && recordingsHandler.counter == 3)
-        {
-            currentState = (int)GameState.downloading;
-            UpdateUI(currentState);
-        }
-
         // Quit application
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
@@ -96,6 +103,12 @@ public class MuziekGame : MonoBehaviour
     public void StartGame()
     {
         currentState = (int)GameState.recording;
+        UpdateUI(currentState);
+    }
+
+    public void DownloadState()
+    {
+        currentState = (int)GameState.downloading;
         UpdateUI(currentState);
     }
 
@@ -111,16 +124,19 @@ public class MuziekGame : MonoBehaviour
         {
             case 0:
                 track1_recording.SetActive(false);
+                track1Video.gameObject.SetActive(false);
                 track1Post.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
                 track1Post.SetActive(true);
                 break;
             case 1:
                 track2_recording.SetActive(false);
+                track2Video.gameObject.SetActive(false);
                 track2Post.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
                 track2Post.SetActive(true);
                 break;
             case 2:
                 track3_recording.SetActive(false);
+                track3Video.gameObject.SetActive(false);
                 track3Post.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
                 track3Post.SetActive(true);
                 break;
@@ -134,14 +150,17 @@ public class MuziekGame : MonoBehaviour
         {
             case 0:
                 track1_recording.SetActive(true);
+                track1Video.gameObject.SetActive(true);
                 track1Post.SetActive(false);
                 break;
             case 1:
                 track2_recording.SetActive(true);
+                track2Video.gameObject.SetActive(true);
                 track2Post.SetActive(false);
                 break;
             case 2:
                 track3_recording.SetActive(true);
+                track3Video.gameObject.SetActive(true);
                 track3Post.SetActive(false);
                 break;
         }
