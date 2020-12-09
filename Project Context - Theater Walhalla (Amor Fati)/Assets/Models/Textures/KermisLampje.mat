@@ -8,19 +8,35 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: KermisLampje
-  m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: e536e43fb2c55c941b1d237ccac00b4b,
+    type: 3}
   m_ShaderKeywords: _EMISSION _METALLICSPECGLOSSMAP _NORMALMAP
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3050
-  stringTagMap:
-    RenderType: Transparent
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses:
   - SHADOWCASTER
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_70017BF2:
+        m_Texture: {fileID: 2800000, guid: ea1cdddf63524054a99a3210f78e9e9e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_AFFDF5EF:
+        m_Texture: {fileID: 2800000, guid: 57cc0ffffe0375b4e978d81561b0c776, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_C9E6134E:
+        m_Texture: {fileID: 2800000, guid: cb3b14f57cd6e2c4f96e209a7d7ffa78, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_FBD82114:
+        m_Texture: {fileID: 2800000, guid: 453c5bc1ef25e104b87eb070458e366a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -50,6 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_3CDCAC62: 0
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -72,9 +89,10 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
+    - Color_8EADDAEC: {r: 95.87451, g: 0, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 0.3632073, b: 0.3632073, a: 0.6117647}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 1.7207954, g: 0.405423, b: 0.405423, a: 1}
+    - _EmissionColor: {r: 6.8831816, g: 1.621692, b: 1.621692, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
 --- !u!114 &951252263145417328
 MonoBehaviour:
