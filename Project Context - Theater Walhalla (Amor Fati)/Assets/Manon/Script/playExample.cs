@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class playExample : MonoBehaviour
 {
-    [SerializeField] AudioSource example;
+    [SerializeField] AudioSource source;
+    [SerializeField] AudioClip banenliedTotaal;
     [SerializeField] Sprite play;
     [SerializeField] Sprite pause;
     [SerializeField] Sprite stop;
@@ -18,13 +19,13 @@ public class playExample : MonoBehaviour
 
     void PlayExample()
     {
-        example.Play();
+        source.Play();
         this.GetComponent<Image>().sprite = stop;
     }
 
     void StopExample()
     {
-        example.Pause();
+        source.Pause();
         this.GetComponent<Image>().sprite = play;
     }
     #endregion
@@ -32,7 +33,8 @@ public class playExample : MonoBehaviour
     #region Public methods
     public void ExampleButton()
     {
-        if (example.isPlaying) StopExample();
+        source.clip = banenliedTotaal;
+        if (source.isPlaying) StopExample();
         else PlayExample();
     }
     #endregion
