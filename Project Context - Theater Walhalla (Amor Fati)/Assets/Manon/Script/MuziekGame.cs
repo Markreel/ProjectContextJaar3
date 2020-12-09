@@ -18,17 +18,6 @@ public class MuziekGame : MonoBehaviour
     [SerializeField] Sprite play;
     [SerializeField] GameObject karaokevideo;
     [SerializeField] GameObject postRecording;
-    /*[SerializeField] GameObject track1Video;
-    [SerializeField] GameObject track2Video;
-    [SerializeField] GameObject track3Video; */
-
-  //  [Header("Track elements")]
-  /*  [SerializeField] GameObject track1_recording;
-    [SerializeField] GameObject track2_recording;
-    [SerializeField] GameObject track3_recording; */
- /*   [SerializeField] GameObject track1Post;
-    [SerializeField] GameObject track2Post;
-    [SerializeField] GameObject track3Post; */
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
@@ -58,18 +47,7 @@ public class MuziekGame : MonoBehaviour
                 startButton.gameObject.SetActive(true);
                 tutorialButton.gameObject.SetActive(true);
                 quitButton.gameObject.SetActive(true);
-
-                // Deactivate recording menu
-                /* track1_recording.transform.localScale = new Vector3(1, 1, 1);
-                 track1_recording.gameObject.SetActive(false);
-                 track2_recording.gameObject.SetActive(false);
-                 track3_recording.gameObject.SetActive(false);
-                 track1Post.gameObject.SetActive(false);
-                 track2Post.gameObject.SetActive(false);
-                 track3Post.gameObject.SetActive(false);
-                 track1Video.gameObject.SetActive(false);
-                 track2Video.gameObject.SetActive(false);
-                 track3Video.gameObject.SetActive(false); */
+                quitButton.GetComponentInChildren<Text>().text = "Afsluiten";
 
                 // Deactivate elements
                 startKaraokeButton.gameObject.SetActive(false);
@@ -89,22 +67,11 @@ public class MuziekGame : MonoBehaviour
                 voorbeeldButton.gameObject.SetActive(false);
                 playButton.gameObject.SetActive(false);
                 downloadButton.gameObject.SetActive(false);
+                postRecording.SetActive(false);
 
                 // Active elements
                 karaokevideo.SetActive(true);
-                // track1Video.gameObject.SetActive(true);
-
-
-                // voorbeeldButton.gameObject.SetActive(false);
-                // startButton.gameObject.SetActive(false);
-
-                // Activate recording menu
-                /*  track1_recording.gameObject.SetActive(true);
-                  track2_recording.gameObject.SetActive(true);
-                  track3_recording.gameObject.SetActive(true); */
-
-                /*   track2Video.gameObject.SetActive(true);
-                   track3Video.gameObject.SetActive(true); */
+                quitButton.GetComponentInChildren<Text>().text = "Menu";
                 break;
 
             case (int)GameState.downloading:
@@ -119,6 +86,7 @@ public class MuziekGame : MonoBehaviour
                 postRecording.SetActive(true);
                 playButton.gameObject.SetActive(true);
                 downloadButton.gameObject.SetActive(true);
+                quitButton.GetComponentInChildren<Text>().text = "Menu";
                 break;
         }
     }
@@ -157,66 +125,17 @@ public class MuziekGame : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        currentState = (int)GameState.menu;
-        UpdateUI(currentState);
+        if (currentState != (int)GameState.menu)
+        {
+            currentState = (int)GameState.menu;
+            UpdateUI(currentState);
+        }
+       
+        else if (currentState == (int)GameState.menu)
+        {
+            Application.Quit();
+        }
     }
-
-    
-    //public void ProcessRecording(int trackNr)
-    //{
-    //    switch (trackNr)
-    //    {
-    //        case 0:
-    //           // track1_recording.SetActive(false);
-    //            startKaraokeButton.gameObject.SetActive(false);
-    //            karaokevideo.gameObject.SetActive(false);
-    //            //track1Video.gameObject.SetActive(false);
-    //            postRecording.SetActive(true);
-    //          //  track1Post.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
-    //          //  track1Post.SetActive(true);
-    //            break;
-    //     /*   case 1:
-    //            track2_recording.SetActive(false);
-    //            track2Video.gameObject.SetActive(false);
-    //            track2Post.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
-    //            track2Post.SetActive(true);
-    //            break;
-    //        case 2:
-    //            track3_recording.SetActive(false);
-    //            track3Video.gameObject.SetActive(false);
-    //            track3Post.GetComponentInChildren<Button>().GetComponent<Image>().sprite = play;
-    //            track3Post.SetActive(true);
-    //            break; */
-    //    }
-    //} 
-
-    // This method is the opposite of ProcessRecording
-    //public void RedoRecording(int trackNr)
-    //{
-    //    switch (trackNr)
-    //    {
-    //        case 0:
-    //            //    track1_recording.SetActive(true);
-
-    //            //track1Video.gameObject.SetActive(true);
-    //            karaokevideo.gameObject.SetActive(true);
-    //            startKaraokeButton.gameObject.SetActive(true);
-    //            postRecording.SetActive(false);
-    //           // track1Video.gameObject.SetActive(true);
-    //           // track1Post.SetActive(false);
-    //            break;
-    //      /*  case 1:
-    //            track2_recording.SetActive(true);
-    //            track2Video.gameObject.SetActive(true);
-    //            track2Post.SetActive(false);
-    //            break;
-    //        case 2:
-    //            track3_recording.SetActive(true);
-    //            track3Video.gameObject.SetActive(true);
-    //            track3Post.SetActive(false);
-    //            break; */
-    //    }
-    //} 
 
     #endregion
 }

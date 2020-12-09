@@ -810,7 +810,7 @@ RectTransform:
   - {fileID: 964984262}
   - {fileID: 1098966332}
   m_Father: {fileID: 1588150491}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -886,7 +886,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Afsluiten
+  m_Text: Menu
 --- !u!222 &255725019
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1276,6 +1276,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 771756025}
+  - {fileID: 417646348}
   - {fileID: 696903246}
   - {fileID: 932654949}
   - {fileID: 1436474134}
@@ -6141,12 +6143,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 896585591}
-  m_Father: {fileID: 1588150491}
+  m_Father: {fileID: 364208185}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -110, y: 87.22}
+  m_AnchoredPosition: {x: 799.99994, y: 87.22}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &417646349
@@ -6193,7 +6195,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1078148855}
-        m_MethodName: RecordTrack1
+        m_MethodName: RecordTrack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8168,7 +8170,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1078148855}
-        m_MethodName: RedoTrack1
+        m_MethodName: RedoTrack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8247,7 +8249,7 @@ RectTransform:
   m_Children:
   - {fileID: 1139022521}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -9293,7 +9295,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 879247204}
-  m_Father: {fileID: 1588150491}
+  m_Father: {fileID: 364208185}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -9345,7 +9347,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 52673047}
-        m_MethodName: StartGame
+        m_MethodName: RecordingState
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10095,7 +10097,7 @@ RectTransform:
   m_Children:
   - {fileID: 255725017}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -11162,14 +11164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69fe0ef6dbbea9d4bb16cc8535f64c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source: {fileID: 1000744860}
-  aftellen: {fileID: 8300000, guid: 1a38ac521e4460a498f9d03f3bbbd3f3, type: 3}
-  eindekaraoke: {fileID: 8300000, guid: 66eda3231c95c2c4cb2125c54745be6d, type: 3}
-  karaokeTrack: {fileID: 8300000, guid: ad5146bb81c322a45a5d78e4adad196e, type: 3}
-  volumeDuringRecording: 0.5
-  recording: {fileID: 0}
-  karaokevideo: {fileID: 1180691953}
-  microphoneFrequency: 44100
   counter: 0
   game: {fileID: 52673047}
   mixer: {fileID: 1359121657}
@@ -11179,6 +11173,14 @@ MonoBehaviour:
   microphone: {fileID: 21300000, guid: db9b2d581bfad364396f0e26cdfcdd13, type: 3}
   startKaraokeButton: {fileID: 417646349}
   afluisterButton: {fileID: 2019939576}
+  source: {fileID: 1000744860}
+  aftellen: {fileID: 8300000, guid: 1a38ac521e4460a498f9d03f3bbbd3f3, type: 3}
+  eindekaraoke: {fileID: 8300000, guid: 66eda3231c95c2c4cb2125c54745be6d, type: 3}
+  karaokeTrack: {fileID: 8300000, guid: ad5146bb81c322a45a5d78e4adad196e, type: 3}
+  volumeDuringRecording: 0.5
+  recording: {fileID: 0}
+  karaokevideo: {fileID: 1180691953}
+  microphoneFrequency: 44100
 --- !u!4 &1078148856
 Transform:
   m_ObjectHideFlags: 0
@@ -13155,7 +13157,7 @@ MonoBehaviour:
   play: {fileID: 21300000, guid: fd6c70cc7098ba340ba4f35d13c23715, type: 3}
   pause: {fileID: 21300000, guid: 04be1b65fd8b8f44b81ef3f7dc418105, type: 3}
   stop: {fileID: 21300000, guid: bcc3b8a2983d9ee4da3ae2c7fba8137a, type: 3}
-  playButton: {fileID: 1098966333}
+  playButton: {fileID: 1894036375}
 --- !u!4 &1359121658
 Transform:
   m_ObjectHideFlags: 0
@@ -13359,7 +13361,7 @@ RectTransform:
   m_Children:
   - {fileID: 1521125406}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14540,13 +14542,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 771756025}
-  - {fileID: 417646348}
   - {fileID: 1597124347}
   - {fileID: 1666833425}
   - {fileID: 254919734}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14676,7 +14676,7 @@ RectTransform:
   m_Children:
   - {fileID: 2037526892}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14795,7 +14795,7 @@ RectTransform:
   - {fileID: 1998475571}
   - {fileID: 1744149525}
   m_Father: {fileID: 1588150491}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -14977,7 +14977,7 @@ RectTransform:
   - {fileID: 118286663}
   - {fileID: 1620120053}
   m_Father: {fileID: 1588150491}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -15662,7 +15662,7 @@ RectTransform:
   - {fileID: 2019939575}
   - {fileID: 679879058}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -16456,7 +16456,7 @@ RectTransform:
   m_Children:
   - {fileID: 1401761904}
   m_Father: {fileID: 364208185}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -17471,7 +17471,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1078148855}
-        m_MethodName: PlayTrack1
+        m_MethodName: PlayTrack
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -21,7 +21,6 @@ public class MusicMixer : MonoBehaviour
     [SerializeField] float enhanceRecording;
 
     int microphoneFrequency;
-    AudioClip[] recordings;
     AudioClip recording;
     AudioSource customAudio;
     int beepOffset = 3800;
@@ -68,16 +67,11 @@ public class MusicMixer : MonoBehaviour
 
     void GenerateSong()
     {
-        // Double check if all audio tracks are recorded
         microphoneFrequency = recordingsHandler.microphoneFrequency;
+
+        // Double check if all audio tracks are recorded
         AudioClip recording = recordingsHandler.recording;
         if (recording == null) return;
-     /*   recordings = new AudioClip[] { recording }; // TODO : not in array */
-         /*recordings = recordingsHandler.recordedTracks; */
-      /*   foreach (AudioClip r in recordings) if (r == null) break; */
-
-        // Combine the song snippets
-        // AudioClip generatedSong = CombineTotaal(recordings);
 
         AudioClip generatedSong = Combine(recording);
         customAudio.clip = generatedSong;
@@ -90,6 +84,7 @@ public class MusicMixer : MonoBehaviour
         return (value < min) ? min : (value > max) ? max : value;
     }
 
+    // Total song
     AudioClip Combine(AudioClip clip)
     {
         // Determine song length
@@ -124,50 +119,7 @@ public class MusicMixer : MonoBehaviour
         return result;
     }
 
-    AudioClip CombineTotaal(AudioClip[] clips) // Function for multiple recordings (might be obsolete)
-    {
-        // Determine song length
-        if (backtrack.channels != 1) Debug.Log("Make sure the audiofile is mono");
-        int length = backtrack.samples * backtrack.channels;
-
-        // Set the audio data for the backtrack in a buffer
-        float[] floatBackTrack = new float[length];
-        backtrack.GetData(floatBackTrack, 0);
-
-        // Hardcode the offsets based on audio data
-        int sampleOffset1 = 393317;
-        int sampleOffset2 = 608232;
-        int sampleOffset3 = 819670;
-
-        // Set the audio data for the recorded tracks in another buffer
-        float[] floatRecordings = new float[length];
-
-        // Get the data of track 1
-        float[] bufferT1 = new float[clips[0].samples * clips[0].channels];
-        clips[0].GetData(bufferT1, beepOffset);
-        bufferT1.CopyTo(floatRecordings, sampleOffset1);
-        // Get the data of track 2
-        float[] bufferT2 = new float[clips[1].samples * clips[1].channels];
-        clips[1].GetData(bufferT2, beepOffset);
-        bufferT2.CopyTo(floatRecordings, sampleOffset2);
-        // Get the data of track 3
-        float[] bufferT3 = new float[clips[2].samples * clips[2].channels];
-        clips[2].GetData(bufferT3, beepOffset);
-        bufferT3.CopyTo(floatRecordings, sampleOffset3);
-
-        // Combine the two tracks
-        float[] mixedFloatArray = new float[length];
-        for (int i = 0; i < length; i++)
-        {
-            mixedFloatArray[i] = ClampToValidRange((floatBackTrack[i] + floatRecordings[i] * enhanceRecording) / 2);
-        }
-
-        // Create an audioclip
-        AudioClip result = AudioClip.Create("Personal song", length, 1, microphoneFrequency, false);
-        result.SetData(mixedFloatArray, 0);
-        return result;
-    }
-
+    // Karaoke part (for listening back)
     AudioClip CombineKaraoke(AudioClip recording)
     {
         // Set vars
@@ -200,13 +152,6 @@ public class MusicMixer : MonoBehaviour
         {
             resultBuffer[i] = ClampToValidRange((instrumentalBuffer[i] + floatRecording[i] * enhanceRecording) / 2);
         }
-
-        
-
-        // Put the karaokepart and ending together
-      //  float[] resultBuffer = new float[length + lengthEnding];
-     //   mixedBuffer.CopyTo(resultBuffer, 0);
-      //  floatEnding.CopyTo(resultBuffer, length);
 
         // Create audio clip
         AudioClip result = AudioClip.Create("Karaoke", resultBuffer.Length, 1, microphoneFrequency, false);
