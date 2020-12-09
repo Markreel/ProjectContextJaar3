@@ -212,7 +212,7 @@ public class BellenMiniGame : MonoBehaviour
         Vector3 startRot = camera2.transform.eulerAngles;
         Vector3 endRot = camera2.transform.eulerAngles + new Vector3(90, 0, 0);
         Vector3 startPos = camera2.transform.position;
-        Vector3 endPos = camera2.transform.position + new Vector3(0, -3, 0);
+        Vector3 endPos = camera2.transform.position + new Vector3(0, -2f, 0);
 
         // Rotate the camera
         float tick = 0f;
