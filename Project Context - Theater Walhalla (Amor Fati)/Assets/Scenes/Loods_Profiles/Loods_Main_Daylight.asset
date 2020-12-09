@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1cb7e9e120078f43bce4f0b1be547a7, type: 3}
   m_Name: AmbientOcclusion
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
@@ -67,7 +67,7 @@ MonoBehaviour:
     value: 1
   filtering:
     overrideState: 1
-    value: {x: 53.99999, y: 99}
+    value: {x: 53.999992, y: 99}
   minLuminance:
     overrideState: 1
     value: 2.93
@@ -104,7 +104,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 2.27
+    value: 3.94
   threshold:
     overrideState: 0
     value: 1
@@ -150,6 +150,7 @@ MonoBehaviour:
   - {fileID: -3372893480833313245}
   - {fileID: 2113564842380146550}
   - {fileID: -2010408103975395835}
+  - {fileID: 4708017809394713914}
 --- !u!114 &2113564842380146550
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -209,13 +210,13 @@ MonoBehaviour:
     value: -100
   colorFilter:
     overrideState: 1
-    value: {r: 0.9811321, g: 0.97496146, b: 0.96724814, a: 1}
+    value: {r: 1, g: 0.9009434, b: 0.9156184, a: 1}
   hueShift:
     overrideState: 0
     value: 0
   saturation:
     overrideState: 1
-    value: -22
+    value: -8
   brightness:
     overrideState: 0
     value: 0
@@ -1461,3 +1462,29 @@ MonoBehaviour:
       - 0.5
       - 0.5
       - 0.5
+--- !u!114 &4708017809394713914
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6050e2d5de785ce4d931e4dbdbf2d755, type: 3}
+  m_Name: ChromaticAberration
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  spectralLut:
+    overrideState: 0
+    value: {fileID: 0}
+    defaultState: 1
+  intensity:
+    overrideState: 1
+    value: 0.031
+  fastMode:
+    overrideState: 0
+    value: 0
