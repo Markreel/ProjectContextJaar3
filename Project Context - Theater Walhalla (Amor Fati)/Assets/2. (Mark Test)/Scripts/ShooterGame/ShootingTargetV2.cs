@@ -8,6 +8,7 @@ namespace ShooterGame
     public class ShootingTargetV2 : MonoBehaviour, IShootable
     {
         [Header("Settings: ")]
+        [SerializeField] private bool useFallAnimation = true;
         [SerializeField] private bool isLooping;
         [SerializeField] private GameObject heightAdjuster;
         [SerializeField] private float minHeightAdjustment;
@@ -25,8 +26,12 @@ namespace ShooterGame
         [SerializeField] private AudioClip audioOnHit1;
         [SerializeField] private AudioClip audioOnHit2;
 
+        [Space]
+
+        [SerializeField] private bool isGoldenBubble = false;
+
         private Animator animator;
-        private TargetManager targetManager;
+        private RoundManager targetManager;
         private bool isShot = false;
         private bool isActivated = false;
 
@@ -64,7 +69,6 @@ namespace ShooterGame
             Vector3 _startHeight = heightAdjuster.transform.localPosition;
             _startHeight.y = Mathf.Lerp(minHeightAdjustment, maxHeightAdjustment, _evaluatedTick);
             heightAdjuster.transform.localPosition = _startHeight;
-            Debug.Log(_startHeight.y);
         }
 
         private void StartHeightAdjustment()
@@ -138,11 +142,17 @@ namespace ShooterGame
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit1);
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit2);
 
+            GameManager.Instance.objectPool.SpawnFromPool("CoinParticle", _shooter.transform.position, Vector3.left * 90);
+
             scoreManager.AddScore(scoreValue);
             scoreManager.AdvanceMultiplierProgression();
 
-            animator.SetTrigger("FallOver");
             isShot = true;
+
+            if (isGoldenBubble) { Debug.Log("ik ben een goude bel"); }
+
+            if (useFallAnimation) { animator.SetTrigger("FallOver"); }
+            else { SelfDestruct(); }
         }
     }
 }

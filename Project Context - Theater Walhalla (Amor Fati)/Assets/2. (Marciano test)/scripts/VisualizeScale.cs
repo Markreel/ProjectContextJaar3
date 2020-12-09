@@ -18,7 +18,7 @@ public class VisualizeScale : MonoBehaviour
 
     void Start()
     {
-        audiovisual = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
+        //audiovisual = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
         sinX = new Vector3(Random.Range(0, 5), Random.Range(0, 5), Random.Range(0, 5));
     }
 

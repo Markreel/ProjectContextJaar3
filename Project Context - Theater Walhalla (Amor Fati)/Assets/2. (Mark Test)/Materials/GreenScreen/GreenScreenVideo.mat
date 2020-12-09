@@ -69,7 +69,7 @@ Material:
     - _Cull: 2
     - _Cutoff: 0.5
     - _Despill: 0.885
-    - _DespillLuminanceAdd: 1
+    - _DespillLuminanceAdd: 0
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
@@ -81,7 +81,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _SampleGI: 0
-    - _Sharpening: 0
+    - _Sharpening: 0.76
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -94,6 +94,6 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _KeyColor: {r: 0.7294118, g: 0.854902, b: 0.3019608, a: 0}
+    - _KeyColor: {r: 0.007843138, g: 0.69411767, b: 0.25490195, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 1}

@@ -11,7 +11,7 @@ namespace PoolingAndAudio
         public TimerHandler TimerHandler;
         public AudioManager AudioManager;
 
-        protected ObjectPool objectPool;
+        public ObjectPool objectPool;
 
         public System.Action OnUpdate;
         public System.Action OnFixedUpdate;
