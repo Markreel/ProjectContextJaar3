@@ -39,8 +39,16 @@ namespace ShooterGame
 
             fati?.Init(uiManager, this);
 
+            
+        }
+
+        public void TutorialFinished()
+        {
             roundRoutine = StartCoroutine(IEExecuteRoundBehaviour(Rounds[0]));
         }
+
+
+
 
         private void LerpCamera(float _t)
         {
