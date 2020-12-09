@@ -11,6 +11,7 @@ namespace ShooterGame
         private ShooterController shooterController;
         private RoundManager targetManager;
         private UIManager uiManager;
+        private Tutorial tutorial; 
 
         protected override void Awake()
         {
@@ -20,6 +21,7 @@ namespace ShooterGame
             targetManager = GetComponentInChildren<RoundManager>();
             ScoreManager = GetComponentInChildren<ScoreManager>();
             uiManager = GetComponentInChildren<UIManager>();
+            tutorial = GetComponentInChildren<Tutorial>();
         }
 
         protected override void Start()
