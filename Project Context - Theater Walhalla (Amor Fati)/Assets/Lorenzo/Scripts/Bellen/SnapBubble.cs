@@ -17,7 +17,7 @@ public class SnapBubble : MonoBehaviour
     private void Start()
     {
         sleepHierJeBubbelText = GetComponentInChildren<TextMeshPro>();
-        bellenMinigame = transform.root.GetComponent<BellenMiniGame>();
+        bellenMinigame = GameObject.Find("BellenMiniGame").GetComponent<BellenMiniGame>();
         meshRenderer = GetComponent<MeshRenderer>();
     }
 
@@ -40,9 +40,9 @@ public class SnapBubble : MonoBehaviour
             meshRenderer.enabled = false;
             //Allows our bubble button to spawn another bubble.
             bellenMinigame.canSpawnBubble = true;
+            bellenMinigame.newBubbleButton.gameObject.SetActive(true);
             //Counts up the amount of filled in bubbles; 
             bellenMinigame.filledInBubbles++;
-
         }
         
     }

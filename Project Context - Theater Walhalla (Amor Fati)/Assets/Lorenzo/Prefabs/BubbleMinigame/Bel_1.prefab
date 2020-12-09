@@ -210,6 +210,10 @@ MonoBehaviour:
   velocityMulti: 0
   velocityDecay: 0.02
   canDrag: 1
+  protectGame: 1
+  falling: 0
+  fixedY: 0
+  fixedZ: 0
   BoundariesMesh: {fileID: 0}
   popParticle: {fileID: 638192410359976809, guid: 1086546d891430c4e9176dffa612c24f,
     type: 3}
@@ -412,7 +416,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3350743141553430547}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -73}
   m_LocalScale: {x: 4.1612, y: 4.1612, z: 4.1612}
   m_Children:
   - {fileID: 3350743141946374157}
@@ -421,7 +425,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 5.362e-12, y: 0.016574}
+  m_AnchoredPosition: {x: -1, y: -8}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3350743141553430551
