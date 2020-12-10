@@ -4,28 +4,51 @@ using UnityEngine;
 using UnityEngine.Video;
 using TMPro;
 
-public class NetworkVideoCheck : MonoBehaviour
+public class OnlineVideoManager : MonoBehaviour
 {
 
-    [SerializeField] GameObject errorPannel;
+    [SerializeField] GameObject connectionErrorPannel;
     [SerializeField] GameObject videoErrorPannel;
 
-    [SerializeField] VideoPlayer videoScreen;
+    [SerializeField] VideoPlayer videoPlayer;
+    [SerializeField] VideoEndDetectionTest videoEndDetection;
+
+    [SerializeField] int scene = 0;
+
+    [SerializeField] string siteLocation = "https://amorfatigame.nl/VideoLocatieSjqJ76fQkw6vCxSY/";
+
+    [SerializeField] string filetype = ".mp4";
+
+    [SerializeField] string[] videoNames;
+
+    [SerializeField] TextMeshProUGUI[] errorCodes; //all errorcodes text elements
+
 
     private void Start()
     {
+        NextVideo();
+    }
+
+    public void NextVideo()
+    {
+        Debug.Log($"Playing {videoNames[scene]}");
+        videoPlayer.url = siteLocation + videoNames[scene] + filetype;
+
+
+        foreach(TextMeshProUGUI errorText in errorCodes) //pre sets error texts
+        {
+            errorText.text = "ERV_" + videoNames[scene];
+        }
+
+        scene++;
+
         CheckConnection();    
     }
 
     public void CheckConnection()
     {
         StartCoroutine(StartPing("8.8.8.8"));
-        errorPannel.SetActive(false);
-    }
-
-    public void DownloadGame()
-    {
-        Application.OpenURL("https://Marcianosordam.com");
+        connectionErrorPannel.SetActive(false);
     }
 
     IEnumerator StartPing(string ip)
@@ -47,7 +70,7 @@ public class NetworkVideoCheck : MonoBehaviour
         {
             //log screen, check connection.
             Debug.Log("no connection");
-            errorPannel.SetActive(true);
+            connectionErrorPannel.SetActive(true);
         }
 
     }
@@ -55,12 +78,14 @@ public class NetworkVideoCheck : MonoBehaviour
 
     IEnumerator FollowUp()
     {
-        // stuff when the Ping p has finshed....
+        // stuff when the Ping has finshed....
         Debug.Log("Ik Doe het");
         //speelt video
-        videoScreen.Play();
+        videoPlayer.Play();
+        videoEndDetection.resetDone();
+
         yield return new WaitForSeconds(3);
-        if(videoScreen.isPlaying)
+        if(videoPlayer.isPlaying)
         {
             Debug.Log("video is playing");
         }
@@ -68,7 +93,7 @@ public class NetworkVideoCheck : MonoBehaviour
         {
             Debug.Log("still loading");
             yield return new WaitForSeconds(5);
-            if (videoScreen.isPlaying)
+            if (videoPlayer.isPlaying)
             {
                 Debug.Log("video is playing");
             }
