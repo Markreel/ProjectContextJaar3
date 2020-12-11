@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
-using UnityEditorInternal;
+//using UnityEditorInternal;
 using System.Runtime.InteropServices;
 
 public class BellenMiniGame : MonoBehaviour

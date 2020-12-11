@@ -21,7 +21,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - Vector1_5778CEAA: 0.5
+    - Vector1_5778CEAA: -0.5
     - _AddAlpha: 0
     - _Amount: 0.001
     - _BlendOpacity: 0.5

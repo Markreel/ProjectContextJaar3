@@ -11,7 +11,7 @@ public class VisualizeScale : MonoBehaviour
     [SerializeField] float speed;
     [SerializeField] int offset = 0;
     Vector3 scaleOffset;
-    float morphSpeed = 2f;
+    [SerializeField] float morphSpeed = 2f;
     Vector3 sinX;
     Vector3 sinOffset;
     [SerializeField] float minScaleSize;
@@ -42,9 +42,9 @@ public class VisualizeScale : MonoBehaviour
 
         target = Mathf.Lerp(target, Mathf.Clamp((audiovisual.spectrum[offset] * multiplyer + minimumSize),0,maxSize), speed*Time.deltaTime);
 
-        scaleOffset.x = Mathf.Round(scaleOffset.x * 10f) / 10f;
-        scaleOffset.y = Mathf.Round(scaleOffset.y * 10f) / 10f;
-        scaleOffset.z = Mathf.Round(scaleOffset.z * 10f) / 10f;
+        //scaleOffset.x = Mathf.Round(scaleOffset.x * 10f) / 10f;
+        //scaleOffset.y = Mathf.Round(scaleOffset.y * 10f) / 10f;
+        //scaleOffset.z = Mathf.Round(scaleOffset.z * 10f) / 10f;
 
         
 
