@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StartButton : ButtonFunctionality
+public class StartButtonOud : ButtonFunctionality
 {
     [SerializeField] GameObject microphoneObject;
     [SerializeField] GameObject bord;
