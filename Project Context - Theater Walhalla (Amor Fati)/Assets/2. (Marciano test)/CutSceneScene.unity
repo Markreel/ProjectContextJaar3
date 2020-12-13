@@ -378,7 +378,7 @@ PrefabInstance:
     - target: {fileID: 533974933865947579, guid: b3b302edc6e18144a86086b22ab3962f,
         type: 3}
       propertyPath: videoNames.Array.data[0]
-      value: SpaceEngineers
+      value: 6A_Greenscreen_V2
       objectReference: {fileID: 0}
     - target: {fileID: 533974933865947579, guid: b3b302edc6e18144a86086b22ab3962f,
         type: 3}

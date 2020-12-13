@@ -31,18 +31,31 @@ public class OnlineVideoManager : MonoBehaviour
 
     public void NextVideo()
     {
-        Debug.Log($"Playing {videoNames[scene]}");
-        videoPlayer.url = siteLocation + videoNames[scene] + filetype;
-
-
-        foreach(TextMeshProUGUI errorText in errorCodes) //pre sets error texts
+        //check if scene should go to next scene or to game
+        if(true)
         {
-            errorText.text = "ERV_" + videoNames[scene];
+            LoadVideo(scene);
+            scene++;
+        }
+        else
+        {
+            //go to game
         }
 
-        scene++;
+    }
 
-        CheckConnection();    
+    public void LoadVideo(int i)
+    {
+        Debug.Log($"Playing {videoNames[i]}");
+        videoPlayer.url = siteLocation + videoNames[i] + filetype;
+
+
+        foreach (TextMeshProUGUI errorText in errorCodes) //pre sets error texts
+        {
+            errorText.text = "ERV_" + videoNames[i];
+        }
+
+        CheckConnection();
     }
 
     public void CheckConnection()
