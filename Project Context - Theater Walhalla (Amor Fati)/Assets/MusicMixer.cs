@@ -18,6 +18,7 @@ public class MusicMixer : MonoBehaviour
     [SerializeField] AudioClip backtrackKaraoke;
     [SerializeField] AudioClip karaokeEinde;
     [SerializeField] float enhanceRecording;
+    [SerializeField] int combineOffset = 9000; // for some reason there's a small delay; use this to have better overlap between recording and music 
 
     int microphoneFrequency;
     AudioClip recording;
@@ -107,9 +108,9 @@ public class MusicMixer : MonoBehaviour
 
         // Combine the two tracks
         float[] mixedFloatArray = new float[length];
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < length - combineOffset; i++)
         {
-            mixedFloatArray[i] = ClampToValidRange((floatBackTrack[i] + floatRecordings[i] * enhanceRecording) / 2);
+            mixedFloatArray[i] = ClampToValidRange((floatBackTrack[i] + floatRecordings[i + combineOffset] * enhanceRecording) / 2);
         }
 
         // Create an audioclip
@@ -147,9 +148,9 @@ public class MusicMixer : MonoBehaviour
         // Combine the instrumental/music buffer and the recording
         float[] resultBuffer = new float[karaokeLength + lengthEnding];
         resultBuffer = instrumentalBuffer;
-        for (int i = 0; i < floatRecording.Length; i++)
+        for (int i = 0; i < floatRecording.Length - combineOffset; i++)
         {
-            resultBuffer[i] = ClampToValidRange((instrumentalBuffer[i] + floatRecording[i] * enhanceRecording) / 2);
+            resultBuffer[i] = ClampToValidRange((instrumentalBuffer[i] + floatRecording[i + combineOffset] * enhanceRecording) / 2);
         }
 
         // Create audio clip

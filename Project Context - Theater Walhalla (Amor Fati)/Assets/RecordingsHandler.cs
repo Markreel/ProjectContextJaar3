@@ -238,6 +238,9 @@ public class RecordingsHandler : MonoBehaviour
             _audio.clip = karaokeClip;
             _audio.Play();
             afluisterButton.GetComponent<Image>().sprite = stop;
+
+            yield return new WaitWhile(() => (_audio.clip == karaokeClip && _audio.isPlaying));
+            afluisterButton.GetComponent<Image>().sprite = play;
         }
 
         yield break;
