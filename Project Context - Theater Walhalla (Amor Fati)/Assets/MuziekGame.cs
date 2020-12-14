@@ -8,7 +8,7 @@ using UnityEngine.Video;
 
 public class MuziekGame : MonoBehaviour
 {
-    [Header("UI elements")]
+    [Header("UI Buttons")]
     [SerializeField] Button voorbeeldButton;
     [SerializeField] Button startButton;
     [SerializeField] Button downloadButton;
@@ -17,9 +17,13 @@ public class MuziekGame : MonoBehaviour
     [SerializeField] Button playButton;
     [SerializeField] Button startKaraokeButton;
     [SerializeField] Button playBackButton;
+    [SerializeField] Button terugButton;
     [SerializeField] Sprite play;
     [SerializeField] GameObject postRecording;
+
+    [Header("Tekst")]
     [SerializeField] GameObject karaokeTekst;
+    [SerializeField] GameObject geenMicrofoon;
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
@@ -60,6 +64,8 @@ public class MuziekGame : MonoBehaviour
                 postRecording.SetActive(false);
                 karaokeTekst.SetActive(false);
                 recordingsHandler.metronoomAnimator.SetBool("IsPlaying", false);
+                terugButton.gameObject.SetActive(false);
+                geenMicrofoon.SetActive(false);
 
                 // Turn off any playing audio
                 if (recordingsHandler._audio.isPlaying) recordingsHandler._audio.Stop();
@@ -68,22 +74,47 @@ public class MuziekGame : MonoBehaviour
                 break;
 
             case (int)GameState.recording:
-                // Transition
-                StartCoroutine(TransitionToRecording());
 
-                // Deactive elements
-                startButton.gameObject.SetActive(false);
-                voorbeeldButton.gameObject.SetActive(false);
-                playButton.gameObject.SetActive(false);
-                downloadButton.gameObject.SetActive(false);
-                postRecording.SetActive(false);
+                // Check if the game can start 
+                bool microphonePresent = recordingsHandler.MicrophoneSetup();
 
-                // Active elements
-                karaokeTekst.SetActive(true);
-                menuButton.idle = menuButton.menu_idle;
-                menuButton.GetComponent<Image>().sprite = menuButton.idle;
-                menuButton.active = menuButton.menu_active;
+                // If there is a microphone, load all elements
+                if (microphonePresent)
+                {
+                    // Transition
+                    StartCoroutine(TransitionToRecording());
+
+                    // Deactive elements
+                    startButton.gameObject.SetActive(false);
+                    voorbeeldButton.gameObject.SetActive(false);
+                    playButton.gameObject.SetActive(false);
+                    downloadButton.gameObject.SetActive(false);
+                    postRecording.SetActive(false);
+                    geenMicrofoon.SetActive(false);
+
+                    // Terug naar downloaden als je voor de tweede keer iets aan het opnemen bent
+                    if (recordingsHandler.recording == null) terugButton.gameObject.SetActive(false);
+                    else terugButton.gameObject.SetActive(true);
+
+                    // Active elements
+                    karaokeTekst.SetActive(true);
+                    menuButton.idle = menuButton.menu_idle;
+                    menuButton.GetComponent<Image>().sprite = menuButton.idle;
+                    menuButton.active = menuButton.menu_active;
+                }
+
+                // Else, show warning that there is no mic
+                else
+                {
+                    // Deactive elements
+                    startButton.gameObject.SetActive(false);
+
+                    // Activate elements
+                    geenMicrofoon.SetActive(true);
+                }
+
                 break;
+
 
             case (int)GameState.downloading:
 
@@ -93,6 +124,8 @@ public class MuziekGame : MonoBehaviour
                 startKaraokeButton.gameObject.SetActive(false);
                 karaokeTekst.SetActive(false);
                 recordingsHandler.metronoomAnimator.SetBool("IsPlaying", false);
+                terugButton.gameObject.SetActive(false);
+                geenMicrofoon.SetActive(false);
 
                 // Activate elements
                 playBackButton.GetComponent<Image>().sprite = play;

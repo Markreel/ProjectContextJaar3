@@ -67,26 +67,6 @@ public class RecordingsHandler : MonoBehaviour
         karaokePlaying = false;
     }
 
-    bool MicrophoneSetup()
-    {
-        // Find microphone devices
-        string[] devices = Microphone.devices;
-        if (devices.Length > 0)
-        {
-            // Set device
-            device = devices[0];
-
-            // Get max frequency of device
-            int minFreq;
-            int maxFreq;
-            Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
-            if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
-            return true;
-        }
-
-        else return false;
-    }
-
     IEnumerator StartRecording()
     {
         // Check microphone
@@ -261,11 +241,32 @@ public class RecordingsHandler : MonoBehaviour
         }
 
         yield break;
-    } 
+    }
 
     #endregion
 
     #region Public methods
+
+    // Check microphone
+    public bool MicrophoneSetup()
+    {
+        // Find microphone devices
+        string[] devices = Microphone.devices;
+        if (devices.Length > 0)
+        {
+            // Set device
+            device = devices[0];
+
+            // Get max frequency of device
+            int minFreq;
+            int maxFreq;
+            Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
+            if (maxFreq < microphoneFrequency) microphoneFrequency = maxFreq;
+            return true;
+        }
+
+        else return false;
+    }
 
     // Recording
     public void RecordTrack() => StartCoroutine(StartRecording());

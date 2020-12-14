@@ -160,8 +160,9 @@ public class MusicMixer : MonoBehaviour
 
     IEnumerator DownloadSong()
     {
+        
         // Check if generated clip is present
-        if (customAudio.clip == null) GenerateSong();
+        if (customAudio.clip == null) GenerateSong();  
 
         // Try downloading the clip
         try
