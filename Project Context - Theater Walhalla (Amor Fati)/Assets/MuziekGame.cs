@@ -24,6 +24,7 @@ public class MuziekGame : MonoBehaviour
     [Header("Tekst")]
     [SerializeField] GameObject karaokeTekst;
     [SerializeField] GameObject geenMicrofoon;
+    [SerializeField] GameObject FlipNoorman; // to be removed or set to inactive later
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
@@ -66,6 +67,7 @@ public class MuziekGame : MonoBehaviour
                 recordingsHandler.metronoomAnimator.SetBool("IsPlaying", false);
                 terugButton.gameObject.SetActive(false);
                 geenMicrofoon.SetActive(false);
+                FlipNoorman.SetActive(false);
 
                 // Turn off any playing audio
                 if (recordingsHandler._audio.isPlaying) recordingsHandler._audio.Stop();
@@ -98,6 +100,7 @@ public class MuziekGame : MonoBehaviour
 
                     // Active elements
                     karaokeTekst.SetActive(true);
+                    FlipNoorman.SetActive(true);
                     menuButton.idle = menuButton.menu_idle;
                     menuButton.GetComponent<Image>().sprite = menuButton.idle;
                     menuButton.active = menuButton.menu_active;
@@ -126,6 +129,7 @@ public class MuziekGame : MonoBehaviour
                 recordingsHandler.metronoomAnimator.SetBool("IsPlaying", false);
                 terugButton.gameObject.SetActive(false);
                 geenMicrofoon.SetActive(false);
+                FlipNoorman.SetActive(false);
 
                 // Activate elements
                 playBackButton.GetComponent<Image>().sprite = play;

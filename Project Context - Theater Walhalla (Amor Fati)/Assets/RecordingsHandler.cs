@@ -57,6 +57,19 @@ public class RecordingsHandler : MonoBehaviour
     string device;
     int duration = 15;
 
+    // For the demo with Flip -- to be removed later
+    [Header("Flip Noorman - predikant")]
+    [SerializeField] Image flip1;
+    [SerializeField] Image flip2;
+    [SerializeField] Image flip3;
+    [SerializeField] Image predikant1;
+    [SerializeField] Image predikant2;
+    [SerializeField] Image predikant3;
+    [SerializeField] public Sprite flip_idle;
+    [SerializeField] public Sprite flip_active;
+    [SerializeField] public Sprite predikant_idle;
+    [SerializeField] public Sprite predikant_active;
+
     #endregion
 
     #region Private methods
@@ -104,6 +117,7 @@ public class RecordingsHandler : MonoBehaviour
 
             // Reset last line of karaoke
             line3.sprite = _all;
+            predikant3.sprite = predikant_idle;
 
             // Play end of song for continuity
             source.clip = eindekaraoke;
@@ -184,40 +198,95 @@ public class RecordingsHandler : MonoBehaviour
         line3.sprite = _all;
 
         // Show correct image
+        // Flip/Predikant should be commented out en _naam & _beroep gebruiken op de lijn ipv _all
         while (source.isPlaying)
         {
             // Line 1
             if (source.timeSamples < _ken1) line1.sprite = _ken;
             else if (source.timeSamples < _je1) line1.sprite = _je;
-            else if (source.timeSamples < _naam1) line1.sprite = _naam;
-            else if (source.timeSamples < _die1) line1.sprite = _die;
+            else if (source.timeSamples < _naam1)
+            {
+              //  line1.sprite = _naam;
+                line1.sprite = _all;
+                flip1.sprite = flip_active;
+            }
+
+
+            else if (source.timeSamples < _die1)
+            {
+                flip1.sprite = flip_idle;
+                line1.sprite = _die;
+            }
+                
             else if (source.timeSamples < _is1) line1.sprite = _is;
-            else if (source.timeSamples < _beroep1) line1.sprite = _beroep;
+            else if (source.timeSamples < _beroep1)
+            {
+                // line1.sprite = _beroep;
+                line1.sprite = _all;
+                predikant1.sprite = predikant_active;
+            }
 
             // Line 2
             else if (source.timeSamples < _ken2)
             {
                 line1.sprite = _all;
                 line2.sprite = _ken;
+                predikant1.sprite = predikant_idle;
             }
                
             else if (source.timeSamples < _je2) line2.sprite = _je;
-            else if (source.timeSamples < _naam2) line2.sprite = _naam;
-            else if (source.timeSamples < _die2) line2.sprite = _die;
+            else if (source.timeSamples < _naam2)
+            {
+                //   line2.sprite = _naam;
+                line2.sprite = _all;
+                flip2.sprite = flip_active;
+            }
+                
+            else if (source.timeSamples < _die2)
+            {
+                flip2.sprite = flip_idle;
+                line2.sprite = _die;
+            }
+               
             else if (source.timeSamples < _is2) line2.sprite = _is;
-            else if (source.timeSamples < _beroep2) line2.sprite = _beroep;
+            else if (source.timeSamples < _beroep2)
+            {
+                // line2.sprite = _beroep;
+                line2.sprite = _all;
+                predikant2.sprite = predikant_active;
+            }
+               
 
             // Line 3
             else if (source.timeSamples < _ken3)
             {
+                predikant2.sprite = predikant_idle;
                 line2.sprite = _all;
                 line3.sprite = _ken;
             }
             else if (source.timeSamples < _je3) line3.sprite = _je;
-            else if (source.timeSamples < _naam3) line3.sprite = _naam;
-            else if (source.timeSamples < _die3) line3.sprite = _die;
+            else if (source.timeSamples < _naam3)
+            {
+                //  line3.sprite = _naam;
+                line3.sprite = _all;
+                flip3.sprite = flip_active;
+            }
+               
+            else if (source.timeSamples < _die3)
+            {
+                flip3.sprite = flip_idle;
+                line3.sprite = _die;
+            }
+                
             else if (source.timeSamples < _is3) line3.sprite = _is;
-            else if (source.timeSamples < _beroep3) line3.sprite = _beroep;
+            else if (source.timeSamples < _beroep3)
+            {
+                // line3.sprite = _beroep;
+                line3.sprite = _all;
+               
+                predikant3.sprite = predikant_active;
+            }
+                
             yield return null;
         }
 
