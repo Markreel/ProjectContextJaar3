@@ -33,11 +33,15 @@ public class RecordingsHandler : MonoBehaviour
     public AudioClip recording;
     bool karaokePlaying;
 
+    // Metronoom
+    [SerializeField] Animator metronoomAnimator;
+
     // Video
     [Header("Karaokebolletje-videos")]
     [SerializeField] VideoPlayer karaokevideo;
 
     // Microphone
+    [Header("Microfoon")]
     bool microphonePresent;
     public int microphoneFrequency = 44100;
     string device;
@@ -95,13 +99,12 @@ public class RecordingsHandler : MonoBehaviour
             // Start karaoketrack and recording
             source.clip = karaokeTrack;
             source.volume = volumeDuringRecording;
-          //  karaokevideo.Play();
             source.Play();
+            metronoomAnimator.SetBool("IsPlaying", true);
             recording = Microphone.Start(device, false, duration, microphoneFrequency);
 
             // Stop recording after set duration
-             yield return new WaitWhile(() => (source.clip == karaokeTrack && source.isPlaying));
-           // karaokevideo.Stop();
+            yield return new WaitWhile(() => (source.clip == karaokeTrack && source.isPlaying));
 
             // Play end of song for continuity
             source.clip = eindekaraoke;
@@ -110,6 +113,7 @@ public class RecordingsHandler : MonoBehaviour
 
             // Stop the recording
             Microphone.End(device);
+            metronoomAnimator.SetBool("IsPlaying", false);
 
             yield return new WaitWhile(() => (source.clip == eindekaraoke && source.isPlaying));
 
