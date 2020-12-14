@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 //using UnityEditorInternal;
@@ -24,7 +25,7 @@ public class RecordingsHandler : MonoBehaviour
 
     // Audio
     [Header("Muziek")]
-    [SerializeField] AudioSource source;
+    [SerializeField] public AudioSource source;
     [SerializeField] AudioClip aftellen;
     [SerializeField] AudioClip eindekaraoke;
     [SerializeField] AudioClip karaokeTrack;
@@ -34,11 +35,21 @@ public class RecordingsHandler : MonoBehaviour
     bool karaokePlaying;
 
     // Metronoom
-    [SerializeField] Animator metronoomAnimator;
+    [SerializeField] public Animator metronoomAnimator;
 
-    // Video
-    [Header("Karaokebolletje-videos")]
-    [SerializeField] VideoPlayer karaokevideo;
+    // Karaoketekst
+    [Header("Karaoke")]
+    [SerializeField] Image line1;
+    [SerializeField] Image line2;
+    [SerializeField] Image line3;
+
+    [SerializeField] Sprite _all;
+    [SerializeField] Sprite _ken;
+    [SerializeField] Sprite _je;
+    [SerializeField] Sprite _naam;
+    [SerializeField] Sprite _die;
+    [SerializeField] Sprite _is;
+    [SerializeField] Sprite _beroep;
 
     // Microphone
     [Header("Microfoon")]
@@ -94,17 +105,23 @@ public class RecordingsHandler : MonoBehaviour
             // Start aftellen
             source.clip = aftellen;
             source.Play();
+            metronoomAnimator.SetBool("IsPlaying", true);
             yield return new WaitWhile(() => (source.clip == aftellen && source.isPlaying));
 
             // Start karaoketrack and recording
             source.clip = karaokeTrack;
             source.volume = volumeDuringRecording;
             source.Play();
-            metronoomAnimator.SetBool("IsPlaying", true);
+
+            // Start text
+            StartCoroutine(ShowLyrics());
             recording = Microphone.Start(device, false, duration, microphoneFrequency);
 
             // Stop recording after set duration
             yield return new WaitWhile(() => (source.clip == karaokeTrack && source.isPlaying));
+
+            // Reset last line of karaoke
+            line3.sprite = _all;
 
             // Play end of song for continuity
             source.clip = eindekaraoke;
@@ -113,7 +130,6 @@ public class RecordingsHandler : MonoBehaviour
 
             // Stop the recording
             Microphone.End(device);
-            metronoomAnimator.SetBool("IsPlaying", false);
 
             yield return new WaitWhile(() => (source.clip == eindekaraoke && source.isPlaying));
 
@@ -121,6 +137,7 @@ public class RecordingsHandler : MonoBehaviour
             startKaraokeButton.GetComponent<Image>().sprite = microphone;
 
             // Reset boolean
+            metronoomAnimator.SetBool("IsPlaying", false);
             karaokePlaying = false;
 
             // Go to download screen
@@ -133,13 +150,86 @@ public class RecordingsHandler : MonoBehaviour
             // Stop karaoke
             if (source.isPlaying) { source.Stop(); source.clip = null; }
             karaokePlaying = false;
-            karaokevideo.Stop();
-            karaokevideo.frame = 0;
+            line1.sprite = _all;
+            line2.sprite = _all;
+            line3.sprite = _all;
+            metronoomAnimator.SetBool("IsPlaying", false);
 
             startKaraokeButton.GetComponent<Image>().sprite = microphone;
 
             // Stop coroutine
             StopAllCoroutines();
+        }
+
+        yield break;
+    }
+
+    // Show correct lyrics at correct time
+    IEnumerator ShowLyrics()
+    {
+        // Hardcoded timesamples
+        int _ken1 = 16283;
+        int _je1 = 29595;
+        int _naam1 = 106651;
+        int _die1 = 123035;
+        int _is1 = 135067;
+        int _beroep1 = 213915;
+
+        int _ken2 = 225691;
+        int _je2 = 241051;
+        int _naam2 = 320411;
+        int _die2 = 337563;
+        int _is2 = 346267;
+        int _beroep2 = 425371;
+
+        int _ken3 = 439195;
+        int _je3 = 452763;
+        int _naam3 = 532123;
+        int _die3 = 547995;
+        int _is3 = 557979;
+        int _beroep3 = 640052;
+
+        // Reset the lyrics
+        line1.sprite = _all;
+        line2.sprite = _all;
+        line3.sprite = _all;
+
+        // Show correct image
+        while (source.isPlaying)
+        {
+            // Line 1
+            if (source.timeSamples < _ken1) line1.sprite = _ken;
+            else if (source.timeSamples < _je1) line1.sprite = _je;
+            else if (source.timeSamples < _naam1) line1.sprite = _naam;
+            else if (source.timeSamples < _die1) line1.sprite = _die;
+            else if (source.timeSamples < _is1) line1.sprite = _is;
+            else if (source.timeSamples < _beroep1) line1.sprite = _beroep;
+
+            // Line 2
+            else if (source.timeSamples < _ken2)
+            {
+                line1.sprite = _all;
+                line2.sprite = _ken;
+            }
+               
+            else if (source.timeSamples < _je2) line2.sprite = _je;
+            else if (source.timeSamples < _naam2) line2.sprite = _naam;
+            else if (source.timeSamples < _die2) line2.sprite = _die;
+            else if (source.timeSamples < _is2) line2.sprite = _is;
+            else if (source.timeSamples < _beroep2) line2.sprite = _beroep;
+
+            // Line 3
+            else if (source.timeSamples < _ken3)
+            {
+                line2.sprite = _all;
+                line3.sprite = _ken;
+            }
+            else if (source.timeSamples < _je3) line3.sprite = _je;
+            else if (source.timeSamples < _naam3) line3.sprite = _naam;
+            else if (source.timeSamples < _die3) line3.sprite = _die;
+            else if (source.timeSamples < _is3) line3.sprite = _is;
+            else if (source.timeSamples < _beroep3) line3.sprite = _beroep;
+            yield return null;
         }
 
         yield break;
