@@ -21,6 +21,11 @@ public class playExample : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         this.GetComponent<Image>().sprite = play;
     }
 
+    public void OnEnable()
+    {
+        image.sprite = idle;
+    }
+
     void PlayExample()
     {
         source.Play();

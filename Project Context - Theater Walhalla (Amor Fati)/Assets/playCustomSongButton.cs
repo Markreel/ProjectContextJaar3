@@ -10,6 +10,11 @@ public class playCustomSongButton : MonoBehaviour, IPointerEnterHandler, IPointe
     [SerializeField] Sprite idle;
     [SerializeField] Sprite active;
 
+    public void OnEnable()
+    {
+        image.sprite = idle;
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
        image.sprite = active;
