@@ -1,6 +1,7 @@
 ﻿using ShooterGame;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Video;
@@ -12,9 +13,10 @@ public class MuziekGame : MonoBehaviour
     [SerializeField] Button startButton;
     [SerializeField] Button downloadButton;
     [SerializeField] Button tutorialButton;
-    [SerializeField] Button quitButton;
+    [SerializeField] menuButton menuButton;
     [SerializeField] Button playButton;
     [SerializeField] Button startKaraokeButton;
+    [SerializeField] Button playBackButton;
     [SerializeField] Sprite play;
     [SerializeField] GameObject postRecording;
     [SerializeField] GameObject karaokeTekst;
@@ -46,7 +48,10 @@ public class MuziekGame : MonoBehaviour
                 startButton.transform.localScale = new Vector3(1, 1, 1);
                 startButton.gameObject.SetActive(true);
                 tutorialButton.gameObject.SetActive(true);
-                quitButton.gameObject.SetActive(true);
+                menuButton.idle = menuButton.afsluiten_idle;
+                menuButton.GetComponent<Image>().sprite = menuButton.idle;
+                menuButton.active = menuButton.afsluiten_active;
+                menuButton.gameObject.SetActive(true);
 
                 // Deactivate elements
                 startKaraokeButton.gameObject.SetActive(false);
@@ -75,6 +80,9 @@ public class MuziekGame : MonoBehaviour
 
                 // Active elements
                 karaokeTekst.SetActive(true);
+                menuButton.idle = menuButton.menu_idle;
+                menuButton.GetComponent<Image>().sprite = menuButton.idle;
+                menuButton.active = menuButton.menu_active;
                 break;
 
             case (int)GameState.downloading:
@@ -87,9 +95,13 @@ public class MuziekGame : MonoBehaviour
                 recordingsHandler.metronoomAnimator.SetBool("IsPlaying", false);
 
                 // Activate elements
+                playBackButton.GetComponent<Image>().sprite = play;
                 postRecording.SetActive(true);
                 playButton.gameObject.SetActive(true);
                 downloadButton.gameObject.SetActive(true);
+                menuButton.idle = menuButton.menu_idle;
+                menuButton.GetComponent<Image>().sprite = menuButton.idle;
+                menuButton.active = menuButton.menu_active;
                 break;
         }
     }

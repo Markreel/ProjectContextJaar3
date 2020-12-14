@@ -19,7 +19,7 @@ public class RecordingsHandler : MonoBehaviour
     [SerializeField] Sprite pause;
     [SerializeField] Sprite stop;
     [SerializeField] Sprite microphone;
-    [SerializeField] Button startKaraokeButton;
+    [SerializeField] StartKaraokeButton startKaraokeButton;
     [SerializeField] Button afluisterButton;
 
     // Audio
@@ -99,8 +99,11 @@ public class RecordingsHandler : MonoBehaviour
             karaokePlaying = true;
 
             // Update icon
+            startKaraokeButton.idle = startKaraokeButton.stop_idle;
+            startKaraokeButton.active = startKaraokeButton.stop_active;
+            startKaraokeButton.image.sprite = startKaraokeButton.idle;
             startKaraokeButton.GetComponent<Image>().sprite = stop;
-            
+
             // Start aftellen
             source.clip = aftellen;
             source.Play();
@@ -133,6 +136,9 @@ public class RecordingsHandler : MonoBehaviour
             yield return new WaitWhile(() => (source.clip == eindekaraoke && source.isPlaying));
 
             // Update icon
+            startKaraokeButton.idle = startKaraokeButton.start_idle;
+            startKaraokeButton.active = startKaraokeButton.start_active;
+            startKaraokeButton.image.sprite = startKaraokeButton.idle;
             startKaraokeButton.GetComponent<Image>().sprite = microphone;
 
             // Reset boolean
@@ -154,6 +160,10 @@ public class RecordingsHandler : MonoBehaviour
             line3.sprite = _all;
             metronoomAnimator.SetBool("IsPlaying", false);
 
+            // Update icon
+            startKaraokeButton.idle = startKaraokeButton.start_idle;
+            startKaraokeButton.active = startKaraokeButton.start_active;
+            startKaraokeButton.image.sprite = startKaraokeButton.idle;
             startKaraokeButton.GetComponent<Image>().sprite = microphone;
 
             // Stop coroutine

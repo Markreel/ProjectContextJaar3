@@ -512,7 +512,7 @@ MonoBehaviour:
   pause: {fileID: 21300000, guid: 04be1b65fd8b8f44b81ef3f7dc418105, type: 3}
   stop: {fileID: 21300000, guid: bcc3b8a2983d9ee4da3ae2c7fba8137a, type: 3}
   microphone: {fileID: 21300000, guid: db9b2d581bfad364396f0e26cdfcdd13, type: 3}
-  startKaraokeButton: {fileID: 1459962853}
+  startKaraokeButton: {fileID: 1459962856}
   afluisterButton: {fileID: 984791098}
   source: {fileID: 1431732722}
   aftellen: {fileID: 8300000, guid: 1a38ac521e4460a498f9d03f3bbbd3f3, type: 3}
@@ -641,7 +641,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &213650841
 PrefabInstance:
@@ -772,7 +772,7 @@ Transform:
   m_Children:
   - {fileID: 1029279157}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &218025021
 GameObject:
@@ -2849,7 +2849,7 @@ GameObject:
   - component: {fileID: 696625407}
   - component: {fileID: 696625408}
   m_Layer: 5
-  m_Name: terugButton
+  m_Name: menuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2893,7 +2893,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 17e1f02de8fa97045b6b963babc4a761, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f15aba50a31a3b14b89b65ac24512853, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -2977,6 +2977,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b63b09c3f8f0a2743824b8edfd333e07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menu_idle: {fileID: 21300000, guid: 17e1f02de8fa97045b6b963babc4a761, type: 3}
+  menu_active: {fileID: 21300000, guid: eaf96cf61cd430246a2f308baef0e3e1, type: 3}
+  afsluiten_idle: {fileID: 21300000, guid: f15aba50a31a3b14b89b65ac24512853, type: 3}
+  afsluiten_active: {fileID: 21300000, guid: e5d53932a4b018848bad43d9a0f9ea28, type: 3}
   idle: {fileID: 21300000, guid: 17e1f02de8fa97045b6b963babc4a761, type: 3}
   active: {fileID: 21300000, guid: eaf96cf61cd430246a2f308baef0e3e1, type: 3}
 --- !u!1 &770635220
@@ -3045,7 +3049,7 @@ MonoBehaviour:
   backtrack: {fileID: 8300000, guid: e2b1108b352de1f4eaa6f8dbeabb7981, type: 3}
   backtrackKaraoke: {fileID: 8300000, guid: ad5146bb81c322a45a5d78e4adad196e, type: 3}
   karaokeEinde: {fileID: 8300000, guid: 66eda3231c95c2c4cb2125c54745be6d, type: 3}
-  enhanceRecording: 6
+  enhanceRecording: 8
   songName: Bullshit-Baan
   saveFolder: \Downloads
   play: {fileID: 21300000, guid: fd6c70cc7098ba340ba4f35d13c23715, type: 3}
@@ -3160,7 +3164,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &802119901
 GameObject:
@@ -5497,7 +5501,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1432532278
 GameObject:
@@ -5532,9 +5536,10 @@ MonoBehaviour:
   startButton: {fileID: 1954459607}
   downloadButton: {fileID: 45249879}
   tutorialButton: {fileID: 1179732465}
-  quitButton: {fileID: 696625407}
+  menuButton: {fileID: 696625408}
   playButton: {fileID: 933974366}
   startKaraokeButton: {fileID: 1459962853}
+  playBackButton: {fileID: 984791098}
   play: {fileID: 21300000, guid: fd6c70cc7098ba340ba4f35d13c23715, type: 3}
   postRecording: {fileID: 2098416766}
   karaokeTekst: {fileID: 573754200}
@@ -5551,7 +5556,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1437320193
 GameObject:
@@ -5853,6 +5858,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 277777632}
+  start_idle: {fileID: 21300000, guid: a8d7d1dbefe72da4982ce6692e03147b, type: 3}
+  start_active: {fileID: 21300000, guid: 68a8ed2a76c42314c947e2c3675c5cdb, type: 3}
+  stop_idle: {fileID: 21300000, guid: 0a08dfb152825f247bd3b7b7a9ba312f, type: 3}
+  stop_active: {fileID: 21300000, guid: 64372ba09798e4b45bbc120eeee0ace1, type: 3}
   idle: {fileID: 21300000, guid: a8d7d1dbefe72da4982ce6692e03147b, type: 3}
   active: {fileID: 21300000, guid: 68a8ed2a76c42314c947e2c3675c5cdb, type: 3}
 --- !u!1 &1466469833
