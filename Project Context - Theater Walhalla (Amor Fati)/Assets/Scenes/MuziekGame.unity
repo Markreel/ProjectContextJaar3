@@ -502,7 +502,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 211134200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69fe0ef6dbbea9d4bb16cc8535f64c1f, type: 3}
+  m_Script: {fileID: 11500000, guid: c50f7029db544034c88ee4e497a13082, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   counter: 0
@@ -1191,7 +1191,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 261788380}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 970882eb1510ea94baaeded5b48dcf89, type: 3}
+  m_Script: {fileID: 11500000, guid: 924643fb7d39bcc45a88455bf0c5fcac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 1431732722}
@@ -3038,14 +3038,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 783633134}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a24197476bff3f6479df3f994b6b25e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f286e4e3e22941458fc2a172aa48d3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   recordingsHandler: {fileID: 211134201}
   backtrack: {fileID: 8300000, guid: e2b1108b352de1f4eaa6f8dbeabb7981, type: 3}
   backtrackKaraoke: {fileID: 8300000, guid: ad5146bb81c322a45a5d78e4adad196e, type: 3}
   karaokeEinde: {fileID: 8300000, guid: 66eda3231c95c2c4cb2125c54745be6d, type: 3}
-  enhanceRecording: 5
+  enhanceRecording: 6
   songName: Bullshit-Baan
   saveFolder: \Downloads
   play: {fileID: 21300000, guid: fd6c70cc7098ba340ba4f35d13c23715, type: 3}
@@ -4616,14 +4616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 970882eb1510ea94baaeded5b48dcf89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  source: {fileID: 1431732722}
-  banenliedTotaal: {fileID: 8300000, guid: 4f8714539501ecb4ab09d0fc869e59a4, type: 3}
-  play: {fileID: 21300000, guid: fd6c70cc7098ba340ba4f35d13c23715, type: 3}
-  pause: {fileID: 21300000, guid: 04be1b65fd8b8f44b81ef3f7dc418105, type: 3}
-  stop: {fileID: 21300000, guid: bcc3b8a2983d9ee4da3ae2c7fba8137a, type: 3}
-  image: {fileID: 0}
-  idle: {fileID: 0}
-  active: {fileID: 0}
 --- !u!114 &1245073689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5533,7 +5525,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1432532278}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8286b6e8c7632c04a885034ecb2e97c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 64731c8f77d56d640aab5d56f37aa7ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   voorbeeldButton: {fileID: 261788385}
@@ -5544,7 +5536,6 @@ MonoBehaviour:
   playButton: {fileID: 933974366}
   startKaraokeButton: {fileID: 1459962853}
   play: {fileID: 21300000, guid: fd6c70cc7098ba340ba4f35d13c23715, type: 3}
-  karaokevideo: {fileID: 1707770150}
   postRecording: {fileID: 2098416766}
   karaokeTekst: {fileID: 573754200}
   recordingsHandler: {fileID: 211134201}
