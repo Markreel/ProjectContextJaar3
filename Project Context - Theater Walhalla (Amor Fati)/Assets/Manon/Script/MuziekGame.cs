@@ -18,6 +18,7 @@ public class MuziekGame : MonoBehaviour
     [SerializeField] Sprite play;
     [SerializeField] GameObject karaokevideo;
     [SerializeField] GameObject postRecording;
+    [SerializeField] GameObject karaokeTekst;
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
@@ -47,7 +48,6 @@ public class MuziekGame : MonoBehaviour
                 startButton.gameObject.SetActive(true);
                 tutorialButton.gameObject.SetActive(true);
                 quitButton.gameObject.SetActive(true);
-                quitButton.GetComponentInChildren<Text>().text = "Afsluiten";
 
                 // Deactivate elements
                 startKaraokeButton.gameObject.SetActive(false);
@@ -71,7 +71,6 @@ public class MuziekGame : MonoBehaviour
 
                 // Active elements
                 karaokevideo.SetActive(true);
-                quitButton.GetComponentInChildren<Text>().text = "Menu";
                 break;
 
             case (int)GameState.downloading:
@@ -86,7 +85,6 @@ public class MuziekGame : MonoBehaviour
                 postRecording.SetActive(true);
                 playButton.gameObject.SetActive(true);
                 downloadButton.gameObject.SetActive(true);
-                quitButton.GetComponentInChildren<Text>().text = "Menu";
                 break;
         }
     }
@@ -127,6 +125,8 @@ public class MuziekGame : MonoBehaviour
     {
         if (currentState != (int)GameState.menu)
         {
+            if (recordingsHandler._audio.isPlaying) recordingsHandler._audio.Stop();
+            recordingsHandler.StopAllCoroutines();
             currentState = (int)GameState.menu;
             UpdateUI(currentState);
         }

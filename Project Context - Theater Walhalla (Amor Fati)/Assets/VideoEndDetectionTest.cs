@@ -5,14 +5,23 @@ using UnityEngine.Video;
 public class VideoEndDetectionTest : MonoBehaviour
 {
     public VideoPlayer vp;
-    [SerializeField] GameObject endScreen;
+    [SerializeField] OnlineVideoManager videoManager;
+    [SerializeField] bool done;
 
     private void Update()
     {
-        if (!vp.isPlaying && vp.time > vp.length/10)
+        if (!vp.isPlaying && vp.time > vp.length/10 && !done)
         {
             Debug.Log("I AM DONE");
-            endScreen.SetActive(true);
+            //follow up action
+            done = true;
+
+            videoManager.NextVideo();
         }
+    }
+
+    public void resetDone()
+    {
+        done = false;
     }
 }

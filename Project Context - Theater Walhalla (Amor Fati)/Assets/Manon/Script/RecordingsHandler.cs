@@ -29,7 +29,7 @@ public class RecordingsHandler : MonoBehaviour
     [SerializeField] AudioClip eindekaraoke;
     [SerializeField] AudioClip karaokeTrack;
     [SerializeField] float volumeDuringRecording;
-    AudioSource _audio;
+    public AudioSource _audio;
     public AudioClip recording;
     bool karaokePlaying;
 
@@ -86,7 +86,6 @@ public class RecordingsHandler : MonoBehaviour
 
             // Update icon
             startKaraokeButton.GetComponent<Image>().sprite = stop;
-            startKaraokeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Stop karaoke";
             
             // Start aftellen
             source.clip = aftellen;
@@ -96,13 +95,13 @@ public class RecordingsHandler : MonoBehaviour
             // Start karaoketrack and recording
             source.clip = karaokeTrack;
             source.volume = volumeDuringRecording;
-            karaokevideo.Play();
+          //  karaokevideo.Play();
             source.Play();
             recording = Microphone.Start(device, false, duration, microphoneFrequency);
 
             // Stop recording after set duration
              yield return new WaitWhile(() => (source.clip == karaokeTrack && source.isPlaying));
-            karaokevideo.Stop();
+           // karaokevideo.Stop();
 
             // Play end of song for continuity
             source.clip = eindekaraoke;
@@ -115,7 +114,6 @@ public class RecordingsHandler : MonoBehaviour
             yield return new WaitWhile(() => (source.clip == eindekaraoke && source.isPlaying));
 
             // Update icon
-            startKaraokeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start karaoke";
             startKaraokeButton.GetComponent<Image>().sprite = microphone;
 
             // Reset boolean
@@ -134,7 +132,6 @@ public class RecordingsHandler : MonoBehaviour
             karaokevideo.Stop();
             karaokevideo.frame = 0;
 
-            startKaraokeButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start karaoke";
             startKaraokeButton.GetComponent<Image>().sprite = microphone;
 
             // Stop coroutine
