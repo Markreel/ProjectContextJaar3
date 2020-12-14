@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/0. Main/Scenes/ScenePreloadFix.unity
     guid: d3e6a4b5a778aee46b59b1d6f0e4af45
   - enabled: 1
-    path: Assets/0. Main/Scenes/RoosLoods.unity
-    guid: 129c12ef80f7b344f8da3c97438971d7
+    path: Assets/Scenes/SchiettentOvergang.unity
+    guid: ef38e8b97214b614eb95c0494f3ea05a
   m_configObjects: {}
