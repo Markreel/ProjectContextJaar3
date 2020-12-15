@@ -11,14 +11,27 @@ namespace ShooterGame
         public int targetAmount;
         public int targetsHit;
 
-        public AudioSource audioSource;
+        public AudioSource HitSource;
 
         public RoundManager roundManager;
 
+        public AudioSource MainMusicSource;
+
+        [SerializeField] bool tutorialEnabled;
+        private void Start()
+        {
+            if (!tutorialEnabled)
+            {
+                roundManager.TutorialFinished();
+                MainMusicSource.Play();
+                gameObject.SetActive(false); 
+            }
+        }
 
         // Update is called once per frame
         void Update()
         {
+ 
 
             if (Input.GetMouseButton(0))
             {
@@ -39,7 +52,7 @@ namespace ShooterGame
                     //Moves the target down.
                     LeanTween.moveLocalY(hit.transform.gameObject, -4, 1f).setEaseInExpo();
 
-                    audioSource.Play();
+                    HitSource.Play();
                 }
                 //else
                 //{
@@ -57,25 +70,38 @@ namespace ShooterGame
 
 
                 //Invoke the next round after a small delay. (After feedback that you did the right thing.
-                Invoke("StartNextRound", 2f);
+                //Invoke("StartNextRound", 2f);
 
 
-                roundManager.TutorialFinished(); 
+                roundManager.TutorialFinished();
                 //Probably should put some sort of feedback here that you did the right thing. 
 
                 //Like changing the top text to: Goed gedaan hoor!
 
 
+                //Turn on the music of the game.
+                MainMusicSource.Play();
+
+
+
+                
+                //yes this is terrible I know, but otherwise it dissapears when you are still looking at it.
+                Invoke("HideTutorial", 6f); 
 
 
             }
         }
 
-
-        public void StartNextRound()
+        public void HideTutorial()
         {
-            Debug.Log("NextRound");
+            gameObject.SetActive(false);
         }
+
+
+        //public void StartNextRound()
+        //{
+        //    Debug.Log("NextRound");
+        //}
 
     }
 }

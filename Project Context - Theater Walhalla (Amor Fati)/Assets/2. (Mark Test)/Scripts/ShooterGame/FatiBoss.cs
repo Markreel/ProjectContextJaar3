@@ -32,10 +32,18 @@ namespace ShooterGame
         private UIManager uiManager;
         private RoundManager targetManager;
 
+
+        [SerializeField] private AudioSource source;
+        private int currentVolume = 1; 
+       
+
         public void Init(UIManager _uiManager, RoundManager _targetManager)
         {
             uiManager = _uiManager;
             targetManager = _targetManager;
+
+            
+
         }
 
         public void ResetValues()
@@ -44,6 +52,7 @@ namespace ShooterGame
             stunEffect.SetActive(false);
             transform.position = startPos;
             if (currentRoutine != null) { StopCoroutine(currentRoutine); }
+
         }
 
         public void GetHit()
@@ -52,16 +61,34 @@ namespace ShooterGame
 
             stunEffect.SetActive(true);
             bonk.SetActive(true);
+            bonk.GetComponent<Animator>().Play("Base Layer.BONK", 0, 0);
             GameManager.Instance.AudioManager.Play2DAudio(chirpClip);
 
             uiManager.OpenRoundEndedWindow(2);
+
+            
+            //LeanTween.value(gameObject, LowerVolume, currentVolume, 0, 3f);
+            
+
         }
+
+
+        void LowerVolume(float val)
+        {
+            source.volume = val;
+        }
+
+
+
+
 
         public void DoIntro(UnityAction _onIntroDone = null)
         {
             OnIntroDone += _onIntroDone;
             if (currentRoutine != null) { StopCoroutine(currentRoutine); isIntroducing = false; }
             currentRoutine = StartCoroutine(IEIntro());
+
+            source.Play();
         }
 
         public void DoAttack(UnityAction _onAttackDone = null)

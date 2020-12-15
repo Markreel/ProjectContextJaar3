@@ -19,6 +19,14 @@ namespace ShooterGame
         [Space]
         [SerializeField] private GameObject gameOverWindow;
 
+
+        [SerializeField] private RoundEndUI roundEndUIScript;
+
+        [SerializeField] private GameObject HUD;
+
+
+
+
         public void UpdateTimerVisual(int _timeInSeconds)
         {
             int _minutes = Mathf.Clamp((_timeInSeconds - _timeInSeconds % 60) / 60, 0, 60);
@@ -63,7 +71,12 @@ namespace ShooterGame
         public void OpenRoundEndedWindow()
         {
             roundEndedScoreText.text = scoreText.text;
-            roundEndedWindow.SetActive(true);
+            //roundEndedWindow.SetActive(true);
+            roundEndUIScript.CloseCurtains();
+            roundEndUIScript.raiseHud(); 
+            //HUD.SetActive(false);
+          
+            
         }
 
         public void OpenGameOverWindow(float _delay)
