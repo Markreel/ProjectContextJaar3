@@ -6,8 +6,20 @@ using UnityEngine.UI;
 
 public class menuButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] Sprite idle;
-    [SerializeField] Sprite active;
+    // Sprites
+    [SerializeField] public Sprite menu_idle;
+    [SerializeField] public Sprite menu_active;
+    [SerializeField] public Sprite afsluiten_idle;
+    [SerializeField] public Sprite afsluiten_active;
+
+    // Set the sprite that should be used, based on current state
+    [HideInInspector] public Sprite idle;
+    [HideInInspector] public Sprite active;
+
+    public void OnEnable()
+    {
+        this.GetComponent<Image>().sprite = idle;
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {

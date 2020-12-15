@@ -25,7 +25,7 @@ public class FatiMovement : MonoBehaviour
     {
         //audiovisual = GameObject.Find("AudioVisualizer").GetComponent<AudioVisualizerScript>();
 
-        _movementSpeed = new Vector3(Random.Range(.2f, 1), Random.Range(.2f, 1), Random.Range(.2f, 1));
+        _movementSpeed = new Vector3(Random.Range(.02f, .04f), Random.Range(.02f, .04f), Random.Range(.02f, .04f));
         StartCoroutine(MoveCube());
 
     }
@@ -70,9 +70,11 @@ public class FatiMovement : MonoBehaviour
     {
         if (target > audioThreshold)
         {
-            transform.position += _movementSpeed * target;
+            transform.position += _movementSpeed * target * Time.deltaTime;
         }
-        yield return new WaitForSeconds(.15f);
+        yield return null;
+
+        //yield return new WaitForSeconds(.15f);
         StartCoroutine(MoveCube());
     }
 
