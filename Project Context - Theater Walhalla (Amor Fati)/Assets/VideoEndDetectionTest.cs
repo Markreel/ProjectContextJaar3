@@ -16,7 +16,7 @@ public class VideoEndDetectionTest : MonoBehaviour
             //follow up action
             done = true;
 
-            videoManager.NextVideo();
+            EpisodeManager.Instance.NextEpisode();
         }
     }
 

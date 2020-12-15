@@ -6,43 +6,71 @@ using TMPro;
 
 public class OnlineVideoManager : MonoBehaviour
 {
+    public static OnlineVideoManager Instance;
 
-    [SerializeField] GameObject connectionErrorPannel;
-    [SerializeField] GameObject videoErrorPannel;
+    [SerializeField] private GameObject connectionErrorPannel;
+    [SerializeField] private GameObject videoErrorPannel;
 
-    [SerializeField] VideoPlayer videoPlayer;
-    [SerializeField] VideoEndDetectionTest videoEndDetection;
-
-    [SerializeField] int scene = 0;
-
-    [SerializeField] string siteLocation = "https://amorfatigame.nl/VideoLocatieSjqJ76fQkw6vCxSY/";
-
-    [SerializeField] string filetype = ".mp4";
-
-    [SerializeField] string[] videoNames;
+    [SerializeField] private VideoPlayer videoPlayer;
 
     [SerializeField] TextMeshProUGUI[] errorCodes; //all errorcodes text elements
 
+    private bool isChecking;
+    private bool isPaused;
 
-    private void Start()
+    private void Awake()
     {
-        NextVideo();
+        Instance = Instance ?? (this);
+        if (Instance != this) { Destroy(gameObject); }
+        DontDestroyOnLoad(gameObject);
+
+        videoPlayer.loopPointReached += EndOfVideoReached; 
     }
 
-    public void NextVideo()
+    private void EndOfVideoReached(VideoPlayer _vp)
     {
-        Debug.Log($"Playing {videoNames[scene]}");
-        videoPlayer.url = siteLocation + videoNames[scene] + filetype;
+        EpisodeManager.Instance.NextEpisode();
+    }
 
+    private void Update()
+    {
+        //if (!videoPlayer.isPlaying && videoPlayer.time > videoPlayer.length / 10 && isChecking)
+        //{
+        //    Debug.Log("I AM DONE");
+        //    //follow up action
+        //    isChecking = false;
 
-        foreach(TextMeshProUGUI errorText in errorCodes) //pre sets error texts
+        //    EpisodeManager.Instance.NextEpisode();
+        //}
+    }
+
+    public void StopAllActions()
+    {
+        videoPlayer.Stop();
+        StopAllCoroutines();
+    }
+
+    public bool PauseVideo()
+    {
+        isPaused = isPaused ? false : true;
+
+        if (isPaused) { videoPlayer.Pause(); }
+        if (!isPaused) { videoPlayer.Play(); }
+
+        return isPaused;
+    }
+
+    public void LoadVideo(string _url, int _index)
+    {
+        Debug.Log($"Playing {_url}");
+        videoPlayer.url = _url;
+
+        foreach (TextMeshProUGUI errorText in errorCodes) //pre sets error texts
         {
-            errorText.text = "ERV_" + videoNames[scene];
+            errorText.text = "ERV_" + _index;
         }
 
-        scene++;
-
-        CheckConnection();    
+        CheckConnection();
     }
 
     public void CheckConnection()
@@ -75,14 +103,13 @@ public class OnlineVideoManager : MonoBehaviour
 
     }
 
-
     IEnumerator FollowUp()
     {
         // stuff when the Ping has finshed....
         Debug.Log("Ik Doe het");
         //speelt video
         videoPlayer.Play();
-        videoEndDetection.resetDone();
+        isChecking = true;
 
         yield return new WaitForSeconds(3);
         if(videoPlayer.isPlaying)
