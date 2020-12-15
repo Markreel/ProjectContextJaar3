@@ -118,7 +118,7 @@ public class BellenMiniGame : MonoBehaviour
             // Turn off bellenblaasstok image
             bellenblaasstok.SetActive(false);
 
-            //DO SOME SORT OF FADE OUT ANIMATION FOR THE BUTTON HERE.
+            //Move the Button off screen. 
             newBubbleButton.transform.LeanMoveY(newBubbleButton.transform.position.y - 200, 2f).setEaseOutCubic();
 
             //Fade out the title

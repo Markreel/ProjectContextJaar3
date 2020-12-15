@@ -45,6 +45,7 @@ namespace ShooterGame
             target.SetActive(true);
             transform.position = startPos;
             animator.SetTrigger("Reset");
+            isShot = false; 
         }
 
         public void DoIntro()
@@ -119,6 +120,8 @@ namespace ShooterGame
 
             //rb.isKinematic = false;
             target.SetActive(false);
+
+           
         }
     }
 }

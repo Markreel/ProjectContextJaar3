@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e08a62840a9dfd847b8f0540e6a8b84c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useFallAnimation: 1
   isLooping: 0
   heightAdjuster: {fileID: 7224679931207280146}
   minHeightAdjustment: 0
@@ -143,8 +144,9 @@ MonoBehaviour:
   minActivationDelay: 0
   maxActivationDelay: 0
   scoreValue: 2
-  audioOnHit1: {fileID: 8300000, guid: 04d5b96bec896d7449e5bec8a7a5c28e, type: 3}
+  audioOnHit1: {fileID: 8300000, guid: ef8fe771ece4c84479eea0c2fcf73994, type: 3}
   audioOnHit2: {fileID: 8300000, guid: 9ef3a0de32555684f8ac1060b97eff34, type: 3}
+  isGoldenBubble: 0
 --- !u!1001 &1582984044024235048
 PrefabInstance:
   m_ObjectHideFlags: 0
