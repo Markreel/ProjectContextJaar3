@@ -518,7 +518,7 @@ MonoBehaviour:
   aftellen: {fileID: 8300000, guid: 1a38ac521e4460a498f9d03f3bbbd3f3, type: 3}
   eindekaraoke: {fileID: 8300000, guid: 66eda3231c95c2c4cb2125c54745be6d, type: 3}
   karaokeTrack: {fileID: 8300000, guid: ad5146bb81c322a45a5d78e4adad196e, type: 3}
-  volumeDuringRecording: 0.5
+  volumeDuringRecording: 0.2
   _audio: {fileID: 0}
   recording: {fileID: 0}
   metronoomAnimator: {fileID: 1009876105}
