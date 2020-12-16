@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
+using PoolingAndAudio;
 
 public class BellenMiniGame : MonoBehaviour
 {
@@ -114,7 +115,7 @@ public class BellenMiniGame : MonoBehaviour
         // Initalize audio
         snippetSource = GetComponent<AudioSource>();
         audioIntroduction = true;
-        yield return new WaitForSeconds(0.5f); // short wait, anders begint t zo abrupt
+        yield return new WaitForSeconds(4.5f); // Customize time for when Alex starts talking
 
         // Play introduction
         snippetSource.clip = zin6;
@@ -127,9 +128,7 @@ public class BellenMiniGame : MonoBehaviour
 
         snippetSource.clip = zin8;
         snippetSource.Play();
-        yield return new WaitForSeconds(zin8.length);
-
-        audioIntroduction = false;
+        audioIntroduction = false;       
 
         StartCoroutine(SnippetsInvullen());
 
@@ -141,6 +140,7 @@ public class BellenMiniGame : MonoBehaviour
     {
         while (filledInBubbles < requiredBubbles.Count)
         {
+            yield return new WaitForSeconds(zin8.length);
             snippetSource.PlayOneShot(zin9);
             yield return new WaitForSeconds(zin9.length + interval);
 
@@ -154,8 +154,8 @@ public class BellenMiniGame : MonoBehaviour
 
             yield break;
         }
-        
-        yield break;
+
+        yield return null;
     }
 
     // Update is called once per frame
