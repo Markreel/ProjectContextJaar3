@@ -1,4 +1,5 @@
 ﻿using ShooterGame;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -28,6 +29,9 @@ public class MuziekGame : MonoBehaviour
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
+    [SerializeField] AudioClip intro;
+    [SerializeField] AudioClip tutorial;
+    AudioSource audioSource;
     #endregion
 
     #region Private variables
@@ -40,6 +44,7 @@ public class MuziekGame : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         currentState = (int)GameState.menu;
         UpdateUI(currentState);
     }
@@ -49,6 +54,9 @@ public class MuziekGame : MonoBehaviour
         switch (state)
         {
             case (int)GameState.menu:
+                // Stop audio
+                if (audioSource.isPlaying) audioSource.Stop();
+
                 // Active elements
                 voorbeeldButton.gameObject.SetActive(true);
                 startButton.transform.localScale = new Vector3(1, 1, 1);
@@ -77,6 +85,9 @@ public class MuziekGame : MonoBehaviour
 
             case (int)GameState.recording:
 
+                // Stop audio
+                if (audioSource.isPlaying) audioSource.Stop();
+
                 // Check if the game can start 
                 bool microphonePresent = recordingsHandler.MicrophoneSetup();
 
@@ -94,8 +105,15 @@ public class MuziekGame : MonoBehaviour
                     postRecording.SetActive(false);
                     geenMicrofoon.SetActive(false);
 
+                    // Play welkomstwoordje als je hier voor t eerst bent
+                    if (recordingsHandler.recording == null)
+                    {
+                        audioSource.clip = intro;
+                        audioSource.Play();
+                        terugButton.gameObject.SetActive(false);
+                    }
+
                     // Terug naar downloaden als je voor de tweede keer iets aan het opnemen bent
-                    if (recordingsHandler.recording == null) terugButton.gameObject.SetActive(false);
                     else terugButton.gameObject.SetActive(true);
 
                     // Active elements
@@ -122,6 +140,9 @@ public class MuziekGame : MonoBehaviour
 
 
             case (int)GameState.downloading:
+
+                // Stop audio
+                if (audioSource.isPlaying) audioSource.Stop();
 
                 // Deactivate elements
                 startButton.gameObject.SetActive(false);
@@ -174,6 +195,32 @@ public class MuziekGame : MonoBehaviour
     {
         currentState = (int)GameState.downloading;
         UpdateUI(currentState);
+    }
+    
+    public void Tutorial()
+    {
+        if (audioSource.isPlaying && audioSource.clip == intro)
+        {
+            audioSource.Stop();
+            audioSource.clip = tutorial;
+            audioSource.Play();
+        }
+
+        else if (audioSource.isPlaying && audioSource.clip == tutorial)
+        {
+            audioSource.Stop();
+        }
+
+        else if (!audioSource.isPlaying)
+        {
+            audioSource.clip = tutorial;
+            audioSource.Play();
+        }
+    }
+
+    public void StopIntroAudio()
+    {
+        if (audioSource.isPlaying) audioSource.Stop();
     }
 
     public void ReturnToMenu()
