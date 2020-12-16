@@ -146,6 +146,13 @@ MonoBehaviour:
   scoreValue: 2
   audioOnHit1: {fileID: 8300000, guid: ef8fe771ece4c84479eea0c2fcf73994, type: 3}
   audioOnHit2: {fileID: 8300000, guid: 9ef3a0de32555684f8ac1060b97eff34, type: 3}
+  amorClips: []
+  goudenBelHitClips:
+  - {fileID: 8300000, guid: 9362f0b47cb2b5248a5e047f87de84f5, type: 3}
+  - {fileID: 8300000, guid: 8b1671415aa8b8c4fabda72a567c3e1d, type: 3}
+  - {fileID: 8300000, guid: 9362f0b47cb2b5248a5e047f87de84f5, type: 3}
+  GoudenBelIntro: {fileID: 8300000, guid: 9ce971030744eaa44b4b27cd8e368b5f, type: 3}
+  AlexGoudenBelMis: {fileID: 8300000, guid: f58ba04d61370bc4983d5f79b69058be, type: 3}
   isGoldenBubble: 0
 --- !u!1001 &1582984044024235048
 PrefabInstance:

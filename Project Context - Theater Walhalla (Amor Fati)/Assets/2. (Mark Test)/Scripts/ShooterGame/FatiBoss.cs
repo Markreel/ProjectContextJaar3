@@ -34,8 +34,15 @@ namespace ShooterGame
 
 
         [SerializeField] private AudioSource source;
-        private int currentVolume = 1; 
-       
+        private int currentVolume = 1;
+
+        [SerializeField] public ChangeGameMusic changeGameMusicScript;
+        private NieuwScoreManager nieuwScoreManager;
+
+        private void Start()
+        {
+            nieuwScoreManager = GameManager.Instance.gameObject.GetComponentInChildren<NieuwScoreManager>();
+        }
 
         public void Init(UIManager _uiManager, RoundManager _targetManager)
         {
@@ -57,6 +64,9 @@ namespace ShooterGame
 
         public void GetHit()
         {
+            changeGameMusicScript.ChangeAudio();
+            nieuwScoreManager.fatiBonus = 1;
+
             targetManager.StopRound();
 
             stunEffect.SetActive(true);
@@ -65,6 +75,7 @@ namespace ShooterGame
             GameManager.Instance.AudioManager.Play2DAudio(chirpClip);
 
             uiManager.OpenRoundEndedWindow(2);
+
 
             
             //LeanTween.value(gameObject, LowerVolume, currentVolume, 0, 3f);
@@ -84,6 +95,9 @@ namespace ShooterGame
 
         public void DoIntro(UnityAction _onIntroDone = null)
         {
+            changeGameMusicScript.ChangeAudio();
+
+
             OnIntroDone += _onIntroDone;
             if (currentRoutine != null) { StopCoroutine(currentRoutine); isIntroducing = false; }
             currentRoutine = StartCoroutine(IEIntro());
@@ -96,6 +110,9 @@ namespace ShooterGame
             OnAttackDone += _onAttackDone;
             if (currentRoutine != null) { StopCoroutine(currentRoutine); isIntroducing = false; }
             currentRoutine = StartCoroutine(IEAttack());
+
+            changeGameMusicScript.PlayLossMusic();
+            nieuwScoreManager.fatiBonus = 0; 
         }
 
         private IEnumerator IEIntro()

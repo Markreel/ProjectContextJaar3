@@ -3,18 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using PoolingAndAudio;
 
 namespace ShooterGame
 {
     public class RoundEndUI : MonoBehaviour
     {
+        [Header("Curtains")]
         public Image leftCurtain;
         public Image rightCurtain;
 
-        public GameObject goudenBelBonusUIElement;
+        [Header ("GoudenBel")]
+        public GameObject goudenBelBonusUIElement1;
+        public GameObject goudenBelBonusUIElement2;
+        public GameObject goudenBelBonusUIElement3;
+        public GameObject goudenBelBonusCrossOutUIElement1;
+        public GameObject goudenBelBonusCrossOutUIElement2;
+        public GameObject goudenBelBonusCrossOutUIElement3;
+        public float sfxDelay = 1f; 
+
+        [Header ("HUD")]
+        public GameObject goudenBelBonusUIHUDElement;
+
         public int goudenBelBonusPunten;
+        public AudioClip goudenBelBonusClip;
+
+        [Header("Fati")]
         public GameObject fatiBonusUIElement;
+        public GameObject fatiBonusCrossOutUIElement;
         public int fatiBonusPunten;
+        public AudioClip fatiBonusClip;
 
         public GameObject scoreBoardContainer;
 
@@ -25,7 +43,10 @@ namespace ShooterGame
         public TextMeshProUGUI maxBubbleCountText;
         public int maxBubbleCountInt;
 
+
         public TextMeshProUGUI currentCoinsText;
+
+        [Header("Coins")]
         public int currentCoins;
         public int bubbleCoinsEarned;
         public int goudenBelCoinsEarned;
@@ -39,15 +60,32 @@ namespace ShooterGame
 
         [HideInInspector] public bool hasFinishedAllRounds;
 
+        [SerializeField] public ChangeGameMusic changeGameMusicScript;
+
+        [SerializeField] private GameObject blackImage;
+
+        private NieuwScoreManager nieuwScoreManager;
+
+        public AudioClip wrongSFX;
+
+        private AudioSource source;
+
+     
+
+
 
 
         // Start is called before the first frame update
         void Start()
         {
+            nieuwScoreManager = GameManager.Instance.gameObject.GetComponentInChildren<NieuwScoreManager>();
+
             //Moves the scoreboard up so it can move down later.
             //Set object Y to 1050, which is just out of screen.
             //Why we do this? So we don't have to manually move it out of the screen everytime we are done with editing the scoreboard in Unity.
             scoreBoardContainer.transform.localPosition = new Vector3(0, 1050, 0);
+
+            source = GetComponent<AudioSource>(); 
 
 
             //We should set the coin text here to our coin score we got from the bubble game.
@@ -56,19 +94,47 @@ namespace ShooterGame
             //Set our Max Bubbles hit to the max hittable bubbles in the round amount. 
             maxBubbleCountText.text = maxBubbleCountInt.ToString();
 
-
-            //Just for Testing, call this function from an other script to start the round end UI. 
-            //CloseCurtains();
+            
 
 
+
+            blackImage.SetActive(false);
+
+
+           
+
+
+            
 
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            
         }
+
+        public IEnumerator ResetGoudenBelHUD_UI()
+        {
+            yield return new WaitForSeconds(5f);
+            goudenBelBonusUIHUDElement.gameObject.SetActive(false);
+            yield return null;
+        }
+
+        public IEnumerator GoudenBelHUD_UI()
+        {
+            goudenBelBonusUIHUDElement.transform.localScale = new Vector3(5, 5, 5);
+            goudenBelBonusUIHUDElement.gameObject.SetActive(true);
+            //Scale the icon down into it's correct place.
+            goudenBelBonusUIHUDElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+            yield return new WaitForSeconds(0.75f);
+            source.clip = goudenBelBonusClip;
+            source.Play();
+        }
+
+
+
+
 
         public void lowerHud()
         {
@@ -105,28 +171,35 @@ namespace ShooterGame
             LeanTween.moveLocalY(scoreBoardContainer, 0, 2).setEaseInExpo();
 
 
-            Invoke("BubbleCount", 0.5f);
+            StartCoroutine(BubbleCount(0.5f));
         }
 
 
 
-        public void BubbleCount()
+        private IEnumerator BubbleCount(float delay = 0.0f)
         {
-            //Fake Count for example.
-            //Connect this to the system that counts how many bubbles are hit.
+            if (delay != 0)
+                yield return new WaitForSeconds(delay);
+            bubblesHit = nieuwScoreManager.bellenGeraakt;
+
 
             //Counts up our bubbleAmount.
-            LeanTween.value(gameObject, StartCountingBubbles, currentBubbleHitsInt, bubblesHit, 8f).setEaseInExpo();
+            LeanTween.value(gameObject, StartCountingBubbles, currentBubbleHitsInt, bubblesHit, 5f).setEaseInExpo();
 
             //Calculate how much coins we should get. 100 is hardcoded but should be changed into the coin value.
-            bubbleCoinsEarned = bubblesHit * 100 + currentCoins;
-            LeanTween.value(gameObject, StartAddingCoins, currentCoins, bubbleCoinsEarned, 8f).setEaseInExpo();
+            currentCoins = bubblesHit * 100 + currentCoins;
+            //LeanTween.value(gameObject, StartAddingCoins, currentCoins, bubbleCoinsEarned, 8f).setEaseInExpo();
 
+            yield return new WaitForSeconds(6);
+            source.clip = goudenBelBonusClip; 
+            source.Play();
+            yield return new WaitForSeconds(1.2f);
 
-
+            currentCoinsText.text = currentCoins.ToString();
 
             //When done with counting:
-            Invoke("GoudenBelBonus", 9f);
+            //Invoke("GoudenBelBonus", 9f);
+            StartCoroutine(GoudenBelBonus(2f)); 
         }
 
         //These functions are multiple times in the script. Required to start counting up.
@@ -134,75 +207,269 @@ namespace ShooterGame
         {
             currentBubbleHitsText.text = Mathf.Round(val).ToString();
         }
-        void StartAddingCoins(float val)
+        //void StartAddingCoins(float val)
+        //{
+
+        //    currentCoinsText.text = Mathf.Round(val).ToString();
+        //}
+
+
+
+
+        private IEnumerator GoudenBelBonus(float delay = 0.0f)
         {
+            if (delay != 0)
+                yield return new WaitForSeconds(delay);
 
-            currentCoinsText.text = Mathf.Round(val).ToString();
-        }
-
-
-
-
-        public void GoudenBelBonus()
-        {
-
-            //Check here if you got the gouden bel.
-
-            //If No then do a stripethrough animation.
-            //GameObject setactive stripethrough animation.
-
-            //If Yes then:
-            goudenBelBonusUIElement.transform.localScale = new Vector3(5, 5, 5);
-            goudenBelBonusUIElement.gameObject.SetActive(true);
-            //Scale the icon down into it's correct place.
-            goudenBelBonusUIElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+           
 
 
+            if (nieuwScoreManager.goudenBellenGeraakt == 0)
+            {
+                goudenBelBonusCrossOutUIElement1.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusCrossOutUIElement1.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusCrossOutUIElement1.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+                yield return new WaitForSeconds(1.8f);
+
+
+
+                goudenBelBonusCrossOutUIElement2.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusCrossOutUIElement2.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusCrossOutUIElement2.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+                yield return new WaitForSeconds(1.8f);
+
+
+
+                goudenBelBonusCrossOutUIElement3.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusCrossOutUIElement3.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusCrossOutUIElement3.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+                yield return new WaitForSeconds(1.8f);
+
+            }
+            if (nieuwScoreManager.goudenBellenGeraakt == 1)
+            {
+                
+                goudenBelBonusUIElement1.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusUIElement1.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusUIElement1.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                currentCoins += goudenBelBonusPunten; 
+                currentCoinsText.text = currentCoins.ToString();
+                yield return new WaitForSeconds(1.8f);
+
+
+                //Place two wrong X. 
+                goudenBelBonusCrossOutUIElement2.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusCrossOutUIElement2.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusCrossOutUIElement2.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+                yield return new WaitForSeconds(2f);
+
+                goudenBelBonusCrossOutUIElement3.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusCrossOutUIElement3.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusCrossOutUIElement3.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+                yield return new WaitForSeconds(1.8f);
+
+            }
+            if (nieuwScoreManager.goudenBellenGeraakt == 2)
+            {
+                
+                goudenBelBonusUIElement1.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusUIElement1.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusUIElement1.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                currentCoins += goudenBelBonusPunten;
+                currentCoinsText.text = currentCoins.ToString();
+
+                yield return new WaitForSeconds(1.8f);
+
+                goudenBelBonusUIElement2.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusUIElement2.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusUIElement2.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                currentCoins += goudenBelBonusPunten;
+                currentCoinsText.text = currentCoins.ToString();
+
+
+                yield return new WaitForSeconds(1.8f);
+
+                //Place one wrong X. 
+                goudenBelBonusCrossOutUIElement3.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusCrossOutUIElement3.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusCrossOutUIElement3.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+                yield return new WaitForSeconds(1.8f);
+
+            }
+            if (nieuwScoreManager.goudenBellenGeraakt == 3)
+            {
+                
+                goudenBelBonusUIElement1.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusUIElement1.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusUIElement1.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                currentCoins += goudenBelBonusPunten;
+                currentCoinsText.text = currentCoins.ToString();
+
+                yield return new WaitForSeconds(1.8f);
+
+
+                goudenBelBonusUIElement2.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusUIElement2.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusUIElement2.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                currentCoins += goudenBelBonusPunten;
+                currentCoinsText.text = currentCoins.ToString();
+
+                yield return new WaitForSeconds(1.8f);
+
+
+                goudenBelBonusUIElement3.transform.localScale = new Vector3(5, 5, 5);
+                goudenBelBonusUIElement3.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                goudenBelBonusUIElement3.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                currentCoins += goudenBelBonusPunten;
+                currentCoinsText.text = currentCoins.ToString();
+
+                yield return new WaitForSeconds(1.8f);
+
+
+            }
 
 
             //Should add in a small delay here, so it starts counting after the above animation is done.
             //Should probably rewrite this to an ienumator. 
 
             //Calculates how much coins we should add to the coins amount. This so we can tween towards it. 
-            goudenBelCoinsEarned = currentCoins + goudenBelBonusPunten;
-            LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, goudenBelCoinsEarned, 1f).setEaseInExpo();
+            //goudenBelCoinsEarned = currentCoins + goudenBelBonusPunten;
+            //LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, goudenBelCoinsEarned, 1f).setEaseInExpo();
 
 
-            //Start Fati Bonus Check.
-            Invoke("FatiBonus", 1.5f);
 
+
+            StartCoroutine(FatiBonus(1.5f));
+
+            yield return null;
         }
 
-        void StartCountingGoudenBelBonus(float val)
-        {
-            currentCoinsText.text = Mathf.Round(val).ToString();
-        }
+        //void StartCountingGoudenBelBonus(float val)
+        //{
+        //    currentCoinsText.text = Mathf.Round(val).ToString();
+        //}
 
-        public void FatiBonus()
+        public IEnumerator FatiBonus(float delay = 0.0f)
         {
+            if (delay != 0)
+                yield return new WaitForSeconds(delay);
+
+
+
+            if (nieuwScoreManager.fatiBonus == 0)
+            {
+                fatiBonusCrossOutUIElement.transform.localScale = new Vector3(5, 5, 5);
+                fatiBonusCrossOutUIElement.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                fatiBonusCrossOutUIElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = wrongSFX;
+                source.Play();
+
+
+            }
+
+            if (nieuwScoreManager.fatiBonus == 1)
+            {
+                fatiBonusUIElement.transform.localScale = new Vector3(5, 5, 5);
+                fatiBonusUIElement.gameObject.SetActive(true);
+                //Scale the icon down into it's correct place.
+                fatiBonusUIElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+                yield return new WaitForSeconds(0.75f);
+                source.clip = goudenBelBonusClip;
+                source.Play();
+                yield return new WaitForSeconds(sfxDelay);
+                //fatiCoinsEarned = currentCoins + fatiBonusPunten;
+                //LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, fatiCoinsEarned, 1f).setEaseInExpo();
+                currentCoins = 1000000;
+                currentCoinsText.text = currentCoins.ToString();
+
+            }
+
+
+
+
+
+
+
+
             //Check here if you got the Fati Bonus.
             //If No then do a stripethrough animation.
             //GameObject setactive stripethrough animation.
 
             //If Yes then:
 
-            fatiBonusUIElement.transform.localScale = new Vector3(5, 5, 5);
-            fatiBonusUIElement.gameObject.SetActive(true);
-            //Scale the icon down into it's correct place.
-            fatiBonusUIElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
+            //fatiBonusUIElement.transform.localScale = new Vector3(5, 5, 5);
+            //fatiBonusUIElement.gameObject.SetActive(true);
+            ////Scale the icon down into it's correct place.
+            //fatiBonusUIElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
 
-            //Calculates how much coins we should add to the coins amount. This so we can tween towards it. 
-            fatiCoinsEarned = currentCoins + fatiBonusPunten;
-            LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, fatiCoinsEarned, 1f).setEaseInExpo();
+            ////Calculates how much coins we should add to the coins amount. This so we can tween towards it. 
+            //fatiCoinsEarned = currentCoins + fatiBonusPunten;
+            //LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, fatiCoinsEarned, 1f).setEaseInExpo();
 
 
             Invoke("RaiseScoreBoard", 3f);
         }
 
-        void StartCountingFatiBonus(float val)
-        {
-            currentCoinsText.text = Mathf.Round(val).ToString();
-        }
+        //void StartCountingFatiBonus(float val)
+        //{
+        //    currentCoinsText.text = Mathf.Round(val).ToString();
+        //}
 
         public void RaiseScoreBoard()
         {
@@ -212,6 +479,7 @@ namespace ShooterGame
 
             //keep the curtains closed after the last round so we can transition from there with a cut or fade to the footage. 
 
+            turnOnBlackImage(); 
 
             Invoke("OpenCurtains", 3.5f);
 
@@ -243,20 +511,20 @@ namespace ShooterGame
 
         public void RoundCloseCurtainsTrigger()
         {
-            Invoke("RoundCloseCurtains", 4f);
+            Invoke("RoundCloseCurtains", 2f);
 
         }
 
         public void RoundCloseCurtains()
         {
             //Left Curtain
-            LeanTween.moveLocalX(leftCurtain.gameObject, 11, 2).setEaseInExpo();
+            LeanTween.moveLocalX(leftCurtain.gameObject, 11, 3).setEaseInExpo();
             //Right Curtain
-            LeanTween.moveLocalX(rightCurtain.gameObject, -12, 2).setEaseInExpo();
+            LeanTween.moveLocalX(rightCurtain.gameObject, -12, 3).setEaseInExpo();
 
             shooterControllerScript.enabled = false;
 
-            Invoke("RoundOpenCurtains", 3f); 
+            Invoke("RoundOpenCurtains", 6f); 
 
         }
 
@@ -270,7 +538,24 @@ namespace ShooterGame
             LeanTween.moveLocalX(rightCurtain.gameObject, 978, 2).setEaseInExpo();
 
             shooterControllerScript.enabled = true;
+
+            changeGameMusicScript.ChangeAudio();
         }
+
+        public void turnOnBlackImage()
+        {
+            blackImage.SetActive(true);
+
+            Invoke("NextScene", 7f); 
+        }
+
+        public void NextScene()
+        {
+            //Should probably fade the audo out here. 
+
+            Debug.Log("NextScene");
+        }
+
     }
 
    
