@@ -11,7 +11,8 @@ public class OnlineVideoManager : MonoBehaviour
     [SerializeField] private GameObject connectionErrorPannel;
     [SerializeField] private GameObject videoErrorPannel;
 
-    [SerializeField] private VideoPlayer videoPlayer;
+    [SerializeField] private AudioListener audioListener;
+    [SerializeField] public VideoPlayer VideoPlayer;
 
     [SerializeField] TextMeshProUGUI[] errorCodes; //all errorcodes text elements
 
@@ -24,11 +25,12 @@ public class OnlineVideoManager : MonoBehaviour
         if (Instance != this) { Destroy(gameObject); }
         DontDestroyOnLoad(gameObject);
 
-        videoPlayer.loopPointReached += EndOfVideoReached; 
+        VideoPlayer.loopPointReached += EndOfVideoReached; 
     }
 
     private void EndOfVideoReached(VideoPlayer _vp)
     {
+        Debug.Log("END OF VIDEO REACHED");
         EpisodeManager.Instance.NextEpisode();
     }
 
@@ -46,7 +48,8 @@ public class OnlineVideoManager : MonoBehaviour
 
     public void StopAllActions()
     {
-        videoPlayer.Stop();
+        audioListener.enabled = false;
+        VideoPlayer.Stop();
         StopAllCoroutines();
     }
 
@@ -54,16 +57,18 @@ public class OnlineVideoManager : MonoBehaviour
     {
         isPaused = isPaused ? false : true;
 
-        if (isPaused) { videoPlayer.Pause(); }
-        if (!isPaused) { videoPlayer.Play(); }
+        if (isPaused) { VideoPlayer.Pause(); }
+        if (!isPaused) { VideoPlayer.Play(); }
 
         return isPaused;
     }
 
     public void LoadVideo(string _url, int _index)
     {
+        audioListener.enabled = true;
+
         Debug.Log($"Playing {_url}");
-        videoPlayer.url = _url;
+        VideoPlayer.url = _url;
 
         foreach (TextMeshProUGUI errorText in errorCodes) //pre sets error texts
         {
@@ -108,11 +113,11 @@ public class OnlineVideoManager : MonoBehaviour
         // stuff when the Ping has finshed....
         Debug.Log("Ik Doe het");
         //speelt video
-        videoPlayer.Play();
+        VideoPlayer.Play();
         isChecking = true;
 
         yield return new WaitForSeconds(3);
-        if(videoPlayer.isPlaying)
+        if(VideoPlayer.isPlaying)
         {
             Debug.Log("video is playing");
         }
@@ -120,13 +125,13 @@ public class OnlineVideoManager : MonoBehaviour
         {
             Debug.Log("still loading");
             yield return new WaitForSeconds(5);
-            if (videoPlayer.isPlaying)
+            if (VideoPlayer.isPlaying)
             {
                 Debug.Log("video is playing");
             }
             else
             {
-                videoErrorPannel.SetActive(true);
+                //videoErrorPannel.SetActive(true);
             }
         }
     }
