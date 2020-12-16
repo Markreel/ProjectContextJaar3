@@ -8,6 +8,7 @@ using UnityEngine.Video;
 
 public class MuziekGame : MonoBehaviour
 {
+    #region Unity fields
     [Header("UI Buttons")]
     [SerializeField] Button voorbeeldButton;
     [SerializeField] Button startButton;
@@ -27,10 +28,11 @@ public class MuziekGame : MonoBehaviour
 
     [Header("General")]
     [SerializeField] RecordingsHandler recordingsHandler;
-    int currentState;
+    #endregion
 
     #region Private variables
     enum GameState { menu, recording, downloading };
+    int currentState;
 
     #endregion
 
@@ -111,6 +113,9 @@ public class MuziekGame : MonoBehaviour
 
                     // Activate elements
                     geenMicrofoon.SetActive(true);
+                    menuButton.idle = menuButton.menu_idle;
+                    menuButton.GetComponent<Image>().sprite = menuButton.idle;
+                    menuButton.active = menuButton.menu_active;
                 }
 
                 break;

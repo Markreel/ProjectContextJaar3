@@ -8,7 +8,7 @@ using UnityEngine.Video;
 
 public class RecordingsHandler : MonoBehaviour
 {
-    #region Private variables
+    #region Variables
 
     // Game
     [Header("Game")]
