@@ -43,6 +43,11 @@ namespace ShooterGame
         [SerializeField] private Animator fatiTease1;
         [SerializeField] private Animator fatiTease2;
 
+        [SerializeField] public ChangeGameMusic changeGameMusicScript;
+
+        [SerializeField] public RoundEndUI roundEndUI; 
+
+        
 
 
         public void OnStart(ObjectPool _objectPool, ScoreManager _scoreManager, UIManager _uiManager)
@@ -55,7 +60,11 @@ namespace ShooterGame
             fati?.Init(uiManager, this);
 
 
+            roundEndUI.maxBubbleCountInt = GetComponentsInChildren<ShootingTargetV2>().Length - 1;
+            Debug.Log(roundEndUI.maxBubbleCountInt);
         }
+
+     
 
         public void TutorialFinished()
         {
@@ -72,19 +81,25 @@ namespace ShooterGame
             {
 
                 fatiTease1.Play("Base Layer.SG_Fati_Tease_1", 0, 0);
-
+                changeGameMusicScript.ChangeAudio(); 
 
                 roundEndUIScript.RoundCloseCurtainsTrigger();
                 Debug.Log("Triggered");
-                hasFati1BeenTriggered = true; 
+                hasFati1BeenTriggered = true;
+
+                roundEndUI.StartCoroutine(roundEndUI.ResetGoudenBelHUD_UI());
 
             }
 
            if (!hasFati2BeenTriggered && cam.gameObject.transform.position.x > fati2Trigger.position.x)
             {
+                fatiTease2.Play("Base Layer.SG_Fati_Tease_2", 0, 0);
+                changeGameMusicScript.ChangeAudio();
                 roundEndUIScript.RoundCloseCurtains();
                 Debug.Log("Triggered2");
                 hasFati2BeenTriggered = true;
+
+                roundEndUI.StartCoroutine(roundEndUI.ResetGoudenBelHUD_UI());
             }
 
 
@@ -152,7 +167,7 @@ namespace ShooterGame
                 yield return null;
             }
 
-            //fati.DoAttack(uiManager.OpenGameOverWindow);
+            fati.DoAttack(uiManager.OpenGameOverWindow);
 
             //Time.timeScale = 0;
             //DataCollectionManager.Instance.PostData();
@@ -187,6 +202,8 @@ namespace ShooterGame
         public void PopulateBubbleCountFromParent(Transform _parent)
         {
             amountOfBubblesInScene = _parent.GetComponentsInChildren<ShootingTargetV2>().Length - 1;
+            
+            
             Debug.Log(amountOfBubblesInScene);
         }
     }

@@ -18,6 +18,9 @@ namespace ShooterGame
         public AudioSource MainMusicSource;
 
         [SerializeField] bool tutorialEnabled;
+
+        [SerializeField] public ChangeGameMusic changeGameMusicScript;
+
         private void Start()
         {
             if (!tutorialEnabled)
@@ -80,11 +83,13 @@ namespace ShooterGame
 
 
                 //Turn on the music of the game.
-                MainMusicSource.Play();
+                //MainMusicSource.Play();
+
+                changeGameMusicScript.ChangeAudio();
 
 
 
-                
+
                 //yes this is terrible I know, but otherwise it dissapears when you are still looking at it.
                 Invoke("HideTutorial", 6f); 
 

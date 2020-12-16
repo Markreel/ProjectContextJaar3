@@ -26,6 +26,12 @@ namespace ShooterGame
         [SerializeField] private AudioClip audioOnHit1;
         [SerializeField] private AudioClip audioOnHit2;
 
+        [SerializeField] private List<AudioClip> amorClips;
+        [SerializeField] private AudioClip goudenBelHitClip;
+        [SerializeField] private AudioClip GoudenBelIntro;
+        [SerializeField] private AudioClip AlexGoudenBelMis;
+
+
         [Space]
 
         [SerializeField] private bool isGoldenBubble = false;
@@ -37,6 +43,10 @@ namespace ShooterGame
 
         private ScoreManager scoreManager;
 
+        private NieuwScoreManager nieuwScoreManager;
+
+        [SerializeField] public RoundEndUI roundEndUI;
+
         private void Awake()
         {
             animator = GetComponent<Animator>();
@@ -45,6 +55,7 @@ namespace ShooterGame
         private void Start()
         {
             scoreManager = GameManager.Instance.gameObject.GetComponentInChildren<ScoreManager>();
+            nieuwScoreManager = GameManager.Instance.gameObject.GetComponentInChildren<NieuwScoreManager>();
             SetStartingHeight();
         }
 
@@ -57,11 +68,21 @@ namespace ShooterGame
         {
             if (Camera.main.transform.position.x > transform.position.x - activationRange &&
                 Camera.main.transform.position.x < transform.position.x + activationRange)
-            {               
+            {
                 isActivated = true;
                 Invoke("StartHeightAdjustment", Random.Range(minActivationDelay, maxActivationDelay));
+                if (isGoldenBubble)
+                {
+                    GameManager.Instance.AudioManager.SpawnAudioComponent(transform, GoudenBelIntro);
+                }
+               
             }
         }
+
+
+
+
+
 
         private void SetStartingHeight()
         {
@@ -93,7 +114,8 @@ namespace ShooterGame
                 yield return null;
             }
 
-            if (isLooping) { StartCoroutine(IEAdjustHeight()); }         
+            if (isLooping) { StartCoroutine(IEAdjustHeight()); }
+            if (isGoldenBubble) { GameManager.Instance.AudioManager.SpawnAudioComponent(transform, AlexGoudenBelMis); }
             yield return null;
         }
 
@@ -139,6 +161,8 @@ namespace ShooterGame
         {
             if (isShot) { return; }
 
+            nieuwScoreManager.bellenGeraakt++; 
+
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit1);
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit2);
 
@@ -149,7 +173,23 @@ namespace ShooterGame
 
             isShot = true;
 
-            if (isGoldenBubble) { Debug.Log("ik ben een goude bel"); }
+            if (isGoldenBubble)
+            {
+
+                Debug.Log("ik ben een goude bel");
+                
+               
+                GameManager.Instance.AudioManager.SpawnAudioComponent(transform, goudenBelHitClip);
+                nieuwScoreManager.goudenBellenGeraakt++;
+
+                roundEndUI.StartCoroutine(roundEndUI.GoudenBelHUD_UI()); 
+
+
+
+            }
+
+
+
 
             if (useFallAnimation) { animator.SetTrigger("FallOver"); }
             else { SelfDestruct(); }
