@@ -5,13 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/0. Main/Scenes/ScenePreloadFix.unity
     guid: d3e6a4b5a778aee46b59b1d6f0e4af45
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/SchiettentOvergang.unity
     guid: ef38e8b97214b614eb95c0494f3ea05a
-  - enabled: 1
-    path: Assets/Scenes/MuziekGame.unity
-    guid: 21d68602b255441499489a03d8b3bd3a
   m_configObjects: {}
