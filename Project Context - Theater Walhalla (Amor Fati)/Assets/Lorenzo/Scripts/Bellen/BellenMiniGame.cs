@@ -5,9 +5,11 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
+using PoolingAndAudio;
 
 public class BellenMiniGame : MonoBehaviour
 {
+    #region Public variables
     public GameObject canvas;
     public GameObject boundaries;
     public GameObject camera1;
@@ -57,8 +59,41 @@ public class BellenMiniGame : MonoBehaviour
 
     public int coinTweenID;
 
+    // Audio
+    [Header("Audio")]
+    public AudioClip zin1;
+    public AudioClip zin2;
+    public AudioClip zin3;
+    public AudioClip zin4;
+    public AudioClip zin5;
+    public AudioClip zin6; // intro
+    public AudioClip zin7;
+    public AudioClip zin7_1;
+    public AudioClip zin8;
+    public AudioClip zin9;
+    public AudioClip zin10;
+    public AudioClip zin11;
+    public AudioClip zin12;
+    public AudioClip zin13;
+    public AudioClip zin14;
+    public AudioClip zin15;
+    public AudioClip zin16;
+    public AudioClip zin17;
+    public AudioClip zin18;
+    public AudioClip zin19;
+    public float interval = 3f;
+
+    #endregion
+
+    #region Private variables
+
+    AudioSource snippetSource;
+    bool audioIntroduction;
+
+    #endregion
+
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
         //We get all the requiredbubbles by checking how many sleep je bel hier fields we have.
         GetComponentsInChildren(false, requiredBubbles);
@@ -76,6 +111,51 @@ public class BellenMiniGame : MonoBehaviour
         playerScore.transform.localScale = new Vector3(0, 0, 0);
         scoreBoard.SetActive(false);
         scoreBoard.transform.localScale = new Vector3(0, 0, 0);
+
+        // Initalize audio
+        snippetSource = GetComponent<AudioSource>();
+        audioIntroduction = true;
+        yield return new WaitForSeconds(4.5f); // Customize time for when Alex starts talking
+
+        // Play introduction
+        snippetSource.clip = zin6;
+        snippetSource.Play();
+        yield return new WaitForSeconds(zin6.length);
+
+        snippetSource.clip = zin7_1;
+        snippetSource.Play();
+        yield return new WaitForSeconds(zin7_1.length - 0.5f);
+
+        snippetSource.clip = zin8;
+        snippetSource.Play();
+        audioIntroduction = false;       
+
+        StartCoroutine(SnippetsInvullen());
+
+        yield break;
+    }
+
+    // Opbouwende zinnen voor bij het invullen van de bellen
+    IEnumerator SnippetsInvullen()
+    {
+        while (filledInBubbles < requiredBubbles.Count)
+        {
+            yield return new WaitForSeconds(zin8.length);
+            snippetSource.PlayOneShot(zin9);
+            yield return new WaitForSeconds(zin9.length + interval);
+
+            snippetSource.PlayOneShot(zin10);
+            yield return new WaitForSeconds(zin10.length + interval);
+
+            snippetSource.PlayOneShot(zin11);
+            yield return new WaitForSeconds(zin11.length + interval);
+
+            snippetSource.PlayOneShot(zin12);
+
+            yield break;
+        }
+
+        yield return null;
     }
 
     // Update is called once per frame
@@ -253,7 +333,7 @@ public class BellenMiniGame : MonoBehaviour
     public void SpawnBubble()
     {
         //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
-        if (canSpawnBubble && filledInBubbles < requiredBubbles.Count)
+        if (canSpawnBubble && filledInBubbles < requiredBubbles.Count && !audioIntroduction)
         {
             // Disable new bell button
             newBubbleButton.gameObject.SetActive(false);
