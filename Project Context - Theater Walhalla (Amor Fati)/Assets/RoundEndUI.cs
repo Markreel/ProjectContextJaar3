@@ -8,16 +8,21 @@ namespace ShooterGame
 {
     public class RoundEndUI : MonoBehaviour
     {
+        [Header("Curtains: ")]
         public Image leftCurtain;
         public Image rightCurtain;
 
+        [Header("Bonuses: ")]
         public GameObject goudenBelBonusUIElement;
         public int goudenBelBonusPunten;
         public GameObject fatiBonusUIElement;
         public int fatiBonusPunten;
 
+        [Space]
+
         public GameObject scoreBoardContainer;
 
+        [Header("Bubbles hit UI: ")]
         public TextMeshProUGUI currentBubbleHitsText;
         public int currentBubbleHitsInt;
         public int bubblesHit;
@@ -25,6 +30,7 @@ namespace ShooterGame
         public TextMeshProUGUI maxBubbleCountText;
         public int maxBubbleCountInt;
 
+        [Header("Endscreen UI: ")]
         public TextMeshProUGUI currentCoinsText;
         public int currentCoins;
         public int bubbleCoinsEarned;
@@ -61,12 +67,6 @@ namespace ShooterGame
             //CloseCurtains();
 
 
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
 
         }
 
@@ -121,9 +121,6 @@ namespace ShooterGame
             //Calculate how much coins we should get. 100 is hardcoded but should be changed into the coin value.
             bubbleCoinsEarned = bubblesHit * 100 + currentCoins;
             LeanTween.value(gameObject, StartAddingCoins, currentCoins, bubbleCoinsEarned, 8f).setEaseInExpo();
-
-
-
 
             //When done with counting:
             Invoke("GoudenBelBonus", 9f);
