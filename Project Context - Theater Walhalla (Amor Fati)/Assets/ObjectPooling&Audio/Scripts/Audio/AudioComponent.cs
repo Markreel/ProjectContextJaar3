@@ -23,6 +23,8 @@ namespace PoolingAndAudio
         [Space]
         [SerializeField] protected List<AudioClipCollection> clipCollections = new List<AudioClipCollection>();
 
+        public float Volume { get { return audioSource.volume; } set { audioSource.volume = value; } }
+
         protected float randomPitchValue;
 
         protected virtual void Awake()

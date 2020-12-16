@@ -21,6 +21,9 @@ namespace ShooterGame
 
         [SerializeField] public ChangeGameMusic changeGameMusicScript;
 
+        public AudioSource poppenSpelerSource;
+        public AudioClip poppenspeler_beginspel; 
+
         private void Start()
         {
             if (!tutorialEnabled)
@@ -29,6 +32,10 @@ namespace ShooterGame
                 MainMusicSource.Play();
                 gameObject.SetActive(false); 
             }
+
+            
+            
+
         }
 
         // Update is called once per frame
@@ -87,11 +94,12 @@ namespace ShooterGame
 
                 changeGameMusicScript.ChangeAudio();
 
-
+                poppenSpelerSource.clip = poppenspeler_beginspel;
+                poppenSpelerSource.Play(); 
 
 
                 //yes this is terrible I know, but otherwise it dissapears when you are still looking at it.
-                Invoke("HideTutorial", 6f); 
+                Invoke("HideTutorial", 30f); 
 
 
             }

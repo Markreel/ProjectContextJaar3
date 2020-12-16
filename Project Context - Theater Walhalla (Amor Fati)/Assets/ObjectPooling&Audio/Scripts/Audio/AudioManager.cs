@@ -39,7 +39,10 @@ namespace PoolingAndAudio
             _ac.ResetValues();
             _ac.DisableAfterPlaying = true;
             _ac.AddAudioClipCollection("", _clips);
+            _ac.Volume = 0.4f; 
             _ac.Play();
+
+
         }
 
         public void SpawnAudioComponent(Transform _t, List<AudioClip> _clips)

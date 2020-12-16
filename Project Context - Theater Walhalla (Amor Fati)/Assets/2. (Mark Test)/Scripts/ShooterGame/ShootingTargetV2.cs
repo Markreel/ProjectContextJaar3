@@ -166,6 +166,14 @@ namespace ShooterGame
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit1);
             GameManager.Instance.AudioManager.SpawnAudioComponent(transform, audioOnHit2);
 
+            if (!isGoldenBubble)
+            {
+
+
+
+            }
+
+
             GameManager.Instance.objectPool.SpawnFromPool("CoinParticle", _shooter.transform.position, Vector3.left * 90);
 
             scoreManager.AddScore(scoreValue);
