@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2363f26d193704a438d243fda7327c65, type: 3}
-  m_Name: E3
+  m_Script: {fileID: 11500000, guid: 6f3314c3d388cb7458e2c50d6d0b5fe1, type: 3}
+  m_Name: E3b
   m_EditorClassIdentifier: 
-  SceneIndex: 1
-  VideoUrl: https://amorfatigame.nl/VideoLocatieSjqJ76fQkw6vCxSY/AMORFATI_Sub_03.mp4
+  SceneIndex: 2

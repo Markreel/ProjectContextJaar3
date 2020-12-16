@@ -8,7 +8,7 @@ public class SaveFileManager : MonoBehaviour
 {
     public static SaveFileData SaveFileData = new SaveFileData();
 
-    public static void SaveGame()
+    public static void SaveData()
     {
         BinaryFormatter _bf = new BinaryFormatter();
         FileStream _file = File.Create(Application.persistentDataPath + "/SaveFile.dat");
@@ -17,7 +17,7 @@ public class SaveFileManager : MonoBehaviour
         _file.Close();
     }
 
-    public static void LoadGame()
+    public static void LoadData()
     {
         if (File.Exists(Application.persistentDataPath + "/SaveFile.dat"))
         {
@@ -26,15 +26,14 @@ public class SaveFileManager : MonoBehaviour
 
             SaveFileData = (SaveFileData)bf.Deserialize(file);
             file.Close();
-
-            EpisodeManager.Instance.LoadEpisode(SaveFileData.EpisodeIndex);
-
         }
     }
 }
 
+[System.Serializable]
 public class SaveFileData
 {
-    public int EpisodeIndex;
-    public int Score;
+    public int EpisodeIndex = 0;
+    public int Score = 0;
+    public float Volume = 1;
 }

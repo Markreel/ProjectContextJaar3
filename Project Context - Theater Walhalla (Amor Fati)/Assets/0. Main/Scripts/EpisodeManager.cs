@@ -21,8 +21,8 @@ public class EpisodeManager : MonoBehaviour
 
     public void NextEpisode()
     {
-        LoadEpisode(SaveFileManager.SaveFileData.EpisodeIndex);
         SaveFileManager.SaveFileData.EpisodeIndex++;
+        LoadEpisode(SaveFileManager.SaveFileData.EpisodeIndex);
     }
 
     public void LoadEpisode(int _index)
@@ -57,5 +57,13 @@ public class EpisodeManager : MonoBehaviour
         //Check if the episode is a game episode
         if(_episode is GameEpisode) { onlineVideoManager.StopAllActions(); }
 
+        SaveFileManager.SaveFileData.EpisodeIndex = _index;
+        SaveFileManager.SaveData();
+    }
+
+    public void LoadCurrentEpisode()
+    {
+        SaveFileManager.LoadData();
+        LoadEpisode(SaveFileManager.SaveFileData.EpisodeIndex);
     }
 }
