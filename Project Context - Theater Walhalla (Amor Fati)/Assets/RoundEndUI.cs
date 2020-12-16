@@ -241,6 +241,12 @@ namespace ShooterGame
 
         }
 
+        public void RoundCloseCurtainsTrigger()
+        {
+            Invoke("RoundCloseCurtains", 4f);
+
+        }
+
         public void RoundCloseCurtains()
         {
             //Left Curtain

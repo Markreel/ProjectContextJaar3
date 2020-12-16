@@ -36,10 +36,13 @@ namespace ShooterGame
 
         private int currentRound = 0;
 
-        [SerializeField] private Transform curtainCloseTriggerTransform_1;
-        [SerializeField] private Transform curtainCloseTriggerTransform_2;
-        private bool haveCurtainsOpened1;
-        private bool haveCurtainsOpened2;
+        [SerializeField] private Transform fati1Trigger;
+        [SerializeField] private Transform fati2Trigger;
+        private bool hasFati1BeenTriggered;
+        private bool hasFati2BeenTriggered;
+        [SerializeField] private Animator fatiTease1;
+        [SerializeField] private Animator fatiTease2;
+
 
 
         public void OnStart(ObjectPool _objectPool, ScoreManager _scoreManager, UIManager _uiManager)
@@ -65,18 +68,23 @@ namespace ShooterGame
 
         private void Update()
         {
-            if (!haveCurtainsOpened1 && cam.gameObject.transform.position.x > curtainCloseTriggerTransform_1.position.x)
+            if (!hasFati1BeenTriggered && cam.gameObject.transform.position.x > fati1Trigger.position.x)
             {
-                roundEndUIScript.RoundCloseCurtains();
+
+                fatiTease1.Play("Base Layer.SG_Fati_Tease_1", 0, 0);
+
+
+                roundEndUIScript.RoundCloseCurtainsTrigger();
                 Debug.Log("Triggered");
-                haveCurtainsOpened1 = true; 
+                hasFati1BeenTriggered = true; 
+
             }
 
-           if (!haveCurtainsOpened2 && cam.gameObject.transform.position.x > curtainCloseTriggerTransform_2.position.x)
+           if (!hasFati2BeenTriggered && cam.gameObject.transform.position.x > fati2Trigger.position.x)
             {
                 roundEndUIScript.RoundCloseCurtains();
                 Debug.Log("Triggered2");
-                haveCurtainsOpened2 = true;
+                hasFati2BeenTriggered = true;
             }
 
 
