@@ -64,6 +64,11 @@ public class EpisodeManager : MonoBehaviour
     public void LoadCurrentEpisode()
     {
         SaveFileManager.LoadData();
+        if(SaveFileManager.SaveFileData.EpisodeIndex >= Episodes.Count)
+        {
+            SaveFileManager.SaveFileData.EpisodeIndex = 0;
+            SaveFileManager.SaveData();
+        }
         LoadEpisode(SaveFileManager.SaveFileData.EpisodeIndex);
     }
 }

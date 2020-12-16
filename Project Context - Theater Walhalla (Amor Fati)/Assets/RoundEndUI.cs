@@ -553,7 +553,7 @@ namespace ShooterGame
         {
             //Should probably fade the audo out here. 
 
-            Debug.Log("NextScene");
+            EpisodeManager.Instance.NextEpisode();
         }
 
     }

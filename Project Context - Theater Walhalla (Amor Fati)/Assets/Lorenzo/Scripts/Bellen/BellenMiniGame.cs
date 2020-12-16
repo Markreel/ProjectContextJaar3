@@ -409,7 +409,10 @@ public class BellenMiniGame : MonoBehaviour
         LeanTween.scale(scoreBoard, new Vector3(1, 1, 1), 1f).setEaseInCubic();
 
         //However long you want the scoreboard to exist. Could also replaced by a continue button.
-        //yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
+
+        EpisodeManager.Instance.NextEpisode();
+
         yield break;
     }
 }
