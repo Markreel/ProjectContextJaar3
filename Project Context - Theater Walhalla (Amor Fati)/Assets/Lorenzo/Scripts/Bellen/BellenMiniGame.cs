@@ -92,6 +92,7 @@ public class BellenMiniGame : MonoBehaviour
 
     #endregion
 
+    #region Main Functions
     // Start is called before the first frame update
     IEnumerator Start()
     {
@@ -122,40 +123,20 @@ public class BellenMiniGame : MonoBehaviour
         snippetSource.Play();
         yield return new WaitForSeconds(zin6.length);
 
-        snippetSource.clip = zin7_1;
+        snippetSource.clip = zin7;
         snippetSource.Play();
-        yield return new WaitForSeconds(zin7_1.length - 0.5f);
+        yield return new WaitForSeconds(zin7.length - 0.5f);
 
         snippetSource.clip = zin8;
         snippetSource.Play();
-        audioIntroduction = false;       
+
+        // Toggle boolean to allow player to start playing
+        audioIntroduction = false;
+        yield return new WaitForSeconds(zin8.length);
 
         StartCoroutine(SnippetsInvullen());
 
         yield break;
-    }
-
-    // Opbouwende zinnen voor bij het invullen van de bellen
-    IEnumerator SnippetsInvullen()
-    {
-        while (filledInBubbles < requiredBubbles.Count)
-        {
-            yield return new WaitForSeconds(zin8.length);
-            snippetSource.PlayOneShot(zin9);
-            yield return new WaitForSeconds(zin9.length + interval);
-
-            snippetSource.PlayOneShot(zin10);
-            yield return new WaitForSeconds(zin10.length + interval);
-
-            snippetSource.PlayOneShot(zin11);
-            yield return new WaitForSeconds(zin11.length + interval);
-
-            snippetSource.PlayOneShot(zin12);
-
-            yield break;
-        }
-
-        yield return null;
     }
 
     // Update is called once per frame
@@ -187,6 +168,9 @@ public class BellenMiniGame : MonoBehaviour
             fatiManager.enabled = false;
             //Cleans up any left behind lines of Fati.
             fatiManager.lineRenderer.positionCount = 0;
+            // Play final audio
+            AudioClip[] endGameClips = new AudioClip[] { zin5, zin19 };
+            StartCoroutine(SnippetPlayer(endGameClips, 1.5f));
         }
     }
 
@@ -195,6 +179,11 @@ public class BellenMiniGame : MonoBehaviour
         //When we have the required amount of bubbles the button will instead trigger this function.
         if (filledInBubbles == requiredBubbles.Count)
         {
+            // Audio for starting the game
+            if (snippetSource.isPlaying) snippetSource.Stop();
+            AudioClip[] startGameClips = new AudioClip[] { zin14, zin15 };
+            StartCoroutine(SnippetPlayer(startGameClips, 2.5f));
+
             // Turn off bellenblaasstok image
             bellenblaasstok.SetActive(false);
 
@@ -229,6 +218,195 @@ public class BellenMiniGame : MonoBehaviour
         }
     }
 
+    public void StartProtectGame()
+    {
+        //Start the Fati attack.
+        fatiManager.StartFirstAttack();
+
+        // Start coin generation
+        StartCoinGeneration();
+    }
+
+    public void SpawnBubble()
+    {
+        //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
+        if (canSpawnBubble && filledInBubbles < requiredBubbles.Count && !audioIntroduction)
+        {
+            // Disable new bell button
+            newBubbleButton.gameObject.SetActive(false);
+
+            GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
+            bubble.transform.localScale = new Vector3(0, 0, 0);
+            // Set variables for drag component
+            bubble.GetComponent<DragObject>().fixedZ = this.transform.position.z;
+            bubble.GetComponent<DragObject>().protectGame = false;
+            LeanTween.scale(bubble, new Vector3(1, 1, 1), 0.5f).setEaseInExpo();
+            bubbles.Add(bubble);
+
+            DragObject dragObject = bubble.GetComponent<DragObject>();
+            if (dragObject != null) dragObject.BoundariesMesh = BoundariesMesh;
+
+            //Before we can spawn a new one this value needs to be set to true again by the SnapBubble Script.
+            canSpawnBubble = false;
+
+        }
+    }
+
+    public void StartCoinGeneration()
+    {
+        //Starts coin generation and shows our coin UI.
+        generatingCoins = true;
+        LeanTween.scale(coinImage.gameObject, new Vector3(1, 1, 1), 1f);
+        LeanTween.scale(coinText.gameObject, new Vector3(1, 1, 1), 1f);
+        LeanTween.scale(coinMultiplierText.gameObject, new Vector3(1, 1, 1), 1f);
+    }
+
+    #endregion
+
+    #region End of game
+
+    IEnumerator EndScreen()
+    {
+        //Shows our Player Scoreboard.
+        playerScore.SetActive(true);
+        LeanTween.scale(playerScore, new Vector3(1, 1, 1), 1f).setEaseInCubic();
+
+        //Move the Coin UI to the middle of the screen.
+        LeanTween.moveLocalY(coinUIRoot, -5, 2f).setEaseInExpo();
+
+        //Return time should be the same as it takes for the coin UI to move.
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(DrainCoins());
+    }
+
+    IEnumerator DrainCoins()
+    {
+        //Fills up our scoreboard coin UI.
+        LeanTween.value(gameObject, givePlayerCoins, endScreenPlayerScoreFloat, coinAmount, 6f).setEaseInExpo();
+
+        //Drains out the coins in the Coin UI. 
+        LeanTween.value(gameObject, drainCoinScore, coinAmount, 0f, 6f).setEaseInExpo();
+
+        //Return time should be the same as it takes for the coins to drain + a second or two to not make it instant.
+        yield return new WaitForSeconds(7.25f);
+        StartCoroutine(ShowScoreBoard());
+    }
+
+    //Function required to use the value sadly. 
+    void givePlayerCoins(float val)
+    {
+        endScreenPlayerScore.text = Mathf.Round(val).ToString();
+    }
+
+    //Function required to use the value sadly. 
+    void drainCoinScore(float val)
+    {
+        coinText.text = Mathf.Round(val).ToString();
+    }
+
+    IEnumerator ShowScoreBoard()
+    {
+        scoreBoard.SetActive(true);
+        LeanTween.scale(scoreBoard, new Vector3(1, 1, 1), 1f).setEaseInCubic();
+
+        //However long you want the scoreboard to exist. Could also replaced by a continue button.
+        yield return new WaitForSeconds(3f);
+
+        EpisodeManager.Instance.NextEpisode();
+
+        yield break;
+    }
+
+    #endregion
+
+    #region Audio, camera, environment
+
+    // Opbouwende zinnen voor bij het invullen van de bellen
+    IEnumerator SnippetsInvullen()
+    {
+        // Options
+        AudioClip[] clips = new AudioClip[] { zin9, zin10, zin11, zin12 };
+
+        for (int i = 0; i < clips.Length; i++)
+        {
+            // Specify the interval
+            yield return new WaitForSeconds(interval);
+            // Early out if all bubbles are filled in
+            if (filledInBubbles == requiredBubbles.Count) yield break;
+            // Play a sentence
+            snippetSource.clip = clips[i];
+            snippetSource.Play();
+            yield return new WaitForSeconds(clips[i].length);
+        }
+
+        yield break;
+    }
+
+    // Opbouwende zinnen voor bij het 'eten' van de bellen
+    public IEnumerator SnippetsEating(int bubbleNr)
+    {
+        if (snippetSource.isPlaying) yield return new WaitWhile(() => snippetSource.isPlaying);
+
+        switch (bubbleNr)
+        {
+            // Eerste bel knapt
+            case 0:
+                // snippetSource.PlayOneShot(zin16);
+                snippetSource.clip = zin16;
+                snippetSource.Play();
+                break;
+            // Tweede
+            case 1:
+                // snippetSource.PlayOneShot(zin1);
+                snippetSource.clip = zin1;
+                snippetSource.Play();
+                break;
+            // Derde
+            case 2:
+                // snippetSource.PlayOneShot(zin2);
+                snippetSource.clip = zin2;
+                snippetSource.Play();
+                break;
+            // Vierde
+            case 3:
+               // snippetSource.PlayOneShot(zin17);
+                snippetSource.clip = zin17;
+                snippetSource.Play();
+                break;
+            // Vijfde
+            case 4:
+               // snippetSource.PlayOneShot(zin3);
+                snippetSource.clip = zin3;
+                snippetSource.Play();
+                break;
+            // Zesde
+            case 5:
+               // snippetSource.PlayOneShot(zin18);
+                snippetSource.clip = zin18;
+                snippetSource.Play();
+                break;
+        }
+
+        yield break;
+    }
+
+    // Functie om meerdere audioclips na elkaar af te spelen met een willekeurig interval ertussen
+    IEnumerator SnippetPlayer(AudioClip[] clips, float interval)
+    {
+        // Don't let audio overlap
+        if (snippetSource.isPlaying) yield return new WaitWhile(() => snippetSource.isPlaying);
+
+        for (int i = 0; i < clips.Length; i++)
+        {
+            snippetSource.clip = clips[i];
+            snippetSource.Play();
+            yield return new WaitForSeconds(clips[i].length + interval);
+        }
+
+        yield break;
+    }
+
     public IEnumerator TransitionToGame(Vector3 startPos, Vector3 endPos, Vector3 canvasOffset, Vector3 boundariesOffset, float duration)
     {
         // Turn off UI for now
@@ -248,11 +426,11 @@ public class BellenMiniGame : MonoBehaviour
             float _evaluatedTick = dropCurve.Evaluate(tick);
             canvas.transform.position = Vector3.Lerp(startPos + canvasOffset, endPos + canvasOffset, _evaluatedTick);
             boundaries.transform.position = Vector3.Lerp(startPos + boundariesOffset, endPos + boundariesOffset, _evaluatedTick);
-            gameObject.transform.position = Vector3.Lerp(startPos, endPos, _evaluatedTick);            
+            gameObject.transform.position = Vector3.Lerp(startPos, endPos, _evaluatedTick);
             yield return null;
         }
 
-         // Rotate the elements
+        // Rotate the elements
         canvas.transform.eulerAngles += new Vector3(90, 0, 0);
         gameObject.transform.eulerAngles += new Vector3(90, 0, 0);
         boundaries.transform.eulerAngles += new Vector3(90, 0, 0);
@@ -318,101 +496,8 @@ public class BellenMiniGame : MonoBehaviour
         // Start the game
         StartProtectGame();
 
-        yield break;        
-    }
-
-    public void StartProtectGame()
-    {
-        //Start the Fati attack.
-        fatiManager.StartFirstAttack();
-
-        // Start coin generation
-        StartCoinGeneration();
-    }
-
-    public void SpawnBubble()
-    {
-        //Only allow to spawn a bubble if we do not have the max amount of bubbles and we do not currently have a bubble not dragged into the sleep je bubbel hier.
-        if (canSpawnBubble && filledInBubbles < requiredBubbles.Count && !audioIntroduction)
-        {
-            // Disable new bell button
-            newBubbleButton.gameObject.SetActive(false);
-
-            GameObject bubble = Instantiate(bubblePrefab, bubbleSpawnLocation);
-            bubble.transform.localScale = new Vector3(0, 0, 0);
-            // Set variables for drag component
-            bubble.GetComponent<DragObject>().fixedZ = this.transform.position.z;
-            bubble.GetComponent<DragObject>().protectGame = false;
-            LeanTween.scale(bubble, new Vector3(1, 1, 1), 0.5f).setEaseInExpo();
-            bubbles.Add(bubble);
-
-            DragObject dragObject = bubble.GetComponent<DragObject>();
-            if (dragObject != null) dragObject.BoundariesMesh = BoundariesMesh;
-
-            //Before we can spawn a new one this value needs to be set to true again by the SnapBubble Script.
-            canSpawnBubble = false;
-
-        }
-    }
-
-    public void StartCoinGeneration()
-    {
-        //Starts coin generation and shows our coin UI.
-        generatingCoins = true;
-        LeanTween.scale(coinImage.gameObject, new Vector3(1, 1, 1), 1f);
-        LeanTween.scale(coinText.gameObject, new Vector3(1, 1, 1), 1f);
-        LeanTween.scale(coinMultiplierText.gameObject, new Vector3(1, 1, 1), 1f);
-    }
-
-    IEnumerator EndScreen()
-    {
-        //Shows our Player Scoreboard.
-        playerScore.SetActive(true);
-        LeanTween.scale(playerScore, new Vector3(1, 1, 1), 1f).setEaseInCubic();
-
-        //Move the Coin UI to the middle of the screen.
-        LeanTween.moveLocalY(coinUIRoot, -5, 2f).setEaseInExpo();
-
-        //Return time should be the same as it takes for the coin UI to move.
-        yield return new WaitForSeconds(2f);
-
-        StartCoroutine(DrainCoins());
-    }
-
-    IEnumerator DrainCoins()
-    {
-        //Fills up our scoreboard coin UI.
-        LeanTween.value(gameObject, givePlayerCoins, endScreenPlayerScoreFloat, coinAmount, 6f).setEaseInExpo();
-
-        //Drains out the coins in the Coin UI. 
-        LeanTween.value(gameObject, drainCoinScore, coinAmount, 0f, 6f).setEaseInExpo();
-
-        //Return time should be the same as it takes for the coins to drain + a second or two to not make it instant.
-        yield return new WaitForSeconds(7.25f);
-        StartCoroutine(ShowScoreBoard());
-    }
-
-    //Function required to use the value sadly. 
-    void givePlayerCoins(float val)
-    {
-        endScreenPlayerScore.text = Mathf.Round(val).ToString();
-    }
-    //Function required to use the value sadly. 
-    void drainCoinScore(float val)
-    {
-        coinText.text = Mathf.Round(val).ToString();
-    }
-
-    IEnumerator ShowScoreBoard()
-    {
-        scoreBoard.SetActive(true);
-        LeanTween.scale(scoreBoard, new Vector3(1, 1, 1), 1f).setEaseInCubic();
-
-        //However long you want the scoreboard to exist. Could also replaced by a continue button.
-        yield return new WaitForSeconds(3f);
-
-        EpisodeManager.Instance.NextEpisode();
-
         yield break;
     }
+
+    #endregion
 }

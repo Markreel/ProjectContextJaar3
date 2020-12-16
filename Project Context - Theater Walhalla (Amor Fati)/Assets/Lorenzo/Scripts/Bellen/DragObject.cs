@@ -128,6 +128,10 @@ public class DragObject : MonoBehaviour
 
         if (collision.gameObject.tag == "FatiBellenMinigame")
         {
+            // Play audio for the i-th destroy
+            StartCoroutine(gameObject.GetComponentInParent<BellenMiniGame>().SnippetsEating(6 - gameObject.GetComponentInParent<BellenMiniGame>().filledInBubbles));
+
+            // Update info
             Instantiate(popParticle, transform.position, transform.rotation);
             Destroy(gameObject);
             gameObject.GetComponentInParent<BellenMiniGame>().coinMuliplierInt -= 1;
