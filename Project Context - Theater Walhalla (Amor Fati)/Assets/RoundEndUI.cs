@@ -77,8 +77,11 @@ namespace ShooterGame
 
         public Tutorial tutorial;
 
-        public GameObject introSign; 
+        public GameObject introSign;
 
+        public GameObject gameOverScreen;
+
+        public ParticleSystem particleSystemCoinsUI; 
 
 
         // Start is called before the first frame update
@@ -219,6 +222,8 @@ namespace ShooterGame
             bubblesHit = nieuwScoreManager.bellenGeraakt;
 
 
+
+
             //Counts up our bubbleAmount.
             LeanTween.value(gameObject, StartCountingBubbles, currentBubbleHitsInt, bubblesHit, 5f).setEaseInExpo();
 
@@ -230,6 +235,15 @@ namespace ShooterGame
             source.clip = goudenBelBonusClip;
             source.Play();
             yield return new WaitForSeconds(1.2f);
+
+            particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0,0,0);
+            particleSystemCoinsUI.transform.position = new Vector3(-144, 249, -301); 
+
+                
+            particleSystemCoinsUI.Play(); 
+
+
+
 
             currentCoinsText.text = currentCoins.ToString();
 
@@ -596,6 +610,12 @@ namespace ShooterGame
 
             EpisodeManager.Instance.NextEpisode();
 
+        }
+
+
+        public void GameOverScreen()
+        {
+            gameOverScreen.SetActive(true); 
         }
 
 

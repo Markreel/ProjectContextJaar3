@@ -131,6 +131,7 @@ namespace ShooterGame
 
             fatiAudioSource.clip = fatiLach;
             fatiAudioSource.Play(); 
+            
         }
 
         private IEnumerator IEIntro()
