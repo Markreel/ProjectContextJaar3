@@ -42,6 +42,7 @@ namespace ShooterGame
         private bool hasFati2BeenTriggered;
         [SerializeField] private Animator fatiTease1;
         [SerializeField] private Animator fatiTease2;
+        [SerializeField] private AudioClip fatiTeaseClip; 
 
         [SerializeField] public ChangeGameMusic changeGameMusicScript;
 
@@ -86,6 +87,7 @@ namespace ShooterGame
                 roundEndUIScript.RoundCloseCurtainsTrigger();
                 Debug.Log("Triggered");
                 hasFati1BeenTriggered = true;
+                GameManager.Instance.AudioManager.Play2DAudio(fatiTeaseClip);
 
                 roundEndUI.StartCoroutine(roundEndUI.ResetGoudenBelHUD_UI());
 
@@ -98,6 +100,7 @@ namespace ShooterGame
                 roundEndUIScript.RoundCloseCurtains();
                 Debug.Log("Triggered2");
                 hasFati2BeenTriggered = true;
+                GameManager.Instance.AudioManager.Play2DAudio(fatiTeaseClip);
 
                 roundEndUI.StartCoroutine(roundEndUI.ResetGoudenBelHUD_UI());
             }
@@ -167,7 +170,8 @@ namespace ShooterGame
                 yield return null;
             }
 
-            fati.DoAttack(uiManager.OpenGameOverWindow);
+            //fati.DoAttack(uiManager.OpenGameOverWindow);
+
 
             //Time.timeScale = 0;
             //DataCollectionManager.Instance.PostData();

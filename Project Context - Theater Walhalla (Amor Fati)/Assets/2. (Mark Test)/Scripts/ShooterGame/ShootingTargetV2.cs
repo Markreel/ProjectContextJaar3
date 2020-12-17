@@ -169,7 +169,7 @@ namespace ShooterGame
             if (!isGoldenBubble)
             {
 
-
+                GameManager.Instance.AudioManager.SpawnAudioComponent(transform, amorClips[Random.Range(0, amorClips.Count)]);
 
             }
 

@@ -33,8 +33,7 @@ namespace ShooterGame
                 gameObject.SetActive(false); 
             }
 
-            
-            
+
 
         }
 

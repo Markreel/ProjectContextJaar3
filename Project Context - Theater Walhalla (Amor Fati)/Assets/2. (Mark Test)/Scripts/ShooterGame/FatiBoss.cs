@@ -39,6 +39,13 @@ namespace ShooterGame
         [SerializeField] public ChangeGameMusic changeGameMusicScript;
         private NieuwScoreManager nieuwScoreManager;
 
+        public GameObject weight;
+
+        public AudioSource fatiAudioSource; 
+        public AudioClip fatiLach;
+        public AudioClip fatiDood;
+        public AudioClip fatiIntro; 
+
         private void Start()
         {
             nieuwScoreManager = GameManager.Instance.gameObject.GetComponentInChildren<NieuwScoreManager>();
@@ -76,7 +83,8 @@ namespace ShooterGame
 
             uiManager.OpenRoundEndedWindow(2);
 
-
+            fatiAudioSource.clip = fatiDood;
+            fatiAudioSource.Play(); 
             
             //LeanTween.value(gameObject, LowerVolume, currentVolume, 0, 3f);
             
@@ -103,6 +111,13 @@ namespace ShooterGame
             currentRoutine = StartCoroutine(IEIntro());
 
             source.Play();
+
+            weight.gameObject.SetActive(true);
+
+            fatiAudioSource.clip = fatiIntro;
+            fatiAudioSource.Play(); 
+
+
         }
 
         public void DoAttack(UnityAction _onAttackDone = null)
@@ -112,7 +127,10 @@ namespace ShooterGame
             currentRoutine = StartCoroutine(IEAttack());
 
             changeGameMusicScript.PlayLossMusic();
-            nieuwScoreManager.fatiBonus = 0; 
+            nieuwScoreManager.fatiBonus = 0;
+
+            fatiAudioSource.clip = fatiLach;
+            fatiAudioSource.Play(); 
         }
 
         private IEnumerator IEIntro()
@@ -133,6 +151,8 @@ namespace ShooterGame
             isIntroducing = false;
             OnIntroDone?.Invoke();
             yield return null;
+
+            
         }
 
         private IEnumerator IEAttack()
