@@ -29,7 +29,10 @@ public class EpisodeManager : MonoBehaviour
     {
         //Check if the episode index is out of the episode list range
         if(Episodes.Count <= _index) {
-            Debug.LogWarning($"Episode index ({_index}) is out of range."); return; }
+            _index = 0;
+            SceneManager.LoadScene(0);
+            Debug.LogWarning($"Episode index ({_index}) is out of range.");
+            return; }
 
         //Check if the episode with the given index is null
         if(Episodes[_index] == null) {
