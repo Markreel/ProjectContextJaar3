@@ -81,7 +81,10 @@ namespace ShooterGame
 
         public GameObject gameOverScreen;
 
-        public ParticleSystem particleSystemCoinsUI; 
+        public ParticleSystem particleSystemCoinsUI;
+
+        public ParticleSystem fatiCoinsParticle1;
+        public ParticleSystem fatiCoinsParticle2;
 
 
         // Start is called before the first frame update
@@ -237,9 +240,7 @@ namespace ShooterGame
             yield return new WaitForSeconds(1.2f);
 
             particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0,0,0);
-            particleSystemCoinsUI.transform.position = new Vector3(-144, 249, -301); 
-
-                
+            particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 249, -500);           
             particleSystemCoinsUI.Play(); 
 
 
@@ -322,6 +323,12 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 180, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 3, -500);
+                particleSystemCoinsUI.Play();
+
+
                 yield return new WaitForSeconds(1.8f);
 
 
@@ -358,8 +365,13 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 180, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 3, -500);
+                particleSystemCoinsUI.Play();
 
                 yield return new WaitForSeconds(1.8f);
+
+
 
                 goudenBelBonusUIElement2.transform.localScale = new Vector3(5, 5, 5);
                 goudenBelBonusUIElement2.gameObject.SetActive(true);
@@ -371,6 +383,10 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 0, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-2, 3, -500);
+                particleSystemCoinsUI.Play();
 
 
                 yield return new WaitForSeconds(1.8f);
@@ -400,6 +416,9 @@ namespace ShooterGame
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
 
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 180, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 3, -500);
+                particleSystemCoinsUI.Play();
                 yield return new WaitForSeconds(1.8f);
 
 
@@ -413,7 +432,9 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
-
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 0, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-2, 3, -500);
+                particleSystemCoinsUI.Play();
                 yield return new WaitForSeconds(1.8f);
 
 
@@ -427,6 +448,9 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 0, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(146, 3, -500);
+                particleSystemCoinsUI.Play();
 
                 yield return new WaitForSeconds(1.8f);
 
@@ -486,6 +510,11 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 //fatiCoinsEarned = currentCoins + fatiBonusPunten;
                 //LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, fatiCoinsEarned, 1f).setEaseInExpo();
+
+                fatiCoinsParticle1.Play();
+                fatiCoinsParticle2.Play();
+
+
                 currentCoins = 1000000;
                 currentCoinsText.text = currentCoins.ToString();
 
@@ -529,10 +558,15 @@ namespace ShooterGame
             //Scoreboard get's Raised back up.
             LeanTween.moveLocalY(scoreBoardContainer, 1050, 2.5f).setEaseInExpo();
 
+            
 
             //keep the curtains closed after the last round so we can transition from there with a cut or fade to the footage. 
 
             turnOnBlackImage();
+
+            fatiCoinsParticle1.Stop();
+            fatiCoinsParticle2.Stop(); 
+
 
             Invoke("OpenCurtains", 3.5f);
 
