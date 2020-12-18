@@ -24,7 +24,7 @@ public class MainMenuBehaviour : MonoBehaviour
 
     public void Extras()
     {
-        Application.OpenURL("https://amorfatigame.nl/extra.html");
+        Application.OpenURL("https://amorfatigame.nl/extra.php");
     }
 
     public void QuitGame()
