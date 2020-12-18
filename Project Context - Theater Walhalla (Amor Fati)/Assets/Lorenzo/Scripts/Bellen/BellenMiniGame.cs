@@ -157,6 +157,10 @@ public class BellenMiniGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.UpArrow)) { Time.timeScale++; }
+        if (Input.GetKeyDown(KeyCode.DownArrow)) { Time.timeScale--; }
+        if (Input.GetKeyDown(KeyCode.Space)) { Time.timeScale = 1; }
+
         // Update counter
         bellenblaasstok.GetComponentInChildren<TextMeshPro>().text = $"{filledInBubbles}/{requiredBubbles.Count}";
 

@@ -24,6 +24,9 @@ public class FatiFirstMinigame : MonoBehaviour
     public float attackWaitTime = 2;
     public float attackWaitSpeedup = 0.1f;
 
+    [Header("Audio: ")]
+    public AudioClip wooshAudio;
+    public AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
@@ -98,7 +101,15 @@ public class FatiFirstMinigame : MonoBehaviour
         {
             attackWaitTime = 0.5f; 
         }
-        yield return new WaitForSeconds(attackWaitTime);
+
+        fati.transform.localScale = Vector3.one + Vector3.one / fatiMoveSpeed;
+
+        yield return new WaitForSeconds(attackWaitTime/2);
+        audioSource.pitch = Mathf.Clamp(3f - fatiMoveSpeed, 1, 3);
+        Debug.Log(3f - fatiMoveSpeed);
+        audioSource.PlayOneShot(wooshAudio);
+        yield return new WaitForSeconds(attackWaitTime/2);
+
 
         Attack();
     }
