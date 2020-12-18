@@ -28,16 +28,10 @@ public class ServerManager : MonoBehaviour
             /*  Dit zijn 3 voorbeeld waardes en bijbehorende naam/label.
                 Eerst moeten de labels en bijbehorende waardes ingevult worden, daarna pas kan de Enumerator "postData" aangeroepen worden. */
 
-            labels[0] = "playerName";
-            values[0] = "Willem-Jan Renger";
 
-            labels[1] = "SelectedThings";
-            values[1] = "10";
+            //StartCoroutine(postData()); //start post en gaat de array af
 
-            labels[2] = "aantalFlips";
-            values[2] = "420";
-
-            StartCoroutine(postData()); //start post en gaat de array af
+            StartCoroutine(getdata());
 
             /* voor een vervolg iteratie. Array wordt automatisch langer voor elke waarde die wordt toegevoegd */
         }
@@ -49,7 +43,7 @@ public class ServerManager : MonoBehaviour
     public IEnumerator postData() 
     {
         string response; //response van de server
-        string site = "https://www.slatecanvas.com/context3/postdata.php?buffer=0"; // site waarmee gecomuniceert wordt
+        string site = "https://www.marcianosordam.com/projects/context3/postdata.php?buffer=0"; // site waarmee gecomuniceert wordt
 
 
         //voegt de waardes toe aan de totale post, loopt door de array door.
@@ -93,7 +87,7 @@ public class ServerManager : MonoBehaviour
     public IEnumerator getdata()
     {
         string requestedData;
-        string uri = "https://www.slatecanvas.com/context3/getdata.php"; //site waarmee gecomuniceert wordt
+        string uri = "https://www.marcianosordam.com/projects/context3/getdata.php"; //site waarmee gecomuniceert wordt
 
         using (UnityWebRequest webRequest = UnityWebRequest.Get(uri))
         {
@@ -111,8 +105,7 @@ public class ServerManager : MonoBehaviour
             {
                 requestedData = webRequest.downloadHandler.text;
                 
-                Debug.Log(requestedData);
-                Target = float.Parse(requestedData); //maakt target gelijk aan het resultaat;
+                Debug.Log(requestedData);              
             }
         }
     }

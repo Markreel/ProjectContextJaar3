@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class TelevisionItem : MonoBehaviour
 {
-    [SerializeField] private Renderer renderer;
+    [SerializeField] public Renderer Renderer;
     [SerializeField] public bool TurnedOn = true;
+    [SerializeField] public MediaTopic MediaTopic;
     public MediaItem mediaItem;
     public string tvName;
 
-    public void SetScreen(int index)
+    public void SetScreen(MediaItem _mi)
     {
-        mediaItem = DataManager.Instance.MediaData.MediaItems[index];
-        renderer.material = mediaItem.Material; 
+        mediaItem = _mi;
+        Renderer.material = mediaItem.Material; 
     }
 }

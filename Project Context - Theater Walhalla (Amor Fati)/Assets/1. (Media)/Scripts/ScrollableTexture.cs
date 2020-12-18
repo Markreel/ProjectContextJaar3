@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class ScrollableTexture : MonoBehaviour
 {
-    [SerializeField] private Material poep;
+    [SerializeField] private Material material;
 
     private IEnumerator Start()
     {
         //material = GetComponent<Renderer>().material;
-        Debug.Log(poep.mainTextureOffset.y);
+        Debug.Log(material.mainTextureOffset.y);
 
         while (true)
         {
 
-            poep.mainTextureOffset = new Vector2(0f, 0.21f) * Time.deltaTime;
-            Debug.Log(poep.mainTextureOffset);
+            material.mainTextureOffset = new Vector2(0f, 0.21f) * Time.deltaTime;
             yield return null;
         }
 

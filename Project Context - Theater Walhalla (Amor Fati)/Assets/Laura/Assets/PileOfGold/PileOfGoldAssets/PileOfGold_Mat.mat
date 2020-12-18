@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PileOfGold_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: eae5f91fb276f0f4395c04d90ed849de,
+    type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _SampleTexture2DLOD_EBAB9D94_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 884e3b305abf8744a8ab11a08163c422, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_4FC845AF_Texture_1:
+        m_Texture: {fileID: 2800000, guid: b941dc2ab3a8dae4fb56fc6dd7f6a980, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_60AE0935_Texture_1:
+        m_Texture: {fileID: 2800000, guid: b33df42923a87484c9e9feba2ba05a42, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_89594546_Texture_1:
+        m_Texture: {fileID: 2800000, guid: c3cbce1566a100f42be283a3fe7d1d5d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_C6168BAD_Texture_1:
+        m_Texture: {fileID: 2800000, guid: c3cbce1566a100f42be283a3fe7d1d5d, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_5F090B30: 3.82
+    - Vector1_B618DA85: 370.14
+    m_Colors:
+    - Color_DC592599: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 0}
+    - Vector2_93E0E106: {r: 6, g: 6, b: 0, a: 0}
+    - Vector2_9E26C5A8: {r: 0.2, g: 0.3, b: 0, a: 0}
+    - Vector2_AB3AB1A4: {r: 6, g: 6, b: 0, a: 0}
