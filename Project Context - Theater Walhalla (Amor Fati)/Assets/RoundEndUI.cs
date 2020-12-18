@@ -87,6 +87,12 @@ namespace ShooterGame
         public ParticleSystem fatiCoinsParticle2;
 
 
+        public GameObject highScorePlacementsParent;
+        private int m_IndexNumber;
+        public GameObject endHighScoreScreen;
+
+        public AudioClip bellenCountSFX; 
+
         // Start is called before the first frame update
         void Start()
         {
@@ -119,7 +125,19 @@ namespace ShooterGame
 
 
 
+
+
+            m_IndexNumber = 6;
+            //Set the Sibling Index
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+
+           
+
+
         }
+
+
+
 
         public IEnumerator IntroAnimation()
         {
@@ -189,6 +207,9 @@ namespace ShooterGame
 
         public void CloseCurtains()
         {
+            
+
+
             //Left Curtain
             //Move X to 9
             LeanTween.moveLocalX(leftCurtain.gameObject, 11, 2).setEaseInBack();
@@ -234,10 +255,14 @@ namespace ShooterGame
             currentCoins = bubblesHit * 100 + currentCoins;
             //LeanTween.value(gameObject, StartAddingCoins, currentCoins, bubbleCoinsEarned, 8f).setEaseInExpo();
 
-            yield return new WaitForSeconds(6);
-            source.clip = goudenBelBonusClip;
+            yield return new WaitForSeconds(1.5f);
+
+            source.clip = bellenCountSFX;
             source.Play();
-            yield return new WaitForSeconds(1.2f);
+
+            yield return new WaitForSeconds(4.2f);
+
+            //yield return new WaitForSeconds(1.2f);
 
             particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0,0,0);
             particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 249, -500);           
@@ -496,6 +521,8 @@ namespace ShooterGame
                 source.Play();
 
 
+                Invoke("RaiseScoreBoard", 4f);
+
             }
 
             if (nieuwScoreManager.fatiBonus == 1)
@@ -518,8 +545,15 @@ namespace ShooterGame
                 currentCoins = 1000000;
                 currentCoinsText.text = currentCoins.ToString();
 
+                endHighScoreScreen.SetActive(true);
+                StartCoroutine(movePlayerScoreBoardPosition());
+
+
                 alexSource.clip = wowWatEenScore;
                 alexSource.Play();
+
+                Invoke("RaiseScoreBoard", 8f);
+
             }
 
 
@@ -529,23 +563,32 @@ namespace ShooterGame
 
 
 
-            //Check here if you got the Fati Bonus.
-            //If No then do a stripethrough animation.
-            //GameObject setactive stripethrough animation.
+            
+        }
 
-            //If Yes then:
-
-            //fatiBonusUIElement.transform.localScale = new Vector3(5, 5, 5);
-            //fatiBonusUIElement.gameObject.SetActive(true);
-            ////Scale the icon down into it's correct place.
-            //fatiBonusUIElement.LeanScale(new Vector3(1, 1, 1), 0.75f).setEaseInExpo();
-
-            ////Calculates how much coins we should add to the coins amount. This so we can tween towards it. 
-            //fatiCoinsEarned = currentCoins + fatiBonusPunten;
-            //LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, fatiCoinsEarned, 1f).setEaseInExpo();
+        public IEnumerator movePlayerScoreBoardPosition()
+        {
 
 
-            Invoke("RaiseScoreBoard", 3f);
+            m_IndexNumber--;
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+            yield return new WaitForSeconds(0.45f);
+            m_IndexNumber--;
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+            yield return new WaitForSeconds(0.45f);
+            m_IndexNumber--;
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+            yield return new WaitForSeconds(0.45f);
+            m_IndexNumber--;
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+            yield return new WaitForSeconds(0.45f);
+            m_IndexNumber--;
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+            yield return new WaitForSeconds(0.45f);
+            m_IndexNumber--;
+            highScorePlacementsParent.transform.SetSiblingIndex(m_IndexNumber);
+            yield return new WaitForSeconds(0.45f);
+
         }
 
         //void StartCountingFatiBonus(float val)
@@ -649,7 +692,8 @@ namespace ShooterGame
 
         public void GameOverScreen()
         {
-            gameOverScreen.SetActive(true); 
+            gameOverScreen.SetActive(true);
+            Invoke("CloseCurtains", 4f); 
         }
 
 

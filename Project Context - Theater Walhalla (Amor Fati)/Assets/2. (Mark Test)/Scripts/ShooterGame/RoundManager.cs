@@ -170,7 +170,7 @@ namespace ShooterGame
                 yield return null;
             }
 
-            //fati.DoAttack(uiManager.OpenGameOverWindow);
+            fati.DoAttack();
 
 
             //Time.timeScale = 0;
