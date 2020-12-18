@@ -83,6 +83,15 @@ public class BellenMiniGame : MonoBehaviour
     public AudioClip zin19;
     public float interval = 3f;
 
+    [Header("Music")]
+    public BossfightMusicManager bossfightMusicManager;
+    private bool musicHasSwitched = false;
+
+    [Header("Fade out")]
+    public Animator fadeImageAnimator;
+
+    private Coroutine startCoroutine;
+
     #endregion
 
     #region Private variables
@@ -93,8 +102,13 @@ public class BellenMiniGame : MonoBehaviour
     #endregion
 
     #region Main Functions
+    private void Start()
+    {
+        startCoroutine = StartCoroutine(IEStart());
+    }
+
     // Start is called before the first frame update
-    IEnumerator Start()
+    IEnumerator IEStart()
     {
         //We get all the requiredbubbles by checking how many sleep je bel hier fields we have.
         GetComponentsInChildren(false, requiredBubbles);
@@ -118,10 +132,14 @@ public class BellenMiniGame : MonoBehaviour
         audioIntroduction = true;
         yield return new WaitForSeconds(4.5f); // Customize time for when Alex starts talking
 
+        // Toggle boolean to allow player to start playing
+        audioIntroduction = false;
+
         // Play introduction
         snippetSource.clip = zin6;
         snippetSource.Play();
         yield return new WaitForSeconds(zin6.length);
+
 
         snippetSource.clip = zin7;
         snippetSource.Play();
@@ -129,12 +147,9 @@ public class BellenMiniGame : MonoBehaviour
 
         snippetSource.clip = zin8;
         snippetSource.Play();
-
-        // Toggle boolean to allow player to start playing
-        audioIntroduction = false;
         yield return new WaitForSeconds(zin8.length);
 
-        StartCoroutine(SnippetsInvullen());
+        startCoroutine = StartCoroutine(SnippetsInvullen());
 
         yield break;
     }
@@ -160,6 +175,13 @@ public class BellenMiniGame : MonoBehaviour
         }
 
         //If all bubbles have been destroyed...
+        if (filledInBubbles == 4 && generatingCoins && !musicHasSwitched)
+        {
+            musicHasSwitched = true;
+            bossfightMusicManager.SecondStage();
+        }
+
+        //If all bubbles have been destroyed...
         if (filledInBubbles == 0 && generatingCoins)
         {
             generatingCoins = false;
@@ -179,6 +201,8 @@ public class BellenMiniGame : MonoBehaviour
         //When we have the required amount of bubbles the button will instead trigger this function.
         if (filledInBubbles == requiredBubbles.Count)
         {
+            StopCoroutine(startCoroutine);
+
             // Audio for starting the game
             if (snippetSource.isPlaying) snippetSource.Stop();
             AudioClip[] startGameClips = new AudioClip[] { zin14, zin15 };
@@ -213,7 +237,7 @@ public class BellenMiniGame : MonoBehaviour
             // Move the game objects to second postion
             Vector3 canvasOffset = canvas.transform.position - gameObject.transform.position;
             Vector3 boundariesOffset = boundaries.transform.position - gameObject.transform.position;
-            StartCoroutine(TransitionToGame(gameObject.transform.position, gameObject.transform.position + new Vector3(0, -8, 0), 
+            StartCoroutine(TransitionToGame(gameObject.transform.position, gameObject.transform.position + new Vector3(0, -8, 0),
                 canvasOffset, boundariesOffset, 3));
         }
     }
@@ -222,6 +246,8 @@ public class BellenMiniGame : MonoBehaviour
     {
         //Start the Fati attack.
         fatiManager.StartFirstAttack();
+
+        bossfightMusicManager.StartMusic();
 
         // Start coin generation
         StartCoinGeneration();
@@ -267,6 +293,8 @@ public class BellenMiniGame : MonoBehaviour
 
     IEnumerator EndScreen()
     {
+        bossfightMusicManager.StopMusic();
+
         //Shows our Player Scoreboard.
         playerScore.SetActive(true);
         LeanTween.scale(playerScore, new Vector3(1, 1, 1), 1f).setEaseInCubic();
@@ -311,8 +339,11 @@ public class BellenMiniGame : MonoBehaviour
         LeanTween.scale(scoreBoard, new Vector3(1, 1, 1), 1f).setEaseInCubic();
 
         //However long you want the scoreboard to exist. Could also replaced by a continue button.
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(6f);
 
+        fadeImageAnimator.SetTrigger("FadeOut");
+
+        yield return new WaitForSeconds(3f);
         EpisodeManager.Instance.NextEpisode();
 
         yield break;
@@ -343,48 +374,52 @@ public class BellenMiniGame : MonoBehaviour
         yield break;
     }
 
+    private List<int> audioToBePlayed = new List<int>();
+
     // Opbouwende zinnen voor bij het 'eten' van de bellen
     public IEnumerator SnippetsEating(int bubbleNr)
     {
-        if (snippetSource.isPlaying) yield return new WaitWhile(() => snippetSource.isPlaying);
+        //if (snippetSource.isPlaying) yield return new WaitWhile(() => snippetSource.isPlaying);
+
+
 
         switch (bubbleNr)
         {
             // Eerste bel knapt
             case 0:
-                // snippetSource.PlayOneShot(zin16);
-                snippetSource.clip = zin16;
-                snippetSource.Play();
+                 snippetSource.PlayOneShot(zin16);
+                //snippetSource.clip = zin16;
+                //snippetSource.Play();
                 break;
             // Tweede
             case 1:
-                // snippetSource.PlayOneShot(zin1);
-                snippetSource.clip = zin1;
-                snippetSource.Play();
+                 snippetSource.PlayOneShot(zin1);
+                //snippetSource.clip = zin1;
+               // snippetSource.Play();
                 break;
             // Derde
             case 2:
-                // snippetSource.PlayOneShot(zin2);
-                snippetSource.clip = zin2;
-                snippetSource.Play();
+                 snippetSource.PlayOneShot(zin2);
+                //snippetSource.clip = zin2;
+                //snippetSource.Play();
                 break;
             // Vierde
             case 3:
-               // snippetSource.PlayOneShot(zin17);
-                snippetSource.clip = zin17;
-                snippetSource.Play();
+                 snippetSource.PlayOneShot(zin17);
+                //snippetSource.clip = zin17;
+                //snippetSource.Play();
                 break;
             // Vijfde
             case 4:
-               // snippetSource.PlayOneShot(zin3);
-                snippetSource.clip = zin3;
-                snippetSource.Play();
+                 snippetSource.PlayOneShot(zin3);
+                //snippetSource.clip = zin3;
+                //snippetSource.Play();
                 break;
             // Zesde
             case 5:
-               // snippetSource.PlayOneShot(zin18);
-                snippetSource.clip = zin18;
-                snippetSource.Play();
+                 snippetSource.PlayOneShot(zin18);
+                //snippetSource.clip = zin18;
+                //snippetSource.Play();
                 break;
         }
 

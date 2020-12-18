@@ -17,6 +17,16 @@ public class MainMenuBehaviour : MonoBehaviour
         sceneSelectWindow.gameObject.SetActive(_value);
     }
 
+    public void HelheimMedia()
+    {
+        Application.OpenURL("http://helheimmedia.com/");
+    }
+
+    public void Extras()
+    {
+        Application.OpenURL("https://amorfatigame.nl/extra.html");
+    }
+
     public void QuitGame()
     {
         Application.Quit();
