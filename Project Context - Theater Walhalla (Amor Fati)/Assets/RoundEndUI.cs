@@ -686,8 +686,8 @@ namespace ShooterGame
         {
             //Should probably fade the audo out here. 
 
-            EpisodeManager.Instance.NextEpisode();
-
+            //EpisodeManager.Instance.NextEpisode();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
 
 

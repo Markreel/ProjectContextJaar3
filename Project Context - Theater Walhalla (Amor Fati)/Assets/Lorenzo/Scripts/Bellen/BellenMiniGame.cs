@@ -356,7 +356,7 @@ public class BellenMiniGame : MonoBehaviour
 
         yield return new WaitForSeconds(3f);
         AudioListener.volume = 1f;
-        EpisodeManager.Instance.NextEpisode();
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
 
         yield break;
     }
