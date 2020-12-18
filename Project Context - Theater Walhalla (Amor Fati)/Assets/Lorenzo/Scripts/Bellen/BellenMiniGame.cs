@@ -107,6 +107,7 @@ public class BellenMiniGame : MonoBehaviour
     private void Start()
     {
         startCoroutine = StartCoroutine(IEStart());
+        AudioListener.volume = 2f;
     }
 
     // Start is called before the first frame update
@@ -159,9 +160,9 @@ public class BellenMiniGame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow)) { Time.timeScale++; }
-        if (Input.GetKeyDown(KeyCode.DownArrow)) { Time.timeScale--; }
-        if (Input.GetKeyDown(KeyCode.Space)) { Time.timeScale = 1; }
+        //if (Input.GetKeyDown(KeyCode.UpArrow)) { Time.timeScale++; }
+        //if (Input.GetKeyDown(KeyCode.DownArrow)) { Time.timeScale--; }
+        //if (Input.GetKeyDown(KeyCode.Space)) { Time.timeScale = 1; }
 
         // Update counter
         bellenblaasstok.GetComponentInChildren<TextMeshPro>().text = $"{filledInBubbles}/{requiredBubbles.Count}";
@@ -354,6 +355,7 @@ public class BellenMiniGame : MonoBehaviour
         fadeImageAnimator.SetTrigger("FadeOut");
 
         yield return new WaitForSeconds(3f);
+        AudioListener.volume = 1f;
         EpisodeManager.Instance.NextEpisode();
 
         yield break;

@@ -19,14 +19,14 @@ public class UserVideoControls : MonoBehaviour
 
     private void Start()
     {
-        volumeSlider.value = SaveFileManager.SaveFileData.Volume;
-        OnlineVideoManager.Instance.VideoPlayer.GetTargetAudioSource(0).volume = volumeSlider.value;
+        //volumeSlider.value = SaveFileManager.SaveFileData.Volume;
+        //OnlineVideoManager.Instance.VideoPlayer.GetTargetAudioSource(0).volume = volumeSlider.value;
     }
 
     private void Update()
     {
-        SaveFileManager.SaveFileData.Volume = volumeSlider.value;
-        OnlineVideoManager.Instance.VideoPlayer.GetTargetAudioSource(0).volume = volumeSlider.value;
+        //SaveFileManager.SaveFileData.Volume = volumeSlider.value;
+        //OnlineVideoManager.Instance.VideoPlayer.GetTargetAudioSource(0).volume = volumeSlider.value;
 
         //Show pause icon depending on if the mouse is moving or not
         Vector3 _mouseDelta = Input.mousePosition - lastMousePos;
