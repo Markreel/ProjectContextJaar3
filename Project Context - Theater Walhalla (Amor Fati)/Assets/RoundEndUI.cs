@@ -13,16 +13,16 @@ namespace ShooterGame
         public Image leftCurtain;
         public Image rightCurtain;
 
-        [Header ("GoudenBel")]
+        [Header("GoudenBel")]
         public GameObject goudenBelBonusUIElement1;
         public GameObject goudenBelBonusUIElement2;
         public GameObject goudenBelBonusUIElement3;
         public GameObject goudenBelBonusCrossOutUIElement1;
         public GameObject goudenBelBonusCrossOutUIElement2;
         public GameObject goudenBelBonusCrossOutUIElement3;
-        public float sfxDelay = 1f; 
+        public float sfxDelay = 1f;
 
-        [Header ("HUD")]
+        [Header("HUD")]
         public GameObject goudenBelBonusUIHUDElement;
 
         public int goudenBelBonusPunten;
@@ -70,9 +70,21 @@ namespace ShooterGame
 
         private AudioSource source;
 
-     
+        public AudioSource alexSource;
+        public AudioClip alexIntro;
+        public AudioClip alexHierIsJeBonus;
+        public AudioClip wowWatEenScore;
 
+        public Tutorial tutorial;
 
+        public GameObject introSign;
+
+        public GameObject gameOverScreen;
+
+        public ParticleSystem particleSystemCoinsUI;
+
+        public ParticleSystem fatiCoinsParticle1;
+        public ParticleSystem fatiCoinsParticle2;
 
 
         // Start is called before the first frame update
@@ -85,7 +97,7 @@ namespace ShooterGame
             //Why we do this? So we don't have to manually move it out of the screen everytime we are done with editing the scoreboard in Unity.
             scoreBoardContainer.transform.localPosition = new Vector3(0, 1050, 0);
 
-            source = GetComponent<AudioSource>(); 
+            source = GetComponent<AudioSource>();
 
 
             //We should set the coin text here to our coin score we got from the bubble game.
@@ -94,25 +106,53 @@ namespace ShooterGame
             //Set our Max Bubbles hit to the max hittable bubbles in the round amount. 
             maxBubbleCountText.text = maxBubbleCountInt.ToString();
 
-            
+
 
 
 
             blackImage.SetActive(false);
 
+            StartCoroutine(IntroAnimation()); 
 
-           
+            shooterControllerScript.enabled = false;
+            tutorial.enabled = false;
 
 
-            
 
         }
 
-        // Update is called once per frame
-        void Update()
+        public IEnumerator IntroAnimation()
         {
-            
+            yield return new WaitForSeconds(3f);
+            //Lower Sign
+            LeanTween.moveLocalY(introSign.gameObject, -60, 2).setEaseInExpo();
+            yield return new WaitForSeconds(4f);
+            //Raise Sign
+            LeanTween.moveLocalY(introSign.gameObject, 350, 2).setEaseInExpo();
+            yield return new WaitForSeconds(3f);
+
+            tutorial.enabled = true;
+            shooterControllerScript.enabled = true;
+
+
+            //Left Curtain
+
+            LeanTween.moveLocalX(leftCurtain.gameObject, -967, 2).setEaseInExpo();
+
+
+            //Right Curtain
+
+            LeanTween.moveLocalX(rightCurtain.gameObject, 978, 2).setEaseInExpo();
+
+
+
+            yield return null; 
+
         }
+
+
+
+
 
         public IEnumerator ResetGoudenBelHUD_UI()
         {
@@ -170,6 +210,8 @@ namespace ShooterGame
             //Scoreboard get's lowered to 0y.
             LeanTween.moveLocalY(scoreBoardContainer, 0, 2).setEaseInExpo();
 
+            alexSource.clip = alexIntro;
+            alexSource.Play();
 
             StartCoroutine(BubbleCount(0.5f));
         }
@@ -183,6 +225,8 @@ namespace ShooterGame
             bubblesHit = nieuwScoreManager.bellenGeraakt;
 
 
+
+
             //Counts up our bubbleAmount.
             LeanTween.value(gameObject, StartCountingBubbles, currentBubbleHitsInt, bubblesHit, 5f).setEaseInExpo();
 
@@ -191,15 +235,22 @@ namespace ShooterGame
             //LeanTween.value(gameObject, StartAddingCoins, currentCoins, bubbleCoinsEarned, 8f).setEaseInExpo();
 
             yield return new WaitForSeconds(6);
-            source.clip = goudenBelBonusClip; 
+            source.clip = goudenBelBonusClip;
             source.Play();
             yield return new WaitForSeconds(1.2f);
+
+            particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0,0,0);
+            particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 249, -500);           
+            particleSystemCoinsUI.Play(); 
+
+
+
 
             currentCoinsText.text = currentCoins.ToString();
 
             //When done with counting:
             //Invoke("GoudenBelBonus", 9f);
-            StartCoroutine(GoudenBelBonus(2f)); 
+            StartCoroutine(GoudenBelBonus(2f));
         }
 
         //These functions are multiple times in the script. Required to start counting up.
@@ -221,7 +272,8 @@ namespace ShooterGame
             if (delay != 0)
                 yield return new WaitForSeconds(delay);
 
-           
+            alexSource.clip = alexHierIsJeBonus;
+            alexSource.Play();
 
 
             if (nieuwScoreManager.goudenBellenGeraakt == 0)
@@ -260,7 +312,7 @@ namespace ShooterGame
             }
             if (nieuwScoreManager.goudenBellenGeraakt == 1)
             {
-                
+
                 goudenBelBonusUIElement1.transform.localScale = new Vector3(5, 5, 5);
                 goudenBelBonusUIElement1.gameObject.SetActive(true);
                 //Scale the icon down into it's correct place.
@@ -269,8 +321,14 @@ namespace ShooterGame
                 source.clip = goudenBelBonusClip;
                 source.Play();
                 yield return new WaitForSeconds(sfxDelay);
-                currentCoins += goudenBelBonusPunten; 
+                currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 180, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 3, -500);
+                particleSystemCoinsUI.Play();
+
+
                 yield return new WaitForSeconds(1.8f);
 
 
@@ -296,7 +354,7 @@ namespace ShooterGame
             }
             if (nieuwScoreManager.goudenBellenGeraakt == 2)
             {
-                
+
                 goudenBelBonusUIElement1.transform.localScale = new Vector3(5, 5, 5);
                 goudenBelBonusUIElement1.gameObject.SetActive(true);
                 //Scale the icon down into it's correct place.
@@ -307,8 +365,13 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 180, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 3, -500);
+                particleSystemCoinsUI.Play();
 
                 yield return new WaitForSeconds(1.8f);
+
+
 
                 goudenBelBonusUIElement2.transform.localScale = new Vector3(5, 5, 5);
                 goudenBelBonusUIElement2.gameObject.SetActive(true);
@@ -320,6 +383,10 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 0, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-2, 3, -500);
+                particleSystemCoinsUI.Play();
 
 
                 yield return new WaitForSeconds(1.8f);
@@ -337,7 +404,7 @@ namespace ShooterGame
             }
             if (nieuwScoreManager.goudenBellenGeraakt == 3)
             {
-                
+
                 goudenBelBonusUIElement1.transform.localScale = new Vector3(5, 5, 5);
                 goudenBelBonusUIElement1.gameObject.SetActive(true);
                 //Scale the icon down into it's correct place.
@@ -349,6 +416,9 @@ namespace ShooterGame
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
 
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 180, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-144, 3, -500);
+                particleSystemCoinsUI.Play();
                 yield return new WaitForSeconds(1.8f);
 
 
@@ -362,7 +432,9 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
-
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 0, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(-2, 3, -500);
+                particleSystemCoinsUI.Play();
                 yield return new WaitForSeconds(1.8f);
 
 
@@ -376,6 +448,9 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 currentCoins += goudenBelBonusPunten;
                 currentCoinsText.text = currentCoins.ToString();
+                particleSystemCoinsUI.transform.rotation = Quaternion.Euler(0, 0, 0);
+                particleSystemCoinsUI.transform.localPosition = new Vector3(146, 3, -500);
+                particleSystemCoinsUI.Play();
 
                 yield return new WaitForSeconds(1.8f);
 
@@ -393,7 +468,7 @@ namespace ShooterGame
 
 
 
-            StartCoroutine(FatiBonus(1.5f));
+            StartCoroutine(FatiBonus(1f));
 
             yield return null;
         }
@@ -435,9 +510,16 @@ namespace ShooterGame
                 yield return new WaitForSeconds(sfxDelay);
                 //fatiCoinsEarned = currentCoins + fatiBonusPunten;
                 //LeanTween.value(gameObject, StartCountingGoudenBelBonus, currentCoins, fatiCoinsEarned, 1f).setEaseInExpo();
+
+                fatiCoinsParticle1.Play();
+                fatiCoinsParticle2.Play();
+
+
                 currentCoins = 1000000;
                 currentCoinsText.text = currentCoins.ToString();
 
+                alexSource.clip = wowWatEenScore;
+                alexSource.Play();
             }
 
 
@@ -476,10 +558,15 @@ namespace ShooterGame
             //Scoreboard get's Raised back up.
             LeanTween.moveLocalY(scoreBoardContainer, 1050, 2.5f).setEaseInExpo();
 
+            
 
             //keep the curtains closed after the last round so we can transition from there with a cut or fade to the footage. 
 
-            turnOnBlackImage(); 
+            turnOnBlackImage();
+
+            fatiCoinsParticle1.Stop();
+            fatiCoinsParticle2.Stop(); 
+
 
             Invoke("OpenCurtains", 3.5f);
 
@@ -522,9 +609,9 @@ namespace ShooterGame
             //Right Curtain
             LeanTween.moveLocalX(rightCurtain.gameObject, -12, 3).setEaseInExpo();
 
-            shooterControllerScript.enabled = false;
+            //shooterControllerScript.enabled = false;
 
-            Invoke("RoundOpenCurtains", 6f); 
+            Invoke("RoundOpenCurtains", 6f);
 
         }
 
@@ -537,7 +624,7 @@ namespace ShooterGame
             //Right Curtain
             LeanTween.moveLocalX(rightCurtain.gameObject, 978, 2).setEaseInExpo();
 
-            shooterControllerScript.enabled = true;
+            //shooterControllerScript.enabled = true;
 
             changeGameMusicScript.ChangeAudio();
         }
@@ -545,8 +632,10 @@ namespace ShooterGame
         public void turnOnBlackImage()
         {
             blackImage.SetActive(true);
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            shooterControllerScript.enabled = false;
 
-            Invoke("NextScene", 7f); 
+            Invoke("NextScene", 7f);
         }
 
         public void NextScene()
@@ -554,9 +643,23 @@ namespace ShooterGame
             //Should probably fade the audo out here. 
 
             EpisodeManager.Instance.NextEpisode();
+
         }
+
+
+        public void GameOverScreen()
+        {
+            gameOverScreen.SetActive(true); 
+        }
+
+
+
+
+
+
+
 
     }
 
-   
+
 }

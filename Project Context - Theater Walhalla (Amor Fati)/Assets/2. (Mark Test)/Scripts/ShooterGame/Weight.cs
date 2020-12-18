@@ -32,13 +32,21 @@ namespace ShooterGame
         private Rigidbody rb;
         private Vector3 startPos;
 
+        public List<GameObject> visuals; 
+
 
         private void Awake()
         {
             startPos = transform.position;
             animator = GetComponent<Animator>();
             rb = GetComponent<Rigidbody>();
+
+
+
+
         }
+
+       
 
         public void ResetValues()
         {
@@ -59,6 +67,10 @@ namespace ShooterGame
             Vector3 _startPos = Vector3.zero;
             _startPos.z = transform.localPosition.z;
             _startPos.y = offScreenYPos;
+
+
+
+
 
             Vector3 _endPos = _startPos;
             _startPos.y = inScreenYPos;
