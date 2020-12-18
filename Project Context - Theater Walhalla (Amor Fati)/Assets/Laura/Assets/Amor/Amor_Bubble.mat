@@ -27,11 +27,11 @@ Material:
     - _BlendOpacity: 0.5
     - _BlendSharpness: 0.5
     - _DivideColor: 1
-    - _FresnelPower: 1
+    - _FresnelPower: 2
     - _IOR: 0
     - _NoiseScale: 174.9
     - _NoiseSpeed: 0.003
     - _NoiseSubtract: 0.3
-    - _Scale: 400
+    - _Scale: 200
     - _Speed: 0.006
     m_Colors: []

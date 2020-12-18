@@ -86,6 +86,8 @@ public class BellenMiniGame : MonoBehaviour
     [Header("Music")]
     public BossfightMusicManager bossfightMusicManager;
     private bool musicHasSwitched = false;
+    public GameObject IntroMusic;
+    public GameObject OuttroMusic;
 
     [Header("Fade out")]
     public Animator fadeImageAnimator;
@@ -251,6 +253,7 @@ public class BellenMiniGame : MonoBehaviour
         //Start the Fati attack.
         fatiManager.StartFirstAttack();
 
+        IntroMusic.SetActive(false);
         bossfightMusicManager.StartMusic();
 
         // Start coin generation
@@ -339,6 +342,9 @@ public class BellenMiniGame : MonoBehaviour
 
     IEnumerator ShowScoreBoard()
     {
+        OuttroMusic.SetActive(true);
+        bossfightMusicManager.StopAllMusic();
+
         scoreBoard.SetActive(true);
         LeanTween.scale(scoreBoard, new Vector3(1, 1, 1), 1f).setEaseInCubic();
 

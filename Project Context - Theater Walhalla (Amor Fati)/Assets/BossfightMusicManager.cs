@@ -41,6 +41,15 @@ public class BossfightMusicManager : MonoBehaviour
 
     }
 
+    public void StopAllMusic()
+    {
+        StopAllCoroutines();
+        start.Stop();
+        fight.Stop();
+        end.Stop();
+        finish.Stop();
+    }
+
     public void StopMusic()
     {
         started = false;
