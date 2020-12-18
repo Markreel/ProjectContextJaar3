@@ -32,7 +32,7 @@ namespace ShooterGame
         private Rigidbody rb;
         private Vector3 startPos;
 
-        public List<GameObject> visuals; 
+       
 
 
         private void Awake()

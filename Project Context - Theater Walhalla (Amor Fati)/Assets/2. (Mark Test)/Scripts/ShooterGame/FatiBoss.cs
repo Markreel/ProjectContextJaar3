@@ -44,7 +44,9 @@ namespace ShooterGame
         public AudioSource fatiAudioSource; 
         public AudioClip fatiLach;
         public AudioClip fatiDood;
-        public AudioClip fatiIntro; 
+        public AudioClip fatiIntro;
+
+        public RoundEndUI roundEndUI; 
 
         private void Start()
         {
@@ -130,7 +132,9 @@ namespace ShooterGame
             nieuwScoreManager.fatiBonus = 0;
 
             fatiAudioSource.clip = fatiLach;
-            fatiAudioSource.Play(); 
+            fatiAudioSource.Play();
+
+            roundEndUI.GameOverScreen(); 
             
         }
 
